@@ -1,0 +1,188 @@
+@layer reset, base, tokens, recipes, utilities;
+@import "@serendie/ui/styles.css";
+
+@layer reset {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+  }
+}
+
+/* ===== Serendie Design System variable aliases =====
+ * Map short --sds-* names to actual Serendie CSS custom properties.
+ * Serendie uses --colors-sd-system-color-*, --radii-sd-system-dimension-radius-*,
+ * --fonts-sd-reference-typography-font-family-*, etc.
+ */
+:root {
+  /* --- Surface --- */
+  --sds-color-surface-default: var(--colors-sd-system-color-component-surface);
+  --sds-color-surface-variant: var(--colors-sd-system-color-component-surface-dim);
+  --sds-color-surface-container: var(--colors-sd-system-color-component-surface-container);
+  --sds-color-surface-container-high: var(--colors-sd-system-color-component-surface-container-bright);
+  --sds-color-surface-container-low: var(--colors-sd-system-color-component-surface-container-dim);
+  --sds-color-surface-container-lowest: var(--colors-sd-system-color-component-surface-container-dim);
+
+  /* --- On Surface --- */
+  --sds-color-on-surface-default: var(--colors-sd-system-color-component-on-surface);
+  --sds-color-on-surface-variant: var(--colors-sd-system-color-component-on-surface-variant);
+  --sds-color-on-surface-low: var(--colors-sd-system-color-component-on-surface-variant);
+  --sds-color-on-surface-disabled: var(--colors-sd-system-color-interaction-disabled-on-surface);
+
+  /* --- Outline --- */
+  --sds-color-outline-default: var(--colors-sd-system-color-component-outline);
+  --sds-color-outline-variant: var(--colors-sd-system-color-component-outline-bright);
+
+  /* --- Primary --- */
+  --sds-color-primary-default: var(--colors-sd-system-color-impression-primary);
+  --sds-color-primary-container: var(--colors-sd-system-color-impression-primary-container);
+  --sds-color-on-primary-default: var(--colors-sd-system-color-impression-on-primary);
+  --sds-color-on-primary-container: var(--colors-sd-system-color-impression-on-primary-container);
+  --sds-color-impression-primary: var(--colors-sd-system-color-impression-primary);
+  --sds-color-impression-primaryContainer: var(--colors-sd-system-color-impression-primary-container);
+
+  /* --- Secondary --- */
+  --sds-color-secondary-default: var(--colors-sd-system-color-impression-secondary);
+  --sds-color-secondary-container: var(--colors-sd-system-color-impression-secondary-container);
+  --sds-color-on-secondary-container: var(--colors-sd-system-color-impression-on-secondary-container);
+
+  /* --- Tertiary --- */
+  --sds-color-tertiary-default: var(--colors-sd-system-color-impression-tertiary);
+  --sds-color-tertiary-container: var(--colors-sd-system-color-impression-tertiary-container);
+  --sds-color-on-tertiary-container: var(--colors-sd-system-color-impression-on-tertiary-container);
+
+  /* --- Error / Negative --- */
+  --sds-color-error-default: var(--colors-sd-system-color-impression-negative);
+  --sds-color-error-container: var(--colors-sd-system-color-impression-negative-container);
+  --sds-color-on-error-container: var(--colors-sd-system-color-impression-on-negative-container);
+  --sds-color-negative-default: var(--colors-sd-system-color-impression-negative);
+  --sds-color-negative-container: var(--colors-sd-system-color-impression-negative-container);
+
+  /* --- Positive --- */
+  --sds-color-positive-default: var(--colors-sd-system-color-impression-positive);
+  --sds-color-positive-container: var(--colors-sd-system-color-impression-positive-container);
+
+  /* --- Notice / Caution / Warning --- */
+  --sds-color-notice-default: var(--colors-sd-system-color-impression-notice);
+  --sds-color-notice-container: var(--colors-sd-system-color-impression-notice-container);
+  --sds-color-on-notice-default: var(--colors-sd-system-color-impression-on-notice);
+  --sds-color-on-notice-container: var(--colors-sd-system-color-impression-on-notice-container);
+  --sds-color-caution-default: var(--colors-sd-system-color-impression-notice);
+  --sds-color-caution-container: var(--colors-sd-system-color-impression-notice-container);
+  --sds-color-warning-default: var(--colors-sd-system-color-impression-notice);
+  --sds-color-warning-container: var(--colors-sd-system-color-impression-notice-container);
+
+  /* --- Interaction --- */
+  --sds-color-interaction-disabled: var(--colors-sd-system-color-interaction-disabled);
+
+  /* --- Scrim --- */
+  --sds-color-scrim: var(--colors-sd-system-color-component-scrim);
+
+  /* --- Border Radius --- */
+  --sds-border-radius-extra-small: var(--radii-sd-system-dimension-radius-extra-small);
+  --sds-border-radius-small: var(--radii-sd-system-dimension-radius-small);
+  --sds-border-radius-medium: var(--radii-sd-system-dimension-radius-medium);
+  --sds-border-radius-large: var(--radii-sd-system-dimension-radius-large);
+  --sds-border-radius-extra-large: var(--radii-sd-system-dimension-radius-extra-large);
+  --sds-border-radius-full: var(--radii-sd-system-dimension-radius-full);
+
+  /* --- Spacing --- */
+  --sds-spacing-extra-small: var(--spacing-sd-system-dimension-spacing-extra-small);
+  --sds-spacing-small: var(--spacing-sd-system-dimension-spacing-small);
+  --sds-spacing-medium: var(--spacing-sd-system-dimension-spacing-medium);
+  --sds-spacing-large: var(--spacing-sd-system-dimension-spacing-large);
+  --sds-spacing-extra-large: var(--spacing-sd-system-dimension-spacing-extra-large);
+
+  /* --- Typography --- */
+  --sds-typography-body-medium-font-family: var(--fonts-sd-reference-typography-font-family-primary);
+  --sds-typography-mono-font-family: var(--fonts-sd-reference-typography-font-family-monospace);
+}
+
+body {
+  background-color: var(--sds-color-surface-default);
+  color: var(--sds-color-on-surface-default);
+  font-family: var(--sds-typography-body-medium-font-family, sans-serif);
+}
+
+/* Skip link for WCAG 2.4.1 compliance */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--sds-color-primary-default);
+  color: var(--sds-color-on-primary-default);
+  padding: 8px 16px;
+  z-index: 100;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Empty state pattern */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  text-align: center;
+}
+
+.empty-state-icon {
+  color: var(--sds-color-on-surface-low);
+  margin-bottom: 16px;
+}
+
+.empty-state-title {
+  font-size: var(--sds-typography-heading-small-font-size);
+  color: var(--sds-color-on-surface-default);
+  margin: 0 0 8px 0;
+}
+
+.empty-state-description {
+  font-size: var(--sds-typography-body-medium-font-size);
+  color: var(--sds-color-on-surface-low);
+  margin: 0 0 24px 0;
+}
+
+/* ===== Sidebar responsive ===== */
+.sidebar-nav {
+  width: 240px;
+  flex-shrink: 0;
+  background-color: var(--sds-color-surface-container);
+  border-right: 1px solid var(--sds-color-outline-default);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 100;
+}
+
+/* Desktop: sidebar-overlay is hidden */
+.sidebar-overlay {
+  display: none;
+}
+
+/* Mobile: sidebar becomes a fixed overlay drawer */
+@media (max-width: 767px) {
+  .sidebar-nav {
+    position: fixed;
+    top: 56px; /* header height */
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+  }
+
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 99;
+  }
+}

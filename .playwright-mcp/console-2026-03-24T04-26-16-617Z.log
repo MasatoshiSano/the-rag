@@ -1,0 +1,6 @@
+[    7293ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ https://localhost:3443/api/chat/sessions/f3eb752b-45eb-42dd-a8b6-e2aa3481a93d/messages:0
+[    8301ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ https://localhost:3443/api/chat/sessions/f3eb752b-45eb-42dd-a8b6-e2aa3481a93d/messages:0
+[   76223ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ https://localhost:3443/api/messages/assistant-1774326390683/rating:0
+[   76224ms] [ERROR] 評価の送信に失敗しました ApiError: {"detail":"Message assistant-1774326390683 not found"}
+    at iu (https://localhost:3443/assets/index-BLVPPLwm.js:52:168415)
+    at async https://localhost:3443/assets/index-BLVPPLwm.js:152:14811 @ https://localhost:3443/assets/index-BLVPPLwm.js:151

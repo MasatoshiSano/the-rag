@@ -1,0 +1,96 @@
+- generic [ref=e3]:
+  - link "メインコンテンツへスキップ" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e5]:
+    - button "サイドバーを閉じる" [expanded] [ref=e6] [cursor=pointer]:
+      - generic [ref=e7]: ✕
+    - generic [ref=e8]: THE RAG
+    - search "セッション検索" [ref=e10]:
+      - combobox "セッションを検索" [ref=e11]
+  - generic [ref=e12]:
+    - navigation "サイドバーナビゲーション" [ref=e13]:
+      - list [ref=e15]:
+        - listitem [ref=e16]:
+          - link "チャット" [ref=e17] [cursor=pointer]:
+            - /url: /the-rag/chat
+        - listitem [ref=e18]:
+          - link "ナレッジベース" [ref=e19] [cursor=pointer]:
+            - /url: /the-rag/knowledge-bases
+        - listitem [ref=e20]:
+          - link "アップロード" [ref=e21] [cursor=pointer]:
+            - /url: /the-rag/upload
+        - listitem [ref=e22]:
+          - link "ドキュメント" [ref=e23] [cursor=pointer]:
+            - /url: /the-rag/documents
+        - listitem [ref=e24]:
+          - link "設定" [ref=e25] [cursor=pointer]:
+            - /url: /the-rag/settings
+      - separator [ref=e26]
+      - generic [ref=e27]:
+        - paragraph [ref=e28]: お気に入りKB
+        - paragraph [ref=e29]: なし
+      - separator [ref=e30]
+      - generic [ref=e31]:
+        - paragraph [ref=e32]: 最近のセッション
+        - paragraph [ref=e33]: セッションがありません
+      - separator [ref=e34]
+      - generic [ref=e35]:
+        - paragraph [ref=e36]: 開発者向け
+        - list [ref=e37]:
+          - listitem [ref=e38]:
+            - link "API仕様・動作確認 ↗" [ref=e39] [cursor=pointer]:
+              - /url: /the-rag/docs
+          - listitem [ref=e40]:
+            - link "外部連携ガイド ↗" [ref=e41] [cursor=pointer]:
+              - /url: /the-rag/guide.html
+    - main [ref=e42]:
+      - region "ドキュメントアップロード" [ref=e164]:
+        - generic [ref=e165]:
+          - generic [ref=e166]:
+            - img [ref=e167]
+            - heading "ドキュメントアップロード" [level=1] [ref=e169]
+          - region "ナレッジベース" [ref=e170]:
+            - generic [ref=e171]:
+              - img [ref=e172]
+              - text: ナレッジベース
+            - combobox "ナレッジベース" [ref=e174] [cursor=pointer]:
+              - option "-- ナレッジベースを選択 --"
+              - option "フォルダテスト" [selected]
+              - option "技術"
+              - option "ステーション"
+              - option "安全衛生ガイドライン"
+              - option "製造マニュアル"
+          - generic [ref=e176]:
+            - tablist [ref=e177]:
+              - tab "ローカル" [selected] [ref=e178] [cursor=pointer]
+              - tab "ファイル" [ref=e179] [cursor=pointer]
+              - tab "テキスト" [ref=e180] [cursor=pointer]
+              - tab "GitHub" [ref=e181] [cursor=pointer]
+              - tab "Gitea" [ref=e182] [cursor=pointer]
+            - tabpanel "ローカル" [ref=e183]:
+              - region "ローカルフォルダ連携" [ref=e184]:
+                - heading "ローカルフォルダ連携" [level=2] [ref=e185]
+                - generic [ref=e186]:
+                  - paragraph [ref=e187]: "Windowsのフォルダパスを登録すると、深掘り検索時にフォルダ内のファイルを直接読み取って検索します。 対応形式: .md, .txt, .csv, .json, .pdf, .pptx, .xlsx, .docx, .html"
+                  - generic [ref=e188]:
+                    - generic [ref=e189]: フォルダパス
+                    - generic [ref=e190]:
+                      - textbox "フォルダパス" [ref=e191]:
+                        - /placeholder: C:\Users\username\Documents\knowledge
+                        - text: C:\Users\tadsysp616\Apps\rag-phantom\test-folder
+                      - button "値をクリア" [ref=e204] [cursor=pointer]:
+                        - img [ref=e205]
+                  - generic [ref=e194]:
+                    - generic [ref=e195]: ラベル（任意）
+                    - generic [ref=e196]:
+                      - textbox "ラベル（任意）" [ref=e197]:
+                        - /placeholder: "例: 設計資料"
+                        - text: 佐野技術
+                      - button "値をクリア" [ref=e207] [cursor=pointer]:
+                        - img [ref=e208]
+                  - generic [ref=e199]:
+                    - button "検証" [ref=e200] [cursor=pointer]:
+                      - generic [ref=e201]: 検証
+                    - button "登録" [ref=e202] [cursor=pointer]:
+                      - generic [ref=e203]: 登録
+                  - status [ref=e210]: 10件の対応ファイルが見つかりました

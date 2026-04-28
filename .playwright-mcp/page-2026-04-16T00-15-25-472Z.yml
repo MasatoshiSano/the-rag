@@ -1,0 +1,86 @@
+- generic [ref=e3]:
+  - link "メインコンテンツへスキップ" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e5]:
+    - button "サイドバーを閉じる" [expanded] [ref=e6] [cursor=pointer]:
+      - generic [ref=e7]: ✕
+    - generic [ref=e8]: THE RAG
+    - search "セッション検索" [ref=e10]:
+      - combobox "セッションを検索" [ref=e11]
+  - generic [ref=e12]:
+    - navigation "サイドバーナビゲーション" [ref=e13]:
+      - list [ref=e15]:
+        - listitem [ref=e16]:
+          - link "チャット" [ref=e17] [cursor=pointer]:
+            - /url: /rag-phantom/chat
+        - listitem [ref=e18]:
+          - link "ナレッジベース" [ref=e19] [cursor=pointer]:
+            - /url: /rag-phantom/knowledge-bases
+        - listitem [ref=e20]:
+          - link "アップロード" [ref=e21] [cursor=pointer]:
+            - /url: /rag-phantom/upload
+        - listitem [ref=e22]:
+          - link "ドキュメント" [ref=e23] [cursor=pointer]:
+            - /url: /rag-phantom/documents
+        - listitem [ref=e24]:
+          - link "設定" [ref=e25] [cursor=pointer]:
+            - /url: /rag-phantom/settings
+      - separator [ref=e26]
+      - generic [ref=e27]:
+        - paragraph [ref=e28]: お気に入りKB
+        - paragraph [ref=e29]: なし
+      - separator [ref=e30]
+      - generic [ref=e31]:
+        - paragraph [ref=e32]: 最近のセッション
+        - list [ref=e66]:
+          - listitem [ref=e67]:
+            - 'button "セッション: 安全基準について教えてください" [ref=e68] [cursor=pointer]': 安全基準について教えてください
+          - listitem [ref=e69]:
+            - 'button "セッション: 安全基準について教えてください" [ref=e70] [cursor=pointer]': 安全基準について教えてください
+          - listitem [ref=e71]:
+            - 'button "セッション: 安全基準について教えてください" [ref=e72] [cursor=pointer]': 安全基準について教えてください
+      - separator [ref=e34]
+      - generic [ref=e35]:
+        - paragraph [ref=e36]: 開発者向け
+        - list [ref=e37]:
+          - listitem [ref=e38]:
+            - link "API仕様・動作確認 ↗" [ref=e39] [cursor=pointer]:
+              - /url: /rag-phantom/docs
+          - listitem [ref=e40]:
+            - link "外部連携ガイド ↗" [ref=e41] [cursor=pointer]:
+              - /url: /rag-phantom/guide.html
+    - main [ref=e42]:
+      - generic "チャット" [ref=e43]:
+        - heading "チャット - セッション aa78982b-0faf-4975-8130-60603962ecec" [level=1] [ref=e73]
+        - log "チャットメッセージ" [ref=e45]:
+          - article "あなたのメッセージ" [ref=e74]:
+            - generic [ref=e75]: あなた
+            - generic [ref=e76]: 安全基準について教えてください
+            - time [ref=e77]: 09:15
+          - article "アシスタントの回答" [ref=e78]:
+            - generic [ref=e79]: アシスタント
+            - generic [ref=e81]: 選択されたナレッジベース内に該当する情報が見つかりませんでした。別のキーワードでお試しいただくか、管理者にお問い合わせください。
+            - generic [ref=e83]:
+              - button "メッセージをコピー" [ref=e84] [cursor=pointer]:
+                - generic [ref=e85]: ⎘
+                - generic [ref=e86]: コピー
+              - radiogroup "回答を評価" [ref=e87]:
+                - radio "1星" [ref=e88] [cursor=pointer]: ☆
+                - radio "2星" [ref=e89] [cursor=pointer]: ☆
+                - radio "3星" [ref=e90] [cursor=pointer]: ☆
+                - radio "4星" [ref=e91] [cursor=pointer]: ☆
+                - radio "5星" [ref=e92] [cursor=pointer]: ☆
+            - time [ref=e93]: 09:15
+        - region "メッセージ入力エリア" [ref=e49]:
+          - generic [ref=e50]:
+            - textbox "メッセージを入力 (Shift+Enterで改行)" [ref=e51]:
+              - /placeholder: メッセージを入力... (Shift+Enterで改行)
+            - button "音声入力を開始" [ref=e94] [cursor=pointer]:
+              - img [ref=e95]
+            - button "メッセージを送信" [disabled] [ref=e55]:
+              - generic [ref=e56]: ↑
+          - generic [ref=e57]:
+            - generic [ref=e58]:
+              - switch "検索モード切替" [checked] [ref=e59] [cursor=pointer]: 深掘り
+              - switch "回答モード切替" [ref=e62] [cursor=pointer]: コンパクト
+            - paragraph [ref=e65]: Enterで送信・Shift+Enterで改行

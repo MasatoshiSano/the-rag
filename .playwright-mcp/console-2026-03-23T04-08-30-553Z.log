@@ -1,0 +1,1 @@
+[   13486ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Entity) @ http://localhost:3000/api/knowledge-bases/:0

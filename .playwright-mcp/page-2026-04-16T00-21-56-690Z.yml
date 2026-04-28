@@ -1,0 +1,90 @@
+- generic [ref=e3]:
+  - link "メインコンテンツへスキップ" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e5]:
+    - button "サイドバーを閉じる" [expanded] [ref=e6] [cursor=pointer]:
+      - generic [ref=e7]: ✕
+    - generic [ref=e8]: THE RAG
+    - search "セッション検索" [ref=e10]:
+      - combobox "セッションを検索" [ref=e11]
+  - generic [ref=e12]:
+    - navigation "サイドバーナビゲーション" [ref=e13]:
+      - list [ref=e15]:
+        - listitem [ref=e16]:
+          - link "チャット" [ref=e17] [cursor=pointer]:
+            - /url: /rag-phantom/chat
+        - listitem [ref=e18]:
+          - link "ナレッジベース" [ref=e19] [cursor=pointer]:
+            - /url: /rag-phantom/knowledge-bases
+        - listitem [ref=e20]:
+          - link "アップロード" [ref=e21] [cursor=pointer]:
+            - /url: /rag-phantom/upload
+        - listitem [ref=e22]:
+          - link "ドキュメント" [ref=e23] [cursor=pointer]:
+            - /url: /rag-phantom/documents
+        - listitem [ref=e24]:
+          - link "設定" [ref=e25] [cursor=pointer]:
+            - /url: /rag-phantom/settings
+      - separator [ref=e26]
+      - generic [ref=e27]:
+        - paragraph [ref=e28]: お気に入りKB
+        - paragraph [ref=e29]: なし
+      - separator [ref=e30]
+      - generic [ref=e31]:
+        - paragraph [ref=e32]: 最近のセッション
+        - list [ref=e33]:
+          - listitem [ref=e34]:
+            - 'button "セッション: 安全基準について教えてください" [ref=e35] [cursor=pointer]': 安全基準について教えてください
+          - listitem [ref=e36]:
+            - 'button "セッション: 安全基準について教えてください" [ref=e37] [cursor=pointer]': 安全基準について教えてください
+          - listitem [ref=e38]:
+            - 'button "セッション: 安全基準について教えてください" [ref=e39] [cursor=pointer]': 安全基準について教えてください
+          - listitem [ref=e40]:
+            - 'button "セッション: 安全基準について教えてください" [ref=e41] [cursor=pointer]': 安全基準について教えてください
+          - listitem [ref=e42]:
+            - 'button "セッション: 安全基準について教えてください" [ref=e43] [cursor=pointer]': 安全基準について教えてください
+      - separator [ref=e44]
+      - generic [ref=e45]:
+        - paragraph [ref=e46]: 開発者向け
+        - list [ref=e47]:
+          - listitem [ref=e48]:
+            - link "API仕様・動作確認 ↗" [ref=e49] [cursor=pointer]:
+              - /url: /rag-phantom/docs
+          - listitem [ref=e50]:
+            - link "外部連携ガイド ↗" [ref=e51] [cursor=pointer]:
+              - /url: /rag-phantom/guide.html
+    - main [ref=e52]:
+      - generic "チャット" [ref=e53]:
+        - heading "チャット - セッション 64d37ff6-c9b7-429d-88ed-4b20e23c82cd" [level=1] [ref=e54]
+        - log "チャットメッセージ" [ref=e55]:
+          - article "あなたのメッセージ" [ref=e56]:
+            - generic [ref=e57]: あなた
+            - generic [ref=e58]: 安全基準について教えてください
+            - time [ref=e59]: 09:16
+          - article "アシスタントの回答" [ref=e60]:
+            - generic [ref=e61]: アシスタント
+            - generic [ref=e63]: 選択されたナレッジベース内に該当する情報が見つかりませんでした。別のキーワードでお試しいただくか、管理者にお問い合わせください。
+            - generic [ref=e65]:
+              - button "メッセージをコピー" [ref=e66] [cursor=pointer]:
+                - generic [ref=e67]: ⎘
+                - generic [ref=e68]: コピー
+              - radiogroup "回答を評価" [ref=e69]:
+                - radio "1星" [ref=e70] [cursor=pointer]: ☆
+                - radio "2星" [ref=e71] [cursor=pointer]: ☆
+                - radio "3星" [ref=e72] [cursor=pointer]: ☆
+                - radio "4星" [ref=e73] [cursor=pointer]: ☆
+                - radio "5星" [ref=e74] [cursor=pointer]: ☆
+            - time [ref=e75]: 09:16
+        - region "メッセージ入力エリア" [ref=e76]:
+          - generic [ref=e77]:
+            - textbox "メッセージを入力 (Shift+Enterで改行)" [ref=e78]:
+              - /placeholder: メッセージを入力... (Shift+Enterで改行)
+            - button "音声入力を開始" [ref=e79] [cursor=pointer]:
+              - img [ref=e80]
+            - button "メッセージを送信" [disabled] [ref=e82]:
+              - generic [ref=e83]: ↑
+          - generic [ref=e84]:
+            - generic [ref=e85]:
+              - switch "検索モード切替" [ref=e86] [cursor=pointer]: 通常
+              - switch "回答モード切替" [ref=e89] [cursor=pointer]: コンパクト
+            - paragraph [ref=e92]: Enterで送信・Shift+Enterで改行

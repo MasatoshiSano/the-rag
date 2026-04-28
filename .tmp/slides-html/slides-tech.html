@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>THE RAG - Technical Architecture</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #174ECC;
+  --primary-dark: #0B2D7A;
+  --primary-50: #EEF3FF;
+  --primary-100: #DCE7FF;
+  --accent: #8A42FF;
+  --accent-50: #F3ECFF;
+  --success: #12A07F;
+  --success-50: #E0F6EF;
+  --warn: #E8820C;
+  --warn-50: #FFF4E3;
+  --danger: #E0364A;
+  --ink: #0F1629;
+  --ink-soft: #1F2A44;
+  --muted: #5F6B7A;
+  --line: #E3E8F0;
+  --bg: #FFFFFF;
+  --bg-soft: #F5F7FB;
+  --bg-mist: #FAFBFE;
+  --radius: 18px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #24324a; font-family: "Noto Sans JP", "Yu Gothic UI", sans-serif; }
+body { padding: 40px 0; display: flex; flex-direction: column; align-items: center; gap: 32px; }
+.slide { width: 1920px; height: 1080px; background: var(--bg); position: relative; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.25); }
+
+/* Header */
+.header { position: absolute; top: 56px; left: 80px; right: 80px; display: flex; align-items: flex-end; justify-content: space-between; padding-bottom: 28px; border-bottom: 1px solid var(--line); }
+.header .bar { width: 8px; height: 56px; background: var(--primary); border-radius: 4px; }
+.header .title-wrap { display: flex; gap: 20px; align-items: center; }
+.header .t { font-size: 42px; font-weight: 800; color: var(--ink); }
+.header .st { font-size: 18px; color: var(--muted); font-weight: 500; margin-top: 8px; }
+.header .logo { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 14px; font-weight: 700; }
+.header .logo .dot { width: 10px; height: 10px; background: var(--primary); border-radius: 50%; }
+.pager { position: absolute; bottom: 48px; right: 80px; font-size: 16px; color: var(--muted); font-weight: 700; }
+.brandline { position: absolute; bottom: 48px; left: 80px; display: flex; align-items: center; gap: 14px; font-size: 14px; color: var(--muted); font-weight: 700; }
+.brandline .bl-dot { width: 8px; height: 8px; background: var(--primary); border-radius: 50%; }
+.content { position: absolute; top: 200px; left: 80px; right: 80px; bottom: 120px; }
+
+/* Cover - dark tech theme */
+#s1 {
+  background: radial-gradient(ellipse at 20% 80%, rgba(138,66,255,.3), transparent 50%),
+              radial-gradient(ellipse at 80% 20%, rgba(23,78,204,.4), transparent 50%),
+              linear-gradient(135deg, #0a0f1e 0%, #141b2d 50%, #1a1040 100%);
+  color: #fff;
+}
+.cover-wrap { position: absolute; inset: 0; padding: 120px; display: flex; flex-direction: column; justify-content: space-between; z-index: 2; }
+.main-ttl { font-size: 110px; font-weight: 900; line-height: .96; letter-spacing: -.03em; }
+.sub-ttl { font-size: 30px; font-weight: 400; opacity: .85; margin-top: 28px; line-height: 1.55; }
+.chips { display: flex; gap: 14px; margin-top: 32px; flex-wrap: wrap; }
+.chip { background: rgba(255,255,255,.08); backdrop-filter: blur(8px); padding: 10px 20px; border-radius: 999px; font-size: 15px; font-weight: 600; border: 1px solid rgba(255,255,255,.15); font-family: "Inter", sans-serif; }
+.cover-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+.cover-date { font-size: 16px; opacity: .5; }
+
+/* One-liner */
+.one-liner { display: flex; flex-direction: column; gap: 20px; align-items: center; justify-content: center; height: 100%; text-align: center; }
+.one-liner .kicker { font-size: 22px; font-weight: 800; letter-spacing: .12em; color: var(--primary); }
+.one-liner .big { font-size: 72px; font-weight: 900; line-height: 1.2; letter-spacing: -.02em; color: var(--ink); }
+.one-liner .desc { font-size: 22px; color: var(--muted); max-width: 1400px; line-height: 1.7; margin-top: 12px; }
+.hl { background: linear-gradient(180deg, transparent 60%, #FFE788 60%); padding: 0 4px; }
+.hl-ai { background: linear-gradient(180deg, transparent 60%, #E4D2FF 60%); padding: 0 4px; }
+
+/* Chapter */
+.ch-wrap { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; padding: 0 140px; z-index: 1; }
+.ch-kicker { font-size: 22px; font-weight: 800; letter-spacing: .2em; color: var(--primary); margin-bottom: 28px; }
+.ch-title { font-size: 100px; font-weight: 900; line-height: 1.05; letter-spacing: -.02em; color: var(--ink); }
+.ch-sub { font-size: 26px; color: var(--muted); font-weight: 500; margin-top: 32px; line-height: 1.6; max-width: 1400px; }
+.ch-deco { position: absolute; right: -160px; top: -160px; width: 900px; height: 900px; background: radial-gradient(circle, var(--primary-50), transparent 65%); z-index: 0; }
+
+/* Feature Layout */
+.ft-layout { display: grid; grid-template-columns: 1fr 1.55fr; gap: 48px; height: 100%; }
+.ft-left { display: flex; flex-direction: column; gap: 18px; }
+.ft-title { font-size: 34px; font-weight: 800; color: var(--ink); line-height: 1.3; }
+.ft-desc { font-size: 19px; color: var(--ink-soft); line-height: 1.7; }
+
+/* Bullet List */
+.blist { display: flex; flex-direction: column; gap: 14px; }
+.blist .bi { display: flex; gap: 16px; font-size: 20px; color: var(--ink-soft); line-height: 1.6; }
+.blist .bi::before { content: ""; width: 10px; height: 10px; background: var(--primary); border-radius: 50%; flex-shrink: 0; margin-top: 14px; }
+.blist.accent .bi::before { background: var(--accent); }
+.blist.success .bi::before { background: var(--success); }
+
+/* Tags */
+.tag { display: inline-block; padding: 8px 16px; border-radius: 999px; font-size: 14px; font-weight: 800; letter-spacing: .06em; }
+.tag.primary { background: var(--primary-50); color: var(--primary); }
+.tag.accent { background: var(--accent-50); color: var(--accent); }
+.tag.success { background: var(--success-50); color: var(--success); }
+.tag.warn { background: var(--warn-50); color: var(--warn); }
+.tag.dark { background: #1a1b2e; color: #c4c8ff; }
+
+/* Code block */
+.code-block { background: #1a1b2e; border-radius: 14px; padding: 28px 32px; font-family: "JetBrains Mono", monospace; font-size: 16px; line-height: 1.7; color: #e4e6f0; overflow: hidden; }
+.code-block .kw { color: #c792ea; }
+.code-block .fn { color: #82aaff; }
+.code-block .str { color: #c3e88d; }
+.code-block .cm { color: #546e7a; }
+.code-block .num { color: #f78c6c; }
+.code-block .type { color: #ffcb6b; }
+
+/* Two-col cards */
+.two-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
+.two-cards .card-box { background: var(--bg-mist); border: 1px solid var(--line); border-radius: 20px; padding: 32px; display: flex; flex-direction: column; gap: 14px; }
+.two-cards .card-box .ttl { font-size: 26px; font-weight: 800; color: var(--ink); display: flex; align-items: center; gap: 12px; }
+.two-cards .card-box .desc { font-size: 18px; color: var(--ink-soft); line-height: 1.6; }
+
+/* Three-col cards */
+.three-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.three-cards .card-box { background: var(--bg-mist); border: 1px solid var(--line); border-radius: 20px; padding: 28px; display: flex; flex-direction: column; gap: 12px; }
+.three-cards .card-box .icon { font-size: 40px; }
+.three-cards .card-box .ttl { font-size: 22px; font-weight: 800; color: var(--ink); }
+.three-cards .card-box .desc { font-size: 16px; color: var(--ink-soft); line-height: 1.6; }
+
+/* Four-col cards */
+.four-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.four-cards .card-box { background: var(--bg-mist); border: 1px solid var(--line); border-radius: 16px; padding: 24px; display: flex; flex-direction: column; gap: 10px; }
+.four-cards .card-box .ttl { font-size: 20px; font-weight: 800; color: var(--ink); }
+.four-cards .card-box .desc { font-size: 15px; color: var(--ink-soft); line-height: 1.55; }
+
+/* Callout */
+.callout { display: flex; align-items: center; gap: 16px; padding: 20px 28px; background: linear-gradient(90deg, var(--primary-50), #fff); border-left: 5px solid var(--primary); border-radius: 14px; font-size: 20px; color: var(--ink-soft); font-weight: 700; }
+.callout.accent { background: linear-gradient(90deg, var(--accent-50), #fff); border-left-color: var(--accent); }
+
+/* Architecture diagram */
+.arch-box { background: var(--bg-mist); border: 2px solid var(--line); border-radius: 16px; padding: 20px 24px; text-align: center; }
+.arch-box .label { font-size: 13px; font-weight: 800; color: var(--muted); letter-spacing: .1em; margin-bottom: 8px; }
+.arch-box .items { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.arch-item { padding: 8px 14px; border-radius: 10px; font-size: 14px; font-weight: 700; }
+.arch-item.fe { background: #DBEAFE; color: #1E40AF; }
+.arch-item.be { background: #D1FAE5; color: #065F46; }
+.arch-item.db { background: #FEE2E2; color: #991B1B; }
+.arch-item.ai { background: #EDE9FE; color: #5B21B6; }
+.arch-item.infra { background: #FEF3C7; color: #92400E; }
+
+/* Flow arrows */
+.flow-row { display: flex; align-items: center; gap: 0; justify-content: center; }
+.flow-step { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.flow-circle { width: 72px; height: 72px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 900; color: #fff; }
+.flow-circle.blue { background: var(--primary); }
+.flow-circle.purple { background: var(--accent); }
+.flow-circle.green { background: var(--success); }
+.flow-circle.orange { background: var(--warn); }
+.flow-label { font-size: 18px; font-weight: 800; color: var(--ink); text-align: center; }
+.flow-desc { font-size: 14px; color: var(--muted); text-align: center; line-height: 1.5; max-width: 160px; }
+.flow-arrow { font-size: 32px; color: var(--line); margin: 0 6px; margin-bottom: 40px; }
+
+/* Shot */
+.shot { border-radius: 14px; overflow: hidden; background: #fff; box-shadow: 0 30px 70px -25px rgba(15,22,41,.4), 0 6px 20px -4px rgba(15,22,41,.1); border: 1px solid var(--line); }
+.shot img { display: block; width: 100%; height: auto; }
+
+/* Thank you */
+#s15 {
+  background: radial-gradient(ellipse at 20% 80%, rgba(138,66,255,.25), transparent 50%),
+              radial-gradient(ellipse at 80% 20%, rgba(23,78,204,.3), transparent 50%),
+              linear-gradient(135deg, #0a0f1e 0%, #141b2d 50%, #1a1040 100%);
+  color: #fff;
+}
+#s15::before { content: ""; position: absolute; top: -200px; left: -100px; width: 700px; height: 700px; background: radial-gradient(circle, rgba(255,255,255,.06), transparent 60%); }
+.ty-wrap { position: relative; z-index: 2; padding: 140px 120px; height: 100%; display: flex; flex-direction: column; justify-content: center; gap: 36px; }
+.ty-big { font-size: 180px; font-weight: 900; line-height: .96; letter-spacing: -.03em; }
+.ty-sub { font-size: 26px; opacity: .7; line-height: 1.6; }
+
+/* Gradient text */
+.gradient-text { background: linear-gradient(135deg, #8A42FF, #174ECC); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+/* Diagram helpers */
+.diagram-grid { display: grid; gap: 16px; height: 100%; }
+.layer { border-radius: 14px; padding: 20px 28px; display: flex; align-items: center; gap: 20px; }
+.layer-label { font-size: 14px; font-weight: 800; letter-spacing: .1em; writing-mode: vertical-rl; text-orientation: mixed; color: #fff; background: var(--primary); padding: 12px 8px; border-radius: 10px; min-height: 80px; display: flex; align-items: center; justify-content: center; }
+.layer-content { display: flex; gap: 12px; flex-wrap: wrap; flex: 1; }
+.layer-item { padding: 10px 16px; border-radius: 10px; font-size: 15px; font-weight: 700; background: #fff; border: 1px solid var(--line); color: var(--ink); }
+
+/* Metric cards */
+.metric-card { background: var(--bg-mist); border: 1px solid var(--line); border-radius: 16px; padding: 28px; text-align: center; }
+.metric-card .val { font-size: 48px; font-weight: 900; color: var(--primary); font-family: "Inter", sans-serif; }
+.metric-card .unit { font-size: 18px; color: var(--muted); font-weight: 700; margin-top: 4px; }
+.metric-card .label { font-size: 16px; color: var(--ink-soft); margin-top: 8px; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<!-- ===================== S1: COVER ===================== -->
+<section class="slide" id="s1">
+  <div class="cover-wrap">
+    <div>
+      <div style="display:flex;gap:16px;align-items:center;margin-bottom:24px;">
+        <span class="tag" style="background:rgba(138,66,255,.2);color:#B072FF;font-size:16px;">Technical Deep Dive</span>
+      </div>
+      <div class="main-ttl">THE RAG</div>
+      <div class="sub-ttl">RAG-based Knowledge Search Platform<br>Architecture &amp; Technical Overview</div>
+      <div class="chips">
+        <div class="chip">FastAPI + async</div>
+        <div class="chip">React 18 + TypeScript</div>
+        <div class="chip">Qdrant Vector DB</div>
+        <div class="chip">AWS Bedrock Claude</div>
+        <div class="chip">SQLAlchemy 2.0</div>
+        <div class="chip">Docker Compose</div>
+      </div>
+    </div>
+    <div class="cover-bottom">
+      <div class="cover-date">2026-04 / Internal Tech Review</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== S2: ONE-LINER ===================== -->
+<section class="slide" id="s2">
+  <div class="content">
+    <div class="one-liner">
+      <div class="kicker">ARCHITECTURE OVERVIEW</div>
+      <div class="big"><span class="hl">RAG</span> + <span class="hl-ai">Agentic Search</span><br>on Enterprise Documents</div>
+      <div class="desc">社内ドキュメントをベクトル化し、セマンティック検索 + リランキング + LLM生成で<br>高精度な回答を提供する Full-Stack RAG プラットフォーム</div>
+    </div>
+  </div>
+  <div class="brandline"><span class="bl-dot"></span>THE RAG</div>
+  <div class="pager">02 / 15</div>
+</section>
+
+<!-- ===================== S3: CHAPTER - System Architecture ===================== -->
+<section class="slide" id="s3">
+  <div class="ch-wrap">
+    <div class="ch-kicker">SECTION 01</div>
+    <div class="ch-title">System<br>Architecture</div>
+    <div class="ch-sub">3-tier Docker Compose構成、非同期処理基盤、<br>ベクトルDB + RDB のハイブリッドストレージ</div>
+  </div>
+  <div class="ch-deco"></div>
+  <div class="brandline"><span class="bl-dot"></span>THE RAG</div>
+  <div class="pager">03 / 15</div>
+</section>
+
+<!-- ===================== S4: Architecture Diagram ===================== -->
+<section class="slide" id="s4">
+  <div class="header">
+    <div class="title-wrap">
+      <div class="bar"></div>
+      <div><div class="t">システム構成</div><div class="st">Docker Compose 3-service architecture</div></div>
+    </div>
+    <div class="logo"><div class="dot"></div>THE RAG</div>
+  </div>
+  <div class="content">
+    <div class="diagram-grid" style="grid-template-rows: auto auto auto auto; align-content: start; gap: 20px;">
+      <!-- Frontend layer -->
+      <div class="layer" style="background: #EFF6FF; border: 1px solid #BFDBFE;">
+        <div class="layer-label">Frontend</div>
+        <div class="layer-content">
+          <div class="layer-item" style="border-color:#3B82F6;"><strong>React 18</strong> + TypeScript</div>
+          <div class="layer-item" style="border-color:#3B82F6;">Vite 6</div>
+          <div class="layer-item" style="border-color:#3B82F6;">Serendie UI</div>
+          <div class="layer-item" style="border-color:#3B82F6;">TanStack Query</div>
+          <div class="layer-item" style="border-color:#3B82F6;">Zustand</div>
+          <div class="layer-item" style="border-color:#3B82F6;">React Router v7</div>
+          <div class="layer-item" style="border-color:#3B82F6;">Recharts</div>
+          <div class="layer-item" style="border-color:#93C5FD;background:#F0F9FF;">nginx:alpine (port 3000→80)</div>
+        </div>
+      </div>
+      <!-- Backend layer -->
+      <div class="layer" style="background: #ECFDF5; border: 1px solid #A7F3D0;">
+        <div class="layer-label" style="background:var(--success);">Backend</div>
+        <div class="layer-content">
+          <div class="layer-item" style="border-color:#10B981;"><strong>FastAPI</strong> (async)</div>
+          <div class="layer-item" style="border-color:#10B981;">Pydantic v2</div>
+          <div class="layer-item" style="border-color:#10B981;">SQLAlchemy 2.0 async</div>
+          <div class="layer-item" style="border-color:#10B981;">aiosqlite (WAL)</div>
+          <div class="layer-item" style="border-color:#10B981;">SSE Streaming</div>
+          <div class="layer-item" style="border-color:#10B981;">httpx (async)</div>
+          <div class="layer-item" style="border-color:#6EE7B7;background:#F0FDF4;">python:3.12-slim (port 8010→8000)</div>
+        </div>
+      </div>
+      <!-- AI / ML layer -->
+      <div class="layer" style="background: #F5F3FF; border: 1px solid #DDD6FE;">
+        <div class="layer-label" style="background:var(--accent);">AI / ML</div>
+        <div class="layer-content">
+          <div class="layer-item" style="border-color:#8B5CF6;"><strong>Claude Sonnet 4.6</strong> (生成)</div>
+          <div class="layer-item" style="border-color:#8B5CF6;"><strong>Cohere Embed v3</strong> (埋め込み)</div>
+          <div class="layer-item" style="border-color:#8B5CF6;"><strong>Cohere Rerank v3.5</strong></div>
+          <div class="layer-item" style="border-color:#8B5CF6;">AWS Bedrock Runtime</div>
+          <div class="layer-item" style="border-color:#8B5CF6;">Intent Classification</div>
+          <div class="layer-item" style="border-color:#8B5CF6;">Tool-use Agent</div>
+        </div>
+      </div>
+      <!-- Data layer -->
+      <div class="layer" style="background: #FEF2F2; border: 1px solid #FECACA;">
+        <div class="layer-label" style="background:var(--danger);">Data</div>
+        <div class="layer-content">
+          <div class="layer-item" style="border-color:#EF4444;"><strong>Qdrant</strong> (Vector DB)</div>
+          <div class="layer-item" style="border-color:#EF4444;"><strong>SQLite</strong> (FTS5 全文検索)</div>
+          <div class="layer-item" style="border-color:#EF4444;">Oracle DB (製造実績)</div>
+          <div class="layer-item" style="border-color:#EF4444;">qdrant:latest (6333/6334)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="brandline"><span class="bl-dot"></span>THE RAG</div>
+  <div class="pager">04 / 15</div>
+</section>
+
+<!-- ===================== S5: CHAPTER - RAG Pipeline ===================== -->
+<section class="slide" id="s5">
+  <div class="ch-wrap">
+    <div class="ch-kicker">SECTION 02</div>
+    <div class="ch-title">RAG Pipeline</div>
+    <div class="ch-sub">Ingestion → Retrieval → Generation の3フェーズ構成<br>Normal mode と Agentic mode の2つの検索戦略</div>
+  </div>
+  <div class="ch-deco"></div>
+  <div class="brandline"><span class="bl-dot"></span>THE RAG</div>
+  <div class="pager">05 / 15</div>
+</section>
+
+<!-- ===================== S6: Ingestion Pipeline ===================== -->
+<section class="slide" id="s6">
+  <div class="header">
+    <div class="title-wrap">
+      <div class="bar"></div>
+      <div><div class="t">Ingestion Pipeline</div><div class="st">ドキュメント登録からベクトルインデックスまでの非同期処理</div></div>
+    </div>
+    <div class="logo"><div class="dot"></div>THE RAG</div>
+  </div>
+  <div class="content">
+    <div class="flow-row" style="margin-top: 20px;">
+      <div class="flow-step">
+        <div class="flow-circle blue">1</div>
+        <div class="flow-label">Upload</div>
+        <div class="flow-desc">PDF / DOCX / MD<br>multipart upload</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-circle blue">2</div>
+        <div class="flow-label">Convert</div>
+        <div class="flow-desc">pymupdf4llm<br>text extraction</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-circle purple">3</div>
+        <div class="flow-label">Tag</div>
+        <div class="flow-desc">Claude auto-tag<br>content analysis</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-circle purple">4</div>
+        <div class="flow-label">Chunk</div>
+        <div class="flow-desc">Semantic chunking<br>overlap windows</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-circle green">5</div>
+        <div class="flow-label">Embed</div>
+        <div class="flow-desc">Cohere Embed v3<br>multilingual</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-circle green">6</div>
+        <div class="flow-label">Index</div>
+        <div class="flow-desc">Qdrant upsert<br>cosine similarity</div>
+      </div>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 48px;">
+      <div class="code-block">
+        <span class="cm"># Status state machine</span><br>
+        <span class="type">processing</span> → <span class="type">converting</span> → <span class="type">converted</span><br>
+        → <span class="type">tagging</span> → <span class="type">tagged</span><br>
+        → <span class="type">chunking</span> → <span class="type">chunked</span><br>
+        → <span class="type">indexing</span> → <span class="str">indexed</span> ✓<br><br>
+        <span class="cm"># Error → auto retry (max 3)</span><br>
+        <span class="kw">any_stage</span> → <span class="num">error</span> → retry_count++
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div class="callout" style="font-size: 17px;">📁 対応形式: md, txt, csv, json, pdf, docx, xlsx, pptx, png, jpg, html</div>
+        <div class="callout accent" style="font-size: 17px;">🔄 GitHub / Gitea リポジトリからの自動同期対応 (bytes比較でスキップ)</div>
+        <div class="callout" style="font-size: 17px; border-left-color: var(--success); background: linear-gradient(90deg, var(--success-50), #fff);">♻️ バージョン管理: 同名ファイル再登録で parent_document_id 追跡</div>
+      </div>
+    </div>
+  </div>
+  <div class="brandline"><span class="bl-dot"></span>THE RAG</div>
+  <div class="pager">06 / 15</div>
+</section>
+
+<!-- ===================== S7: Retrieval & Generation ===================== -->
+<section class="slide" id="s7">
+  <div class="header">
+    <div class="title-wrap">
+      <div class="bar"></div>
+      <div><div class="t">Retrieval &amp; Generation</div><div class="st">2つの検索モード: Normal vs Agentic</div></div>
+    </div>
+    <div class="logo"><div class="dot"></div>THE RAG</div>
+  </div>
+  <div class="content">
+    <div class="two-cards" style="height: 100%;">
+      <div class="card-box" style="gap: 18px;">
+        <div class="ttl"><span class="tag primary">Normal Mode</span></div>
+        <div class="code-block" style="font-size: 14px;">
+          <span class="cm">// Single-pass retrieval</span><br>
+          <span class="fn">query</span><br>
+          → <span class="fn">embed</span>(Cohere v3)<br>
+          → <span class="fn">vector_search</span>(Qdrant, top-K)<br>
+          → <span class="fn">hybrid_search</span>?(FTS5 + vector)<br>
+          → <span class="fn">rerank</span>?(Cohere Rerank v3.5)<br>
+          → <span class="fn">generate</span>(Claude Sonnet 4.6)<br>
+          → <span class="str">SSE streaming response</span>
+        </div>
+        <div class="blist" style="margin-top: 4px;">
+          <div class="bi" style="font-size:17px;">低レイテンシ（1-pass retrieval）</div>
+          <div class="bi" style="font-size:17px;">ハイブリッド検索（BM25 + cosine）ON/OFF可</div>
+          <div class="bi" style="font-size:17px;">リランキングで精度向上</div>
+        </div>
+      </div>
+      <div class="card-box" style="gap: 18px; border: 2px solid var(--accent);">
+        <div class="ttl"><span class="tag accent">Agentic Mode</span></div>
+        <div class="code-block" style="font-size: 14px;">
+          <span class="cm">// Multi-turn tool-use agent</span><br>
+          <span class="kw">for</span> i <span class="kw">in</span> range(<span class="num">max_iterations=5</span>):<br>
+          &nbsp;&nbsp;<span class="fn">claude_with_tools</span>([<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"search_documents"</span>,<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"read_document"</span>,<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;<span class="str">"final_answer"</span><br>
+          &nbsp;&nbsp;])<br>
+          &nbsp;&nbsp;<span class="cm">// Agent自律的にツール選択</span><br>
+          → <span class="str">SSE streaming (思考過程含む)</span>
+        </div>
+        <div class="blist accent" style="margin-top: 4px;">
+          <div class="bi" style="font-size:17px;">Claude tool-use でドキュメント深掘り</div>
+          <div class="bi" style="font-size:17px;">最大5イテレーション自律探索</div>
+          <div class="bi" style="font-size:17px;">複雑な質問・比較分析に強い</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="brandline"><span class="bl-dot"></span>THE RAG</div>
+  <div class="pager">07 / 15</div>
+</section>
+
+<!-- ===================== S8: Intent Classification ===================== -->
+<section class="slide" id="s8">
+  <div class="header">
+    <div class="title-wrap">
+      <div class="bar"></div>
+      <div><div class="t">Intent Classification</div><div class="st">クエリの意図を分類し、最適な検索パスにルーティング</div></div>
+    </div>
+    <div class="logo"><div class="dot"></div>THE RAG</div>
+  </div>
+  <div class="content">
+    <div class="three-cards" style="margin-top: 20px;">
+      <div class="card-box" style="border-top: 4px solid var(--primary);">
+        <div style="font-size:48px;text-align:center;">📄</div>
+        <div class="ttl" style="justify-content:center;">DOC_SEARCH</div>
+        <div class="desc" style="text-align:center;">ベクトル検索 + リランクで<br>社内ドキュメントから回答生成</div>
+        <div class="code-block" style="font-size:13px;padding:16px;">
+          <span class="str">"安全帯の使い方は？"</span><br>
+          <span class="str">"品質基準を教えて"</span>
+        </div>
+      </div>
+      <div class="card-box" style="border-top: 4px solid var(--warn);">
+        <div style="font-size:48px;text-align:center;">🗄️</div>
+        <div class="ttl" style="justify-content:center;">ORACLE_QUERY</div>
+        <div class="desc" style="text-align:center;">自然言語 → SQL変換で<br>Oracle製造DBに直接クエリ</div>
+        <div class="code-block" style="font-size:13px;padding:16px;">
+          <span class="str">"先月のA1ラインの生産数は？"</span><br>
+          <span class="str">"不良率が高い工程は？"</span>
+        </div>
+      </div>
+      <div class="card-box" style="border-top: 4px solid var(--accent);">
+        <div style="font-size:48px;text-align:center;">🔀</div>
+        <div class="ttl" style="justify-content:center;">HYBRID</div>
+        <div class="desc" style="text-align:center;">ドキュメント検索 + DBクエリを<br>統合して包括的に回答</div>
+        <div class="code-block" style="font-size:13px;padding:16px;">
+          <span class="str">"不良率が高い工程の</span><br>
+          <span class="str">&nbsp;改善手順は？"</span>
+        </div>
+      </div>
+    </div>
+    <div class="callout" style="margin-top: 32px;">
+      🧠 Claude がクエリを分析し、3つのインテントに自動分類。用語辞書による略語展開 → マスタデータ正規化を経てルーティング。
+    </div>
+  </div>
+  <div class="brandline"><span class="bl-dot"></span>THE RAG</div>
+  <div class="pager">08 / 15</div>
+</section>
+
+<!-- ===================== S9: CHAPTER - Personalization ===================== -->
+<section class="slide" id="s9">
+  <div class="ch-wrap">
+    <div class="ch-kicker">SECTION 03</div>
+    <div class="ch-title">Personalization<br>&amp; Learning</div>
+    <div class="ch-sub">用語辞書、自動メモリ抽出、行動プロファイルによる<br>ユーザーごとのコンテキスト最適化</div>
+  </div>
+  <div class="ch-deco"></div>
+  <div class="brandline"><span class="bl-dot"></span>THE RAG</div>
+  <div class="pager">09 / 15</div>
+</section>
+
+<!-- ===================== S10: Personalization Features ===================== -->
+<section class="slide" id="s10">
+  <div class="header">
+    <div class="title-wrap">
+      <div class="bar"></div>
+      <div><div class="t">パーソナライズ機構</div><div class="st">3つの学習レイヤーでユーザー体験を最適化</div></div>
+    </div>
+    <div class="logo"><div class="dot"></div>THE RAG</div>
+  </div>
+  <div class="content">
+    <div class="three-cards" style="height: 100%;">
+      <div class="card-box" style="gap: 16px; border-left: 4px solid var(--primary);">
+        <div class="ttl">📖 用語辞書</div>
+        <div class="desc">ユーザー独自の略語・社内用語を正式名称にマッピング。最長一致置換でクエリを正規化。</div>
+        <div class="code-block" style="font-size: 13px; padding: 16px;">
+          <span class="cm">// user_terms table</span><br>
+          <span class="str">"SA"</span> → <span class="str">"システムアーキテクト"</span><br>
+          <span class="str">"1F"</span> → <span class="str">"第一工場"</span><br><br>
+          <span class="cm">// Longest-match replacement</span><br>
+          <span class="fn">apply_user_terms</span>(query, terms)
+        </div>
+      </div>
+      <div class="card-box" style="gap: 16px; border-left: 4px solid var(--accent);">
+        <div class="ttl">🧠 自動メモリ</div>
+        <div class="desc">チャット完了後、Claudeが会話から重要事項を自動抽出・保存。次回チャットでコンテキスト注入。</div>
+        <div class="code-block" style="font-size: 13px; padding: 16px;">
+          <span class="cm">// user_memories table</span><br>
+          <span class="cm">// Post-chat extraction</span><br>
+          <span class="fn">extract_memories</span>(messages)<br>
+          → [<span class="str">"A1ラインを主担当"</span>,<br>
+          &nbsp;&nbsp;&nbsp;<span class="str">"品質基準ISO9001に関心"</span>]
+        </div>
+      </div>
+      <div class="card-box" style="gap: 16px; border-left: 4px solid var(--success);">
+        <div class="ttl">📊 行動プロファイル</div>
+        <div class="desc">チャット履歴から頻繁に参照するライン・工程を自動学習。system promptに注入。</div>
+        <div class="code-block" style="font-size: 13px; padding: 16px;">
+          <span class="cm">// Auto-updated profile</span><br>
+          {<br>
+          &nbsp;&nbsp;<span class="str">"frequent_lines"</span>: [<span class="str">"A1"</span>, <span class="str">"B2"</span>],<br>
+          &nbsp;&nbsp;<span class="str">"frequent_processes"</span>: [<span class="str">"組立"</span>],<br>
+          &nbsp;&nbsp;<span class="str">"expertise_level"</span>: <span class="str">"mid"</span><br>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="brandline"><span class="bl-dot"></span>THE RAG</div>
+  <div class="pager">10 / 15</div>
+</section>
+
+<!-- ===================== S11: CHAPTER - Data Model ===================== -->
+<section class="slide" id="s11">
+  <div class="ch-wrap">
+    <div class="ch-kicker">SECTION 04</div>
+    <div class="ch-title">Data Model<br>&amp; API</div>
+    <div class="ch-sub">SQLite + Qdrant のハイブリッドストレージと<br>RESTful API + SSE ストリーミング</div>
+  </div>
+  <div class="ch-deco"></div>
+  <div class="brandline"><span class="bl-dot"></span>THE RAG</div>
+  <div class="pager">11 / 15</div>
+</section>
+
+<!-- ===================== S12: Data Model ===================== -->
+<section class="slide" id="s12">
+  <div class="header">
+    <div class="title-wrap">
+      <div class="bar"></div>
+      <div><div class="t">データモデル</div><div class="st">SQLite (FTS5) + Qdrant ハイブリッドストレージ</div></div>
+    </div>
+    <div class="logo"><div class="dot"></div>THE RAG</div>
+  </div>
+  <div class="content">
+    <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; height: 100%;">
+      <div class="code-block" style="font-size: 14px; line-height: 1.6;">
+        <span class="cm">-- Core entities (SQLite + WAL mode)</span><br><br>
+        <span class="kw">User</span> ──┬── <span class="type">sessions</span> ──── <span class="type">messages</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── <span class="type">chat_outputs</span> (table/chart)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="type">user_terms</span> (個人辞書)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="type">user_memories</span> (自動抽出)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── <span class="type">kb_favorites</span><br><br>
+        <span class="kw">KnowledgeBase</span> ──┬── <span class="type">documents</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── <span class="type">document_tags</span> (AI)<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── version chain<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── <span class="type">github_sources</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── <span class="type">gitea_sources</span><br><br>
+        <span class="cm">-- Manufacturing master</span><br>
+        <span class="kw">MasterSite</span> → <span class="type">MasterLine</span> → <span class="type">MasterProcess</span><br>
+        <span class="kw">OracleQueryTemplate</span> (再利用SQL)<br><br>
+        <span class="cm">-- Full-text search</span><br>
+        <span class="kw">messages_fts</span> (FTS5, NFKC正規化)
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <div class="card-box" style="background: #FEF2F2; border-color: #FECACA;">
+          <div class="ttl" style="font-size: 20px;">Qdrant Collections</div>
+          <div class="desc" style="font-size: 15px;">
+            <strong>documents</strong> — ドキュメントチャンクのベクトル<br>
+            <strong>master_data</strong> — 製造マスタのベクトル<br><br>
+            Embedding: Cohere embed-multilingual-v3<br>
+            Similarity: Cosine<br>
+            Dimension: 1024
+          </div>
+        </div>
+        <div class="card-box" style="background: #ECFDF5; border-color: #A7F3D0;">
+          <div class="ttl" style="font-size: 20px;">ストレージ戦略</div>
+          <div class="blist success" style="font-size: 16px;">
+            <div class="bi">SQLite WAL — 同時読み取り最適化</div>
+            <div class="bi">Soft delete — 30日保持後に定期削除</div>
+            <div class="bi">ドキュメントバージョン追跡</div>
+            <div class="bi">Qdrant 永続ボリューム</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="brandline"><span class="bl-dot"></span>THE RAG</div>
+  <div class="pager">12 / 15</div>
+</section>
+
+<!-- ===================== S13: API Design ===================== -->
+<section class="slide" id="s13">
+  <div class="header">
+    <div class="title-wrap">
+      <div class="bar"></div>
+      <div><div class="t">API Design</div><div class="st">RESTful API + SSE + External Integration</div></div>
+    </div>
+    <div class="logo"><div class="dot"></div>THE RAG</div>
+  </div>
+  <div class="content">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+      <div class="card-box" style="gap: 12px;">
+        <div class="ttl" style="font-size: 20px;"><span class="tag primary">Core API</span></div>
+        <div class="code-block" style="font-size: 13px; padding: 16px; line-height: 1.7;">
+          <span class="kw">POST</span> <span class="fn">/api/chat</span> <span class="cm">→ SSE stream</span><br>
+          <span class="kw">GET</span>&nbsp; <span class="fn">/api/sessions</span><br>
+          <span class="kw">GET</span>&nbsp; <span class="fn">/api/sessions/:id/messages</span><br>
+          <span class="kw">POST</span> <span class="fn">/api/sessions/:id/rate</span><br>
+          <span class="kw">GET</span>&nbsp; <span class="fn">/api/sessions/search</span> <span class="cm">FTS5</span><br>
+          <br>
+          <span class="kw">CRUD</span> <span class="fn">/api/knowledge-bases</span><br>
+          <span class="kw">CRUD</span> <span class="fn">/api/documents</span><br>
+          <span class="kw">POST</span> <span class="fn">/api/documents/upload</span><br>
+          <span class="kw">CRUD</span> <span class="fn">/api/user/terms</span><br>
+          <span class="kw">GET</span>&nbsp; <span class="fn">/api/user/profile</span>
+        </div>
+      </div>
+      <div class="card-box" style="gap: 12px;">
+        <div class="ttl" style="font-size: 20px;"><span class="tag accent">External API</span></div>
+        <div class="code-block" style="font-size: 13px; padding: 16px; line-height: 1.7;">
+          <span class="cm">// Sync chat (API key auth)</span><br>
+          <span class="kw">POST</span> <span class="fn">/api/ext/chat/sync</span><br>
+          &nbsp;&nbsp;→ SSE内部消費 → JSON一括応答<br>
+          <br>
+          <span class="cm">// Repository sync</span><br>
+          <span class="kw">POST</span> <span class="fn">/api/ext/github/sync</span><br>
+          &nbsp;&nbsp;→ public repo .md/.txt 同期<br>
+          <span class="kw">POST</span> <span class="fn">/api/ext/gitea/sync</span><br>
+          &nbsp;&nbsp;→ token auth, URL自動解析<br>
+          <br>
+          <span class="cm">// SSE Event types</span><br>
+          <span class="str">chunk</span> | <span class="str">source</span> | <span class="str">tool_call</span><br>
+          <span class="str">tool_result</span> | <span class="str">done</span> | <span class="str">error</span>
+        </div>
+      </div>
+    </div>
+    <div class="callout" style="margin-top: 20px;">
+      🔑 認証: LocalStorage UUID + X-User-Id ヘッダー（社内利用前提）/ 外部API: API Key認証
+    </div>
+  </div>
+  <div class="brandline"><span class="bl-dot"></span>THE RAG</div>
+  <div class="pager">13 / 15</div>
+</section>
+
+<!-- ===================== S14: Key Technical Decisions ===================== -->
+<section class="slide" id="s14">
+  <div class="header">
+    <div class="title-wrap">
+      <div class="bar"></div>
+      <div><div class="t">Key Technical Decisions</div><div class="st">設計上の主要な技術判断とトレードオフ</div></div>
+    </div>
+    <div class="logo"><div class="dot"></div>THE RAG</div>
+  </div>
+  <div class="content">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+      <div class="card-box" style="gap: 10px;">
+        <div class="ttl" style="font-size: 18px;">SQLite over PostgreSQL</div>
+        <div class="desc" style="font-size: 15px;">デプロイ簡易性を優先。WALモードで同時読み取り対応。FTS5で全文検索も実現。小〜中規模チーム向け。</div>
+      </div>
+      <div class="card-box" style="gap: 10px;">
+        <div class="ttl" style="font-size: 18px;">SSE over WebSocket</div>
+        <div class="desc" style="font-size: 15px;">チャットは一方向ストリーミングのため SSE で十分。プロキシ互換性も高く、実装がシンプル。</div>
+      </div>
+      <div class="card-box" style="gap: 10px;">
+        <div class="ttl" style="font-size: 18px;">Qdrant over Pinecone/Weaviate</div>
+        <div class="desc" style="font-size: 15px;">オンプレ Docker 運用前提でセルフホスト可能。REST + gRPC 対応、永続ボリュームで堅牢。</div>
+      </div>
+      <div class="card-box" style="gap: 10px;">
+        <div class="ttl" style="font-size: 18px;">Agentic Search (tool-use)</div>
+        <div class="desc" style="font-size: 15px;">単純RAGでは回答困難な複雑クエリに対応。Claude tool-use で自律的にドキュメント探索。</div>
+      </div>
+      <div class="card-box" style="gap: 10px;">
+        <div class="ttl" style="font-size: 18px;">Hybrid Search (BM25 + Vector)</div>
+        <div class="desc" style="font-size: 15px;">セマンティック検索だけでは型番・品番の完全一致に弱い。FTS5のBM25を併用しカバー。</div>
+      </div>
+      <div class="card-box" style="gap: 10px;">
+        <div class="ttl" style="font-size: 18px;">UUID-based Auth (No Login)</div>
+        <div class="desc" style="font-size: 15px;">社内閉域網前提で認証レスに。LocalStorage UUID で個人設定を保持。導入コスト最小化。</div>
+      </div>
+    </div>
+  </div>
+  <div class="brandline"><span class="bl-dot"></span>THE RAG</div>
+  <div class="pager">14 / 15</div>
+</section>
+
+<!-- ===================== S15: THANK YOU ===================== -->
+<section class="slide" id="s15">
+  <div class="ty-wrap">
+    <div class="ty-big">Thank<br>You.</div>
+    <div class="ty-sub">Questions? Let's discuss architecture,<br>performance, or future improvements.</div>
+  </div>
+</section>
+
+</body>
+</html>

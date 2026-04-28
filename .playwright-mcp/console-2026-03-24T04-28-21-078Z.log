@@ -1,0 +1,2 @@
+[    5634ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ https://localhost:3443/api/chat/sessions/b45924d0-fb21-43a9-94ab-ed24b4dbfc7a/messages:0
+[    6659ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ https://localhost:3443/api/chat/sessions/b45924d0-fb21-43a9-94ab-ed24b4dbfc7a/messages:0

@@ -1,0 +1,169 @@
+- generic [ref=e3]:
+  - link "メインコンテンツへスキップ" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e5]:
+    - button "サイドバーを閉じる" [expanded] [ref=e6] [cursor=pointer]:
+      - generic [ref=e7]: ✕
+    - generic [ref=e8]: THE RAG
+    - search "セッション検索" [ref=e10]:
+      - combobox "セッションを検索" [ref=e11]
+  - generic [ref=e12]:
+    - navigation "サイドバーナビゲーション" [ref=e13]:
+      - list [ref=e15]:
+        - listitem [ref=e16]:
+          - link "チャット" [ref=e17] [cursor=pointer]:
+            - /url: /chat
+        - listitem [ref=e18]:
+          - link "ナレッジベース" [ref=e19] [cursor=pointer]:
+            - /url: /knowledge-bases
+        - listitem [ref=e20]:
+          - link "アップロード" [ref=e21] [cursor=pointer]:
+            - /url: /upload
+        - listitem [ref=e22]:
+          - link "ドキュメント" [ref=e23] [cursor=pointer]:
+            - /url: /documents
+        - listitem [ref=e24]:
+          - link "設定" [ref=e25] [cursor=pointer]:
+            - /url: /settings
+      - separator [ref=e26]
+      - generic [ref=e27]:
+        - paragraph [ref=e28]: お気に入りKB
+        - list [ref=e44]:
+          - listitem [ref=e45]:
+            - 'button "ナレッジベース: ソ企情報" [pressed] [ref=e46] [cursor=pointer]':
+              - generic [ref=e48]: ソ企情報
+          - listitem [ref=e49]:
+            - 'button "ナレッジベース: ステーション" [ref=e50] [cursor=pointer]':
+              - generic [ref=e52]: ステーション
+          - listitem [ref=e53]:
+            - 'button "ナレッジベース: 技術ブログ" [ref=e54] [cursor=pointer]':
+              - generic [ref=e56]: 技術ブログ
+          - listitem [ref=e57]:
+            - 'button "ナレッジベース: 製造マニュアル" [ref=e58] [cursor=pointer]':
+              - generic [ref=e60]: 製造マニュアル
+      - separator [ref=e30]
+      - generic:
+        - paragraph [ref=e31]: 最近のセッション
+        - list [ref=e61]:
+          - listitem [ref=e62]:
+            - 'button "セッション: 勤怠のリンクは" [ref=e63] [cursor=pointer]': 勤怠のリンクは
+          - listitem [ref=e64]:
+            - 'button "セッション: 勤怠のリンクは" [ref=e65] [cursor=pointer]': 勤怠のリンクは
+          - listitem [ref=e66]:
+            - 'button "セッション: 勤怠のリンクは？" [ref=e67] [cursor=pointer]': 勤怠のリンクは？
+          - listitem [ref=e68]:
+            - 'button "セッション: eps成型#5ラインのラインコードは？" [ref=e69] [cursor=pointer]': eps成型#5ラインのラインコードは？
+          - listitem [ref=e70]:
+            - 'button "セッション: モータ組立43号のラインコードは？" [ref=e71] [cursor=pointer]': モータ組立43号のラインコードは？
+          - listitem [ref=e72]:
+            - 'button "セッション: AWSでAIチャットが30秒すぎるとエラーになる。どうしたらいい？" [ref=e73] [cursor=pointer]': AWSでAIチャットが30秒すぎるとエラーになる。どうしたらいい？
+          - listitem [ref=e74]:
+            - 'button "セッション: AWSでAIチャットが30秒すぎるとエラーになる。どうしたらいい？" [ref=e75] [cursor=pointer]': AWSでAIチャットが30秒すぎるとエラーになる。どうしたらいい？
+          - listitem [ref=e76]:
+            - 'button "セッション: AWSでAIチャットが30秒すぎるとエラーになる。どうしたらいい？" [ref=e77] [cursor=pointer]': AWSでAIチャットが30秒すぎるとエラーになる。どうしたらいい？
+          - listitem [ref=e78]:
+            - 'button "セッション: AWSでAIチャットが30秒すぎるとエラーになる。どうしたらいい？" [ref=e79] [cursor=pointer]': AWSでAIチャットが30秒すぎるとエラーになる。どうしたらいい？
+          - listitem [ref=e80]:
+            - 'button "セッション: MQTTは？" [ref=e81] [cursor=pointer]': MQTTは？
+      - separator [ref=e33]
+      - generic [ref=e34]:
+        - paragraph [ref=e35]: 開発者向け
+        - list [ref=e36]:
+          - listitem [ref=e37]:
+            - link "API仕様・動作確認 ↗" [ref=e38] [cursor=pointer]:
+              - /url: /docs
+          - listitem [ref=e39]:
+            - link "外部連携ガイド ↗" [ref=e40] [cursor=pointer]:
+              - /url: /guide.html
+    - main [ref=e41]:
+      - region "設定" [ref=e42]:
+        - heading "設定" [level=1] [ref=e82]
+        - region "検索設定" [ref=e83]:
+          - heading "検索設定" [level=2] [ref=e84]
+          - generic [ref=e86]:
+            - generic [ref=e87]:
+              - generic [ref=e88]: リランク
+              - generic [ref=e89]: 検索結果の関連度を再評価して精度を向上します
+            - checkbox "リランク" [ref=e92]
+          - separator [ref=e93]
+          - generic [ref=e95]:
+            - generic [ref=e96]:
+              - generic [ref=e97]: ハイブリッド検索
+              - generic [ref=e98]: キーワード検索とベクトル検索を組み合わせて検索します
+            - checkbox "ハイブリッド検索" [checked] [ref=e101]
+          - separator [ref=e102]
+          - generic [ref=e103]:
+            - generic [ref=e104]: 検索取得件数
+            - paragraph [ref=e105]: RAG検索で取得するドキュメントチャンクの件数です（1〜50）
+            - spinbutton "検索取得件数" [ref=e106]: "30"
+          - separator [ref=e107]
+          - group "応答モード" [ref=e108]:
+            - generic [ref=e109]: 応答モード
+            - radiogroup [ref=e110]:
+              - generic [ref=e111] [cursor=pointer]:
+                - radio "シンプル" [checked] [ref=e112]
+                - text: シンプル
+              - generic [ref=e113] [cursor=pointer]:
+                - radio "詳細" [ref=e114]
+                - text: 詳細
+        - region "プロフィール" [ref=e115]:
+          - heading "プロフィール" [level=2] [ref=e116]
+          - generic [ref=e117]:
+            - generic [ref=e119]:
+              - generic [ref=e120]: ニックネーム
+              - textbox "ニックネーム" [ref=e122]:
+                - /placeholder: ニックネームを入力
+            - button "ニックネームを保存" [disabled] [ref=e124]:
+              - generic [ref=e125]: 保存
+        - region "個人辞書" [ref=e126]:
+          - heading "個人辞書" [level=2] [ref=e127]
+          - paragraph [ref=e128]: 個人辞書は、あなたが普段使う用語とシステムのマスターデータを紐付けるための機能です。 登録した用語は、チャットでの質問時に自動的に正式な用語へ変換され、より正確な検索結果を得られます。
+          - form "用語追加フォーム" [ref=e129]:
+            - paragraph [ref=e130]: 新しい用語を追加
+            - generic [ref=e131]:
+              - generic [ref=e132]:
+                - generic [ref=e133]: 個人用語
+                - textbox "個人用語" [ref=e135]:
+                  - /placeholder: "例: コンベア"
+              - generic [ref=e137]:
+                - generic [ref=e138]: マスターキー
+                - textbox "マスターキー" [ref=e140]:
+                  - /placeholder: "例: conveyor_line_a"
+              - generic [ref=e142]:
+                - generic [ref=e143]: 種別
+                - combobox "マスター種別を選択" [ref=e144] [cursor=pointer]:
+                  - option "サイト" [selected]
+                  - option "ライン"
+                  - option "工程"
+              - button "用語を追加する" [ref=e145] [cursor=pointer]:
+                - img [ref=e147]
+                - generic [ref=e149]: 追加
+          - paragraph [ref=e151]: 個人辞書に登録された用語がありません。
+        - region "行動プロファイル" [ref=e152]:
+          - heading "行動プロファイル" [level=2] [ref=e153]
+          - generic [ref=e154]:
+            - heading "カスタムプロファイル" [level=3] [ref=e155]
+            - paragraph [ref=e156]: 業務情報や参照すべき事項を自由に登録できます。
+            - list "プロファイル項目一覧" [ref=e157]:
+              - listitem [ref=e158]:
+                - generic [ref=e159]:
+                  - generic [ref=e160]: 担当ライン
+                  - generic [ref=e161]: モータ組立43号
+                  - button "担当ラインを編集" [ref=e162] [cursor=pointer]: 編集
+                  - button "担当ラインを削除" [ref=e163] [cursor=pointer]: 削除
+              - listitem [ref=e171]:
+                - generic [ref=e172]:
+                  - generic [ref=e173]: 所属部署
+                  - generic [ref=e174]: ソフトウェア企画
+                  - button "所属部署を編集" [ref=e175] [cursor=pointer]: 編集
+                  - button "所属部署を削除" [ref=e176] [cursor=pointer]: 削除
+            - generic [ref=e164]:
+              - textbox "新しい項目名" [ref=e165]:
+                - /placeholder: "項目名（例: 担当ライン）"
+              - textbox "新しい値" [ref=e166]:
+                - /placeholder: "値（例: モータ組立43号）"
+              - button "追加" [disabled] [ref=e167] [cursor=pointer]
+          - generic [ref=e168]:
+            - heading "自動分析（チャット履歴から）" [level=3] [ref=e169]
+            - text: チャット履歴からの分析データはまだありません。
+            - generic [ref=e170]: "セッション数: 11 ／ メッセージ数: 24"

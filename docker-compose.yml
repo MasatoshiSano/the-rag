@@ -1,0 +1,61 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8010:8000"
+    volumes:
+      - ./backend/data:/app/data
+      - ./uploads:/app/uploads
+      - /mnt:/host_drives:ro
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:-}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:-}
+      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-ap-northeast-1}
+      - NO_PROXY=localhost,127.0.0.1,::1,qdrant,backend,frontend
+      - no_proxy=localhost,127.0.0.1,::1,qdrant,backend,frontend
+      - BEDROCK_REGION=${BEDROCK_REGION:-ap-northeast-1}
+      - BEDROCK_MODEL_ID=${BEDROCK_MODEL_ID:-apac.anthropic.claude-sonnet-4-20250514-v1:0}
+      - ORACLE_DSN=${ORACLE_DSN:-}
+      - ORACLE_USER=${ORACLE_USER:-}
+      - ORACLE_PASSWORD=${ORACLE_PASSWORD:-}
+      - ORACLE_ENABLED=${ORACLE_ENABLED:-true}
+      - QDRANT_HOST=qdrant
+      - QDRANT_PORT=6333
+      - SQLITE_DB_PATH=/app/data/ragphantom.db
+      - SECRET_KEY=${SECRET_KEY:-dev-secret-key-change-in-production}
+      - UPLOAD_DIR=/app/uploads
+      - MASTER_MD_PATH=/app/data/master-flat-with-place-aliases.md
+      - GITEA_BASE_URL=${GITEA_BASE_URL:-}
+      - GITEA_TOKEN=${GITEA_TOKEN:-}
+    depends_on:
+      qdrant:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    environment:
+      - QDRANT__SERVICE__GRPC_PORT=6334
+
+volumes:
+  qdrant_data:

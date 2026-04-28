@@ -1,0 +1,67 @@
+- generic [ref=e3]:
+  - link "メインコンテンツへスキップ" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e5]:
+    - button "サイドバーを閉じる" [expanded] [ref=e6] [cursor=pointer]:
+      - generic [ref=e7]: ✕
+    - generic [ref=e8]: THE RAG
+    - search "セッション検索" [ref=e10]:
+      - combobox "セッションを検索" [ref=e11]
+  - generic [ref=e12]:
+    - navigation "サイドバーナビゲーション" [ref=e13]:
+      - list [ref=e15]:
+        - listitem [ref=e16]:
+          - link "チャット" [ref=e17] [cursor=pointer]:
+            - /url: /rag-phantom/chat
+        - listitem [ref=e18]:
+          - link "ナレッジベース" [ref=e19] [cursor=pointer]:
+            - /url: /rag-phantom/knowledge-bases
+        - listitem [ref=e20]:
+          - link "アップロード" [ref=e21] [cursor=pointer]:
+            - /url: /rag-phantom/upload
+        - listitem [ref=e22]:
+          - link "ドキュメント" [ref=e23] [cursor=pointer]:
+            - /url: /rag-phantom/documents
+        - listitem [ref=e24]:
+          - link "設定" [ref=e25] [cursor=pointer]:
+            - /url: /rag-phantom/settings
+      - separator [ref=e26]
+      - generic [ref=e27]:
+        - paragraph [ref=e28]: お気に入りKB
+        - paragraph [ref=e29]: なし
+      - separator [ref=e30]
+      - generic [ref=e31]:
+        - paragraph [ref=e32]: 最近のセッション
+        - paragraph [ref=e33]: セッションがありません
+      - separator [ref=e34]
+      - generic [ref=e35]:
+        - paragraph [ref=e36]: 開発者向け
+        - list [ref=e37]:
+          - listitem [ref=e38]:
+            - link "API仕様・動作確認 ↗" [ref=e39] [cursor=pointer]:
+              - /url: /rag-phantom/docs
+          - listitem [ref=e40]:
+            - link "外部連携ガイド ↗" [ref=e41] [cursor=pointer]:
+              - /url: /rag-phantom/guide.html
+    - main [ref=e42]:
+      - generic "チャット" [ref=e114]:
+        - heading "チャット - セッション ef3e967c-ce8a-458f-a62b-84c5d601d0bc" [level=1] [ref=e137]
+        - log "チャットメッセージ" [ref=e116]:
+          - article "あなたのメッセージ" [ref=e138]:
+            - generic [ref=e139]: あなた
+            - generic [ref=e140]: 高所作業時の安全対策について教えてください
+            - time [ref=e141]: 11:06
+          - article "アシスタントが回答中" [ref=e142]:
+            - generic [ref=e143]: アシスタント
+            - status "回答生成中..." [ref=e149]: 回答生成中...
+        - region "メッセージ入力エリア" [ref=e120]:
+          - generic [ref=e121]:
+            - textbox "回答中です。入力できません。" [disabled] [ref=e151]:
+              - /placeholder: 回答中...
+            - button "回答を中断する" [ref=e152] [cursor=pointer]:
+              - generic [ref=e127]: ■
+          - generic [ref=e128]:
+            - generic [ref=e129]:
+              - switch "検索モード切替" [ref=e130] [cursor=pointer]: 通常
+              - switch "回答モード切替" [ref=e133] [cursor=pointer]: コンパクト
+            - paragraph [ref=e136]: Enterで送信・Shift+Enterで改行

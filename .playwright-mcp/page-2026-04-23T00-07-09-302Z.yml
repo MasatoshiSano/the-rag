@@ -1,0 +1,67 @@
+- generic [ref=e3]:
+  - link "メインコンテンツへスキップ" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e5]:
+    - button "サイドバーを閉じる" [expanded] [ref=e6] [cursor=pointer]:
+      - generic [ref=e7]: ✕
+    - generic [ref=e8]: THE RAG
+    - search "セッション検索" [ref=e10]:
+      - combobox "セッションを検索" [ref=e11]
+  - generic [ref=e12]:
+    - navigation "サイドバーナビゲーション" [ref=e13]:
+      - list [ref=e15]:
+        - listitem [ref=e16]:
+          - link "チャット" [ref=e17] [cursor=pointer]:
+            - /url: /the-rag/chat
+        - listitem [ref=e18]:
+          - link "ナレッジベース" [ref=e19] [cursor=pointer]:
+            - /url: /the-rag/knowledge-bases
+        - listitem [ref=e20]:
+          - link "アップロード" [ref=e21] [cursor=pointer]:
+            - /url: /the-rag/upload
+        - listitem [ref=e22]:
+          - link "ドキュメント" [ref=e23] [cursor=pointer]:
+            - /url: /the-rag/documents
+        - listitem [ref=e24]:
+          - link "設定" [ref=e25] [cursor=pointer]:
+            - /url: /the-rag/settings
+      - separator [ref=e26]
+      - generic [ref=e27]:
+        - paragraph [ref=e28]: お気に入りKB
+        - paragraph [ref=e29]: なし
+      - separator [ref=e30]
+      - generic [ref=e31]:
+        - paragraph [ref=e32]: 最近のセッション
+        - list [ref=e49]:
+          - listitem [ref=e50]:
+            - 'button "セッション: データにどんなテーブルがありますか？概要を教えてください" [ref=e51] [cursor=pointer]': データにどんなテーブルがありますか？概要を教えてください
+      - separator [ref=e34]
+      - generic [ref=e35]:
+        - paragraph [ref=e36]: 開発者向け
+        - list [ref=e37]:
+          - listitem [ref=e38]:
+            - link "API仕様・動作確認 ↗" [ref=e39] [cursor=pointer]:
+              - /url: /the-rag/docs
+          - listitem [ref=e40]:
+            - link "外部連携ガイド ↗" [ref=e41] [cursor=pointer]:
+              - /url: /the-rag/guide.html
+    - main [ref=e42]:
+      - generic "チャット" [ref=e153]:
+        - heading "チャット" [level=1] [ref=e154]
+        - log "チャットメッセージ" [ref=e155]:
+          - generic "メッセージがありません" [ref=e156]:
+            - paragraph [ref=e157]: 質問を入力してください
+            - paragraph [ref=e158]: ナレッジベースに関する質問を入力すると、AIが回答します。
+        - region "メッセージ入力エリア" [ref=e159]:
+          - generic [ref=e160]:
+            - textbox "メッセージを入力 (Shift+Enterで改行)" [ref=e161]:
+              - /placeholder: メッセージを入力... (Shift+Enterで改行)
+            - button "音声入力を開始" [ref=e162] [cursor=pointer]:
+              - img [ref=e163]
+            - button "メッセージを送信" [disabled] [ref=e165]:
+              - generic [ref=e166]: ↑
+          - generic [ref=e167]:
+            - generic [ref=e168]:
+              - switch "検索モード切替" [checked] [ref=e169] [cursor=pointer]: 深掘り
+              - switch "回答モード切替" [checked] [ref=e172] [cursor=pointer]: 詳細
+            - paragraph [ref=e175]: Enterで送信・Shift+Enterで改行

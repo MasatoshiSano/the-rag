@@ -1,0 +1,6 @@
+[     356ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/api/sessions?limit=10&offset=0:0
+[     356ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/api/knowledge-bases/favorites:0
+[    1413ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/api/knowledge-bases/favorites:0
+[    1413ms] [ERROR] Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://localhost:3000/api/sessions?limit=10&offset=0:0
+[   22239ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost/api/knowledge-bases/:0
+[   25581ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://localhost/api/knowledge-bases/:0

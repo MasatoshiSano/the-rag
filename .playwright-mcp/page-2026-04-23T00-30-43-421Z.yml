@@ -1,0 +1,129 @@
+- generic [ref=e3]:
+  - link "メインコンテンツへスキップ" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e5]:
+    - button "サイドバーを閉じる" [expanded] [ref=e6] [cursor=pointer]:
+      - generic [ref=e7]: ✕
+    - generic [ref=e8]: THE RAG
+    - search "セッション検索" [ref=e10]:
+      - combobox "セッションを検索" [ref=e11]
+  - generic [ref=e12]:
+    - navigation "サイドバーナビゲーション" [ref=e13]:
+      - list [ref=e15]:
+        - listitem [ref=e16]:
+          - link "チャット" [ref=e17] [cursor=pointer]:
+            - /url: /the-rag/chat
+        - listitem [ref=e18]:
+          - link "ナレッジベース" [ref=e19] [cursor=pointer]:
+            - /url: /the-rag/knowledge-bases
+        - listitem [ref=e20]:
+          - link "アップロード" [ref=e21] [cursor=pointer]:
+            - /url: /the-rag/upload
+        - listitem [ref=e22]:
+          - link "ドキュメント" [ref=e23] [cursor=pointer]:
+            - /url: /the-rag/documents
+        - listitem [ref=e24]:
+          - link "設定" [ref=e25] [cursor=pointer]:
+            - /url: /the-rag/settings
+      - separator [ref=e26]
+      - generic [ref=e27]:
+        - paragraph [ref=e28]: お気に入りKB
+        - paragraph [ref=e29]: なし
+      - separator [ref=e30]
+      - generic [ref=e31]:
+        - paragraph [ref=e32]: 最近のセッション
+        - list [ref=e66]:
+          - listitem [ref=e67]:
+            - 'button "セッション: MA043の3月21日のデータで機種名ごとの件数を教えて" [ref=e68] [cursor=pointer]': MA043の3月21日のデータで機種名ごとの件数を教えて
+          - listitem [ref=e69]:
+            - 'button "セッション: MA043の3月21日のデータで、機種名ごとの件数を教えてください" [ref=e70] [cursor=pointer]': MA043の3月21日のデータで、機種名ごとの件数を教えてください
+          - listitem [ref=e71]:
+            - 'button "セッション: MA043の3月21日のデータで、機種名ごとの件数を教えてください" [ref=e72] [cursor=pointer]': MA043の3月21日のデータで、機種名ごとの件数を教えてください
+          - listitem [ref=e73]:
+            - 'button "セッション: データにどんなテーブルがありますか？概要を教えてください" [ref=e74] [cursor=pointer]': データにどんなテーブルがありますか？概要を教えてください
+      - separator [ref=e34]
+      - generic [ref=e35]:
+        - paragraph [ref=e36]: 開発者向け
+        - list [ref=e37]:
+          - listitem [ref=e38]:
+            - link "API仕様・動作確認 ↗" [ref=e39] [cursor=pointer]:
+              - /url: /the-rag/docs
+          - listitem [ref=e40]:
+            - link "外部連携ガイド ↗" [ref=e41] [cursor=pointer]:
+              - /url: /the-rag/guide.html
+    - main [ref=e42]:
+      - generic "チャット" [ref=e43]:
+        - heading "チャット - セッション aada4808-aebb-48a5-8165-32971450df4e" [level=1] [ref=e75]
+        - log "チャットメッセージ" [ref=e45]:
+          - article "あなたのメッセージ" [ref=e136]:
+            - generic [ref=e137]: あなた
+            - generic [ref=e138]: MA043の3月21日の機種名ごとの件数を教えて
+            - time [ref=e139]: 09:30
+          - article "アシスタントの回答" [ref=e140]:
+            - generic [ref=e141]: アシスタント
+            - generic [ref=e142]:
+              - generic [ref=e143]: 現在の結果から、MA043ラインの2024年3月21日における機種名ごとの件数（40テーブル分）は以下の通りです：
+              - heading "MA043ライン 2024年3月21日 機種名ごと件数（部分集計）" [level=4] [ref=e145]
+              - table [ref=e147]:
+                - rowgroup [ref=e148]:
+                  - row "機種名 件数" [ref=e149]:
+                    - columnheader "機種名" [ref=e150]
+                    - columnheader "件数" [ref=e151]
+                - rowgroup [ref=e152]:
+                  - row "K006T61571 273件" [ref=e153]:
+                    - cell "K006T61571" [ref=e154]
+                    - cell "273件" [ref=e155]
+                  - row "K006T60572 192件" [ref=e156]:
+                    - cell "K006T60572" [ref=e157]
+                    - cell "192件" [ref=e158]
+              - generic [ref=e160]:
+                - strong [ref=e161]: 出典
+                - text: ": MA043トレサビデータ（2024年3月21日分、40テーブル集計）"
+              - heading "集計の詳細" [level=5] [ref=e163]
+              - list [ref=e165]:
+                - listitem [ref=e166]:
+                  - strong [ref=e167]: データソース
+                  - text: ": MA043ラインのトレサビリティデータ"
+                - listitem [ref=e168]:
+                  - strong [ref=e169]: 対象日
+                  - text: ": 2024年3月21日"
+                - listitem [ref=e170]:
+                  - strong [ref=e171]: 集計範囲
+                  - text: ": 256テーブル中40テーブル分（約15.6%）"
+                - listitem [ref=e172]:
+                  - strong [ref=e173]: 主要機種
+                  - text: ":"
+              - generic [ref=e174]:
+                - text: "-"
+                - strong [ref=e175]: K006T61571
+                - text: ": 273件（約58.7%）"
+              - generic [ref=e176]:
+                - text: "-"
+                - strong [ref=e177]: K006T60572
+                - text: ": 192件（約41.3%）"
+              - generic [ref=e179]: この結果は40テーブル分の部分集計となっています。全256テーブルを含めた完全な集計を行うには、残りの216テーブルも統合する必要がありますが、現在のクエリ制限により一度に全テーブルを処理することができませんでした。
+              - generic [ref=e181]: 現在の集計からは、K006T61571が主力機種として多く生産されており、K006T60572がそれに続く生産量であることが確認できます。
+            - generic [ref=e183]:
+              - button "メッセージをコピー" [ref=e184] [cursor=pointer]:
+                - generic [ref=e185]: ⎘
+                - generic [ref=e186]: コピー
+              - radiogroup "回答を評価" [ref=e187]:
+                - radio "1星" [ref=e188] [cursor=pointer]: ☆
+                - radio "2星" [ref=e189] [cursor=pointer]: ☆
+                - radio "3星" [ref=e190] [cursor=pointer]: ☆
+                - radio "4星" [ref=e191] [cursor=pointer]: ☆
+                - radio "5星" [ref=e192] [cursor=pointer]: ☆
+            - time [ref=e193]: 09:30
+        - region "メッセージ入力エリア" [ref=e49]:
+          - generic [ref=e50]:
+            - textbox "メッセージを入力 (Shift+Enterで改行)" [ref=e194]:
+              - /placeholder: メッセージを入力... (Shift+Enterで改行)
+            - button "音声入力を開始" [ref=e195] [cursor=pointer]:
+              - img [ref=e196]
+            - button "メッセージを送信" [disabled] [ref=e198]:
+              - generic [ref=e56]: ↑
+          - generic [ref=e57]:
+            - generic [ref=e58]:
+              - switch "検索モード切替" [checked] [ref=e59] [cursor=pointer]: 深掘り
+              - switch "回答モード切替" [checked] [ref=e62] [cursor=pointer]: 詳細
+            - paragraph [ref=e65]: Enterで送信・Shift+Enterで改行

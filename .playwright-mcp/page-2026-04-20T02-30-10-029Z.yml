@@ -1,0 +1,134 @@
+- generic [ref=e3]:
+  - link "メインコンテンツへスキップ" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e5]:
+    - button "サイドバーを閉じる" [expanded] [ref=e6] [cursor=pointer]:
+      - generic [ref=e7]: ✕
+    - generic [ref=e8]: THE RAG
+    - search "セッション検索" [ref=e10]:
+      - combobox "セッションを検索" [ref=e11]
+  - generic [ref=e12]:
+    - navigation "サイドバーナビゲーション" [ref=e13]:
+      - list [ref=e15]:
+        - listitem [ref=e16]:
+          - link "チャット" [ref=e17] [cursor=pointer]:
+            - /url: /rag-phantom/chat
+        - listitem [ref=e18]:
+          - link "ナレッジベース" [ref=e19] [cursor=pointer]:
+            - /url: /rag-phantom/knowledge-bases
+        - listitem [ref=e20]:
+          - link "アップロード" [ref=e21] [cursor=pointer]:
+            - /url: /rag-phantom/upload
+        - listitem [ref=e22]:
+          - link "ドキュメント" [ref=e23] [cursor=pointer]:
+            - /url: /rag-phantom/documents
+        - listitem [ref=e24]:
+          - link "設定" [ref=e25] [cursor=pointer]:
+            - /url: /rag-phantom/settings
+      - separator [ref=e26]
+      - generic [ref=e27]:
+        - paragraph [ref=e28]: お気に入りKB
+        - list [ref=e29]:
+          - listitem [ref=e30]:
+            - 'button "ナレッジベース: 技術ブログ" [pressed] [ref=e31] [cursor=pointer]':
+              - generic [ref=e33]: 技術ブログ
+      - separator [ref=e34]
+      - generic [ref=e35]:
+        - paragraph [ref=e36]: 最近のセッション
+        - list [ref=e37]:
+          - listitem [ref=e38]:
+            - 'button "セッション: Oracleリスナー接続不調の対応手順を教えてください" [ref=e39] [cursor=pointer]': Oracleリスナー接続不調の対応手順を教えてください
+          - listitem [ref=e40]:
+            - 'button "セッション: Oracleリスナー接続不調の対応手順を教えてください" [ref=e41] [cursor=pointer]': Oracleリスナー接続不調の対応手順を教えてください
+          - listitem [ref=e42]:
+            - 'button "セッション: AWSコスト最適化で54%削減を達成した方法について教えてください。" [ref=e43] [cursor=pointer]': AWSコスト最適化で54%削減を達成した方法について教えてください。
+          - listitem [ref=e44]:
+            - 'button "セッション: AWSコスト最適化で54%削減を達成した方法について教えてください。" [ref=e45] [cursor=pointer]': AWSコスト最適化で54%削減を達成した方法について教えてください。
+          - listitem [ref=e46]:
+            - 'button "セッション: Bedrock RuntimeとBedrock Agents APIの違いは何ですか？" [ref=e47] [cursor=pointer]': Bedrock RuntimeとBedrock Agents APIの違いは何ですか？
+          - listitem [ref=e48]:
+            - 'button "セッション: Bedrock RuntimeとBedrock Agents APIの違いは何ですか？" [ref=e49] [cursor=pointer]': Bedrock RuntimeとBedrock Agents APIの違いは何ですか？
+          - listitem [ref=e50]:
+            - 'button "セッション: 製造AI画像解析でLambdaストリーミングを使う理由は何ですか？" [ref=e51] [cursor=pointer]': 製造AI画像解析でLambdaストリーミングを使う理由は何ですか？
+          - listitem [ref=e52]:
+            - 'button "セッション: 製造AI画像解析でLambdaストリーミングを使う理由は何ですか？" [ref=e53] [cursor=pointer]': 製造AI画像解析でLambdaストリーミングを使う理由は何ですか？
+          - listitem [ref=e54]:
+            - 'button "セッション: DynamoDBのSingle Table Designについて、チャットデータの設計パターンを教え" [ref=e55] [cursor=pointer]': DynamoDBのSingle Table Designについて、チャットデータの設計パターンを教え
+          - listitem [ref=e56]:
+            - 'button "セッション: DynamoDBのSingle Table Designについて、チャットデータの設計パターンを教え" [ref=e57] [cursor=pointer]': DynamoDBのSingle Table Designについて、チャットデータの設計パターンを教え
+      - separator [ref=e58]
+      - generic [ref=e59]:
+        - paragraph [ref=e60]: 開発者向け
+        - list [ref=e61]:
+          - listitem [ref=e62]:
+            - link "API仕様・動作確認 ↗" [ref=e63] [cursor=pointer]:
+              - /url: /rag-phantom/docs
+          - listitem [ref=e64]:
+            - link "外部連携ガイド ↗" [ref=e65] [cursor=pointer]:
+              - /url: /rag-phantom/guide.html
+    - main [ref=e66]:
+      - generic "チャット" [ref=e67]:
+        - heading "チャット - セッション df47bb89-e630-4d7f-b659-7748cd753b7d" [level=1] [ref=e90]
+        - log "チャットメッセージ" [ref=e69]:
+          - article "あなたのメッセージ" [ref=e109]:
+            - generic [ref=e110]: あなた
+            - generic [ref=e111]: Oracleリスナー接続不調の対応手順を教えてください
+            - time [ref=e112]: 11:28
+          - article "アシスタントの回答" [ref=e113]:
+            - generic [ref=e114]: アシスタント
+            - generic [ref=e115]:
+              - strong [ref=e117]: Oracleリスナー接続不調の対応手順：
+              - generic [ref=e119]:
+                - text: •
+                - strong [ref=e120]: リスナー状態確認
+                - text: ":"
+                - code [ref=e121]: lsnrctl status
+                - text: でサービス一覧に対象DBが登録されているか確認
+              - generic [ref=e122]:
+                - text: •
+                - strong [ref=e123]: インスタンス再登録
+                - text: ":"
+                - code [ref=e124]: sqlplus / as sysdba
+                - text: で接続後、
+                - code [ref=e125]: alter system register;
+                - text: を実行
+              - generic [ref=e126]:
+                - text: •
+                - strong [ref=e127]: サービス再起動
+                - text: ": WindowsサービスのOracleServiceを再起動、またはlsnrctlコマンドでリスナー再起動"
+              - generic [ref=e128]:
+                - text: •
+                - strong [ref=e129]: 接続確認
+                - text: ":"
+                - code [ref=e130]: select status from v$instance;
+                - text: でインスタンス状態が「OPEN」であることを確認
+              - generic [ref=e132]: "*情報源: 2025-12-05_Oracleリスナー接続不調対応履歴.md、2025-12-05_Oracle接続トラブル調査手順_OS・DBコマンド一式.md*"
+            - generic [ref=e133]:
+              - region "参照ドキュメント" [ref=e134]:
+                - button "参照ドキュメント 2件を表示" [ref=e135] [cursor=pointer]:
+                  - generic [ref=e136]: ▶
+                  - text: 参照ドキュメント (2)
+              - generic [ref=e137]:
+                - button "メッセージをコピー" [ref=e138] [cursor=pointer]:
+                  - generic [ref=e139]: ⎘
+                  - generic [ref=e140]: コピー
+                - radiogroup "回答を評価" [ref=e141]:
+                  - radio "1星" [ref=e142] [cursor=pointer]: ☆
+                  - radio "2星" [ref=e143] [cursor=pointer]: ☆
+                  - radio "3星" [ref=e144] [cursor=pointer]: ☆
+                  - radio "4星" [ref=e145] [cursor=pointer]: ☆
+                  - radio "5星" [ref=e146] [cursor=pointer]: ☆
+            - time [ref=e147]: 11:28
+        - region "メッセージ入力エリア" [ref=e73]:
+          - generic [ref=e74]:
+            - textbox "メッセージを入力 (Shift+Enterで改行)" [ref=e148]:
+              - /placeholder: メッセージを入力... (Shift+Enterで改行)
+            - button "音声入力を開始" [ref=e149] [cursor=pointer]:
+              - img [ref=e150]
+            - button "メッセージを送信" [disabled] [ref=e152]:
+              - generic [ref=e80]: ↑
+          - generic [ref=e81]:
+            - generic [ref=e82]:
+              - switch "検索モード切替" [checked] [ref=e83] [cursor=pointer]: 深掘り
+              - switch "回答モード切替" [checked] [active] [ref=e86] [cursor=pointer]: 詳細
+            - paragraph [ref=e89]: Enterで送信・Shift+Enterで改行

@@ -1,0 +1,7 @@
+[   22709ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Entity) @ http://localhost:3000/api/knowledge-bases/:0
+[  819002ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/api/documents/upload?knowledge_base_id=07cbce52-2ca8-494e-9cb2-4daf09a6756e:0
+[  866471ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/api/documents/upload?knowledge_base_id=07cbce52-2ca8-494e-9cb2-4daf09a6756e:0
+[  898315ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/api/documents/upload?knowledge_base_id=07cbce52-2ca8-494e-9cb2-4daf09a6756e:0
+[ 1139521ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Entity) @ http://localhost:3000/api/documents/upload?knowledge_base_id=07cbce52-2ca8-494e-9cb2-4daf09a6756e:0
+[ 1198400ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/api/documents/upload?knowledge_base_id=07cbce52-2ca8-494e-9cb2-4daf09a6756e:0
+[ 1800571ms] [ERROR] Failed to load resource: the server responded with a status of 500 (Internal Server Error) @ http://localhost:3000/api/documents/upload?knowledge_base_id=07cbce52-2ca8-494e-9cb2-4daf09a6756e:0

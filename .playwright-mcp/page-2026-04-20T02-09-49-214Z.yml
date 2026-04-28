@@ -1,0 +1,288 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e5]: THE RAG
+      - generic [ref=e6]:
+        - text: 社内ナレッジ検索AIチャット
+        - text: 聞くだけで、必要な情報にアクセス
+      - generic [ref=e7]:
+        - generic [ref=e8]: 🤖 AIチャット
+        - generic [ref=e9]: 📄 ドキュメント管理
+        - generic [ref=e10]: 🔍 ベクトル検索
+        - generic [ref=e11]: 🏭 製造現場対応
+    - generic [ref=e13]: 2026年4月
+  - generic [ref=e14]:
+    - generic [ref=e16]:
+      - generic [ref=e17]: WHAT IS THE RAG?
+      - generic [ref=e18]:
+        - text: 社内の知識に、
+        - text: 聞くだけでアクセス
+      - generic [ref=e19]:
+        - text: マニュアル、手順書、規格書、議事録…
+        - text: 散らばった社内ドキュメントをAIが横断検索し、自然な日本語で回答します。
+    - generic [ref=e20]: THE RAG
+    - generic [ref=e22]: 02 / 15
+  - generic [ref=e23]:
+    - generic [ref=e24]:
+      - generic [ref=e25]: SECTION 01
+      - generic [ref=e26]: 基本機能
+      - generic [ref=e27]:
+        - text: AIチャットで社内ナレッジに質問し、
+        - text: 根拠付きの回答をリアルタイムで受け取れます。
+    - generic [ref=e29]: THE RAG
+    - generic [ref=e31]: 03 / 15
+  - generic [ref=e32]:
+    - generic [ref=e33]:
+      - generic [ref=e36]:
+        - generic [ref=e37]: AIチャットで質問
+        - generic [ref=e38]: 社内ドキュメントを根拠に、AIがリアルタイムで回答
+      - generic [ref=e39]: THE RAG
+    - generic [ref=e42]:
+      - generic [ref=e43]:
+        - generic [ref=e44]: 🤖 AI Powered
+        - generic [ref=e45]:
+          - text: 自然な日本語で
+          - text: なんでも聞ける
+        - generic [ref=e46]:
+          - generic [ref=e47]: ナレッジベースを選んで質問するだけ
+          - generic [ref=e48]: AIがリアルタイムにストリーミング回答
+          - generic [ref=e49]: 参照ドキュメントを根拠として表示
+          - generic [ref=e50]: 音声入力にも対応（マイクボタン）
+          - generic [ref=e51]: 回答の品質を星で評価・フィードバック
+      - img "チャット画面" [ref=e53]
+    - generic [ref=e54]: THE RAG
+    - generic [ref=e56]: 04 / 15
+  - generic [ref=e57]:
+    - generic [ref=e58]:
+      - generic [ref=e61]:
+        - generic [ref=e62]: 2つの検索モード
+        - generic [ref=e63]: 目的に応じて使い分け
+      - generic [ref=e64]: THE RAG
+    - generic [ref=e67]:
+      - generic [ref=e68]:
+        - generic [ref=e70]: 通常モード
+        - generic [ref=e71]: ⚡
+        - generic [ref=e72]: すばやく回答
+        - generic [ref=e73]: ベクトル検索で関連チャンクを取得し、AIが即座に回答を生成します。シンプルな質問に最適です。
+        - generic [ref=e74]:
+          - generic [ref=e75]: 応答が速い
+          - generic [ref=e76]: 一問一答に向いている
+          - generic [ref=e77]: 手順の確認、用語の意味など
+      - generic [ref=e78]:
+        - generic [ref=e80]: 深掘りモード
+        - generic [ref=e81]: 🔬
+        - generic [ref=e82]: 徹底的に調査
+        - generic [ref=e83]: AIが自律的にドキュメントを読み込み、複数回の検索を繰り返して回答精度を高めます。
+        - generic [ref=e84]:
+          - generic [ref=e85]: 最大5回まで自動で深掘り
+          - generic [ref=e86]: 複雑な質問に強い
+          - generic [ref=e87]: 原因調査、比較分析など
+    - generic [ref=e88]: THE RAG
+    - generic [ref=e90]: 05 / 15
+  - generic [ref=e91]:
+    - generic [ref=e92]:
+      - generic [ref=e93]: SECTION 02
+      - generic [ref=e94]:
+        - text: ドキュメント
+        - text: 管理
+      - generic [ref=e95]:
+        - text: マニュアルや手順書をアップロードすると、
+        - text: AIが自動で解析・タグ付け・インデックス化します。
+    - generic [ref=e97]: THE RAG
+    - generic [ref=e99]: 06 / 15
+  - generic [ref=e100]:
+    - generic [ref=e101]:
+      - generic [ref=e104]:
+        - generic [ref=e105]: ナレッジベース
+        - generic [ref=e106]: 目的別にドキュメントを整理・管理
+      - generic [ref=e107]: THE RAG
+    - generic [ref=e110]:
+      - generic [ref=e111]:
+        - generic [ref=e112]:
+          - text: 用途ごとに
+          - text: ナレッジを分類
+        - generic [ref=e113]: ナレッジベースを作成して、関連するドキュメントをグループ化。チャット時に検索対象を絞り込めます。
+        - generic [ref=e114]:
+          - generic [ref=e115]: 「安全衛生ガイドライン」「製造マニュアル」など用途別に作成
+          - generic [ref=e116]: お気に入り登録でサイドバーからすぐアクセス
+          - generic [ref=e117]: ドキュメント数を一覧で確認
+      - img "ナレッジベース画面" [ref=e119]
+    - generic [ref=e120]: THE RAG
+    - generic [ref=e122]: 07 / 15
+  - generic [ref=e123]:
+    - generic [ref=e124]:
+      - generic [ref=e127]:
+        - generic [ref=e128]: ドキュメントアップロード
+        - generic [ref=e129]: 多様な形式に対応、ドラッグ&ドロップで簡単登録
+      - generic [ref=e130]: THE RAG
+    - generic [ref=e133]:
+      - generic [ref=e134]:
+        - generic [ref=e135]:
+          - text: かんたん
+          - text: ドキュメント登録
+        - generic [ref=e136]: ファイルをドラッグ&ドロップするだけで登録完了。あとはAIが自動でインデックスを作成します。
+        - generic [ref=e137]:
+          - generic [ref=e138]: PDF
+          - generic [ref=e139]: Word
+          - generic [ref=e140]: Excel
+          - generic [ref=e141]: PowerPoint
+          - generic [ref=e142]: Markdown
+          - generic [ref=e143]: テキスト
+          - generic [ref=e144]: 画像
+          - generic [ref=e145]: HTML
+        - generic [ref=e146]:
+          - generic [ref=e147]: 最大20ファイルを一括アップロード
+          - generic [ref=e148]: テキスト直接入力にも対応
+          - generic [ref=e149]: GitHub / Gitea リポジトリから自動同期も可能
+      - img "アップロード画面" [ref=e151]
+    - generic [ref=e152]: THE RAG
+    - generic [ref=e154]: 08 / 15
+  - generic [ref=e155]:
+    - generic [ref=e156]:
+      - generic [ref=e159]:
+        - generic [ref=e160]: 自動インデックス処理
+        - generic [ref=e161]: アップロード後、AIが全自動でドキュメントを検索可能にします
+      - generic [ref=e162]: THE RAG
+    - generic [ref=e164]:
+      - generic [ref=e165]:
+        - generic [ref=e166]:
+          - generic [ref=e167]: "1"
+          - generic [ref=e168]: 変換
+          - generic [ref=e169]:
+            - text: PDF・Wordなどを
+            - text: テキストに変換
+        - generic [ref=e170]: →
+        - generic [ref=e171]:
+          - generic [ref=e172]: "2"
+          - generic [ref=e173]: タグ付け
+          - generic [ref=e174]:
+            - text: AIが内容を分析し
+            - text: 自動でタグを付与
+        - generic [ref=e175]: →
+        - generic [ref=e176]:
+          - generic [ref=e177]: "3"
+          - generic [ref=e178]: 分割
+          - generic [ref=e179]:
+            - text: 検索に最適な
+            - text: チャンクに分割
+        - generic [ref=e180]: →
+        - generic [ref=e181]:
+          - generic [ref=e182]: "4"
+          - generic [ref=e183]: ベクトル化
+          - generic [ref=e184]:
+            - text: 意味を数値化し
+            - text: ベクトルDBに格納
+        - generic [ref=e185]: →
+        - generic [ref=e186]:
+          - generic [ref=e187]: "5"
+          - generic [ref=e188]: 検索可能
+          - generic [ref=e189]:
+            - text: チャットから
+            - text: 質問できる状態に
+      - generic [ref=e190]: 💡 すべて自動で処理されます。ユーザーはアップロードして待つだけです。
+    - generic [ref=e191]: THE RAG
+    - generic [ref=e193]: 09 / 15
+  - generic [ref=e194]:
+    - generic [ref=e195]:
+      - generic [ref=e196]: SECTION 03
+      - generic [ref=e197]: パーソナライズ
+      - generic [ref=e198]:
+        - text: 自分だけの辞書や設定で、
+        - text: より正確な回答を得られます。
+    - generic [ref=e200]: THE RAG
+    - generic [ref=e202]: 10 / 15
+  - generic [ref=e203]:
+    - generic [ref=e204]:
+      - generic [ref=e207]:
+        - generic [ref=e208]: 設定とカスタマイズ
+        - generic [ref=e209]: 個人辞書・検索設定・プロファイルで回答精度を向上
+      - generic [ref=e210]: THE RAG
+    - generic [ref=e213]:
+      - generic [ref=e214]:
+        - generic [ref=e215]:
+          - text: あなた専用に
+          - text: チューニング
+        - generic [ref=e216]:
+          - generic [ref=e217]:
+            - strong [ref=e218]: 個人辞書
+            - text: "— 社内略語や独自用語を正式名称にマッピング（例: 「SA」→「システムアーキテクト」）"
+          - generic [ref=e219]:
+            - strong [ref=e220]: 検索設定
+            - text: — リランク、ハイブリッド検索のON/OFF、取得件数の調整
+          - generic [ref=e221]:
+            - strong [ref=e222]: 行動プロファイル
+            - text: — よく参照するラインや工程をAIが自動学習
+          - generic [ref=e223]:
+            - strong [ref=e224]: ニックネーム
+            - text: — チャット内で呼ばれる名前を設定
+      - img "設定画面" [ref=e226]
+    - generic [ref=e227]: THE RAG
+    - generic [ref=e229]: 11 / 15
+  - generic [ref=e230]:
+    - generic [ref=e231]:
+      - generic [ref=e232]: SECTION 04
+      - generic [ref=e233]: 使い方の流れ
+      - generic [ref=e234]: 3つのステップで、すぐに使い始められます。
+    - generic [ref=e236]: THE RAG
+    - generic [ref=e238]: 12 / 15
+  - generic [ref=e239]:
+    - generic [ref=e240]:
+      - generic [ref=e243]:
+        - generic [ref=e244]: かんたん3ステップ
+        - generic [ref=e245]: 誰でもすぐに使えます
+      - generic [ref=e246]: THE RAG
+    - generic [ref=e249]:
+      - generic [ref=e250]:
+        - generic [ref=e251]:
+          - generic [ref=e252]: "1"
+          - text: 選ぶ
+        - generic [ref=e253]: 📚
+        - generic [ref=e254]: ナレッジベースを選択
+        - generic [ref=e255]: サイドバーまたはナレッジベース一覧から、質問したいカテゴリを選びます。
+      - generic [ref=e256]:
+        - generic [ref=e257]:
+          - generic [ref=e258]: "2"
+          - text: 聞く
+        - generic [ref=e259]: 💬
+        - generic [ref=e260]: 質問を入力
+        - generic [ref=e261]: 知りたいことを自然な日本語で入力。音声入力も使えます。
+      - generic [ref=e262]:
+        - generic [ref=e263]:
+          - generic [ref=e264]: "3"
+          - text: 得る
+        - generic [ref=e265]: ✅
+        - generic [ref=e266]: 回答を受け取る
+        - generic [ref=e267]: AIがドキュメントを根拠に回答。参照元も確認できます。
+    - generic [ref=e268]: THE RAG
+    - generic [ref=e270]: 13 / 15
+  - generic [ref=e271]:
+    - generic [ref=e272]:
+      - generic [ref=e275]:
+        - generic [ref=e276]: THE RAG でできること
+        - generic [ref=e277]: まとめ
+      - generic [ref=e278]: THE RAG
+    - generic [ref=e280]:
+      - generic [ref=e281]:
+        - generic [ref=e282]:
+          - generic [ref=e283]: 🔍
+          - generic [ref=e284]: すばやく検索
+          - generic [ref=e285]: マニュアルを探し回る必要はありません。質問するだけで、必要な情報がすぐに見つかります。
+        - generic [ref=e286]:
+          - generic [ref=e287]: 🤖
+          - generic [ref=e288]: AIが要約・回答
+          - generic [ref=e289]: 長い文書を読む手間なし。AIが要点を整理して、分かりやすく回答します。
+        - generic [ref=e290]:
+          - generic [ref=e291]: 📄
+          - generic [ref=e292]: 根拠を確認
+          - generic [ref=e293]: 回答の参照元ドキュメントを表示。情報の出典を確認して安心して活用できます。
+      - generic [ref=e294]: 🏭 製造現場のナレッジを、チーム全員がいつでも活用できる環境を実現します。
+    - generic [ref=e295]: THE RAG
+    - generic [ref=e297]: 14 / 15
+  - generic [ref=e299]:
+    - generic [ref=e300]:
+      - text: Thank
+      - text: You.
+    - generic [ref=e301]:
+      - text: ご質問・ご要望がございましたら、
+      - text: お気軽にお問い合わせください。
+    - generic [ref=e302]: THE RAG — 社内ナレッジ検索AIチャット

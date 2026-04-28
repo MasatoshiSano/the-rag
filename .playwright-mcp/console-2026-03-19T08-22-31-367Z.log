@@ -1,0 +1,44 @@
+[     171ms] [ERROR] Error handled by React Router default ErrorBoundary: TypeError: o.map is not a function
+    at O5 (http://localhost:3000/assets/index-BH1D2T0P.js:68:9474)
+    at qb (http://localhost:3000/assets/index-BH1D2T0P.js:38:16998)
+    at Yy (http://localhost:3000/assets/index-BH1D2T0P.js:40:3139)
+    at tj (http://localhost:3000/assets/index-BH1D2T0P.js:40:44804)
+    at ZA (http://localhost:3000/assets/index-BH1D2T0P.js:40:39766)
+    at TL (http://localhost:3000/assets/index-BH1D2T0P.js:40:39694)
+    at sp (http://localhost:3000/assets/index-BH1D2T0P.js:40:39547)
+    at oS (http://localhost:3000/assets/index-BH1D2T0P.js:40:36662)
+    at da (http://localhost:3000/assets/index-BH1D2T0P.js:38:3274)
+    at http://localhost:3000/assets/index-BH1D2T0P.js:40:34246 @ http://localhost:3000/assets/index-BH1D2T0P.js:51
+[     172ms] [ERROR] Error handled by React Router default ErrorBoundary: TypeError: o.map is not a function
+    at O5 (http://localhost:3000/assets/index-BH1D2T0P.js:68:9474)
+    at qb (http://localhost:3000/assets/index-BH1D2T0P.js:38:16998)
+    at Yy (http://localhost:3000/assets/index-BH1D2T0P.js:40:3139)
+    at tj (http://localhost:3000/assets/index-BH1D2T0P.js:40:44804)
+    at ZA (http://localhost:3000/assets/index-BH1D2T0P.js:40:39766)
+    at TL (http://localhost:3000/assets/index-BH1D2T0P.js:40:39694)
+    at sp (http://localhost:3000/assets/index-BH1D2T0P.js:40:39547)
+    at lg (http://localhost:3000/assets/index-BH1D2T0P.js:40:35914)
+    at oS (http://localhost:3000/assets/index-BH1D2T0P.js:40:36717)
+    at da (http://localhost:3000/assets/index-BH1D2T0P.js:38:3274) @ http://localhost:3000/assets/index-BH1D2T0P.js:51
+[     172ms] [ERROR] TypeError: o.map is not a function
+    at O5 (http://localhost:3000/assets/index-BH1D2T0P.js:68:9474)
+    at qb (http://localhost:3000/assets/index-BH1D2T0P.js:38:16998)
+    at Yy (http://localhost:3000/assets/index-BH1D2T0P.js:40:3139)
+    at tj (http://localhost:3000/assets/index-BH1D2T0P.js:40:44804)
+    at ZA (http://localhost:3000/assets/index-BH1D2T0P.js:40:39766)
+    at TL (http://localhost:3000/assets/index-BH1D2T0P.js:40:39694)
+    at sp (http://localhost:3000/assets/index-BH1D2T0P.js:40:39547)
+    at lg (http://localhost:3000/assets/index-BH1D2T0P.js:40:35914)
+    at oS (http://localhost:3000/assets/index-BH1D2T0P.js:40:36717)
+    at da (http://localhost:3000/assets/index-BH1D2T0P.js:38:3274) @ http://localhost:3000/assets/index-BH1D2T0P.js:39
+[     172ms] [ERROR] React Router caught the following error during render TypeError: o.map is not a function
+    at O5 (http://localhost:3000/assets/index-BH1D2T0P.js:68:9474)
+    at qb (http://localhost:3000/assets/index-BH1D2T0P.js:38:16998)
+    at Yy (http://localhost:3000/assets/index-BH1D2T0P.js:40:3139)
+    at tj (http://localhost:3000/assets/index-BH1D2T0P.js:40:44804)
+    at ZA (http://localhost:3000/assets/index-BH1D2T0P.js:40:39766)
+    at TL (http://localhost:3000/assets/index-BH1D2T0P.js:40:39694)
+    at sp (http://localhost:3000/assets/index-BH1D2T0P.js:40:39547)
+    at lg (http://localhost:3000/assets/index-BH1D2T0P.js:40:35914)
+    at oS (http://localhost:3000/assets/index-BH1D2T0P.js:40:36717)
+    at da (http://localhost:3000/assets/index-BH1D2T0P.js:38:3274) @ http://localhost:3000/assets/index-BH1D2T0P.js:51

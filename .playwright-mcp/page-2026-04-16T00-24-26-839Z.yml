@@ -1,0 +1,98 @@
+- generic [ref=e3]:
+  - link "メインコンテンツへスキップ" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e5]:
+    - button "サイドバーを閉じる" [expanded] [ref=e6] [cursor=pointer]:
+      - generic [ref=e7]: ✕
+    - generic [ref=e8]: THE RAG
+    - search "セッション検索" [ref=e10]:
+      - combobox "セッションを検索" [ref=e11]
+  - generic [ref=e12]:
+    - navigation "サイドバーナビゲーション" [ref=e13]:
+      - list [ref=e15]:
+        - listitem [ref=e16]:
+          - link "チャット" [ref=e17] [cursor=pointer]:
+            - /url: /rag-phantom/chat
+        - listitem [ref=e18]:
+          - link "ナレッジベース" [ref=e19] [cursor=pointer]:
+            - /url: /rag-phantom/knowledge-bases
+        - listitem [ref=e20]:
+          - link "アップロード" [ref=e21] [cursor=pointer]:
+            - /url: /rag-phantom/upload
+        - listitem [ref=e22]:
+          - link "ドキュメント" [ref=e23] [cursor=pointer]:
+            - /url: /rag-phantom/documents
+        - listitem [ref=e24]:
+          - link "設定" [ref=e25] [cursor=pointer]:
+            - /url: /rag-phantom/settings
+      - separator [ref=e26]
+      - generic [ref=e27]:
+        - paragraph [ref=e28]: お気に入りKB
+        - paragraph [ref=e29]: なし
+      - separator [ref=e30]
+      - generic [ref=e31]:
+        - paragraph [ref=e32]: 最近のセッション
+        - list [ref=e33]:
+          - listitem [ref=e34]:
+            - 'button "セッション: 安全基準について教えてください" [ref=e35] [cursor=pointer]': 安全基準について教えてください
+          - listitem [ref=e36]:
+            - 'button "セッション: 安全基準について教えてください" [ref=e37] [cursor=pointer]': 安全基準について教えてください
+          - listitem [ref=e38]:
+            - 'button "セッション: 安全基準について教えてください" [ref=e39] [cursor=pointer]': 安全基準について教えてください
+          - listitem [ref=e40]:
+            - 'button "セッション: 安全基準について教えてください" [ref=e41] [cursor=pointer]': 安全基準について教えてください
+          - listitem [ref=e42]:
+            - 'button "セッション: 安全基準について教えてください" [ref=e43] [cursor=pointer]': 安全基準について教えてください
+      - separator [ref=e44]
+      - generic [ref=e45]:
+        - paragraph [ref=e46]: 開発者向け
+        - list [ref=e47]:
+          - listitem [ref=e48]:
+            - link "API仕様・動作確認 ↗" [ref=e49] [cursor=pointer]:
+              - /url: /rag-phantom/docs
+          - listitem [ref=e50]:
+            - link "外部連携ガイド ↗" [ref=e51] [cursor=pointer]:
+              - /url: /rag-phantom/guide.html
+    - main [ref=e52]:
+      - generic "チャット" [ref=e53]:
+        - heading "チャット - セッション 2d654ead-8824-4921-969f-0a882a4f6fe8" [level=1] [ref=e76]
+        - log "チャットメッセージ" [ref=e55]:
+          - article "あなたのメッセージ" [ref=e77]:
+            - generic [ref=e78]: あなた
+            - generic [ref=e79]: 安全基準について教えてください
+            - time [ref=e80]: 09:24
+          - article "アシスタントの回答" [ref=e81]:
+            - generic [ref=e82]: アシスタント
+            - generic [ref=e83]:
+              - generic [ref=e84]: 申し訳ございませんが、現在ナレッジベース内に安全基準に関するドキュメントが登録されていません。
+              - generic [ref=e86]: 安全基準についてお答えするためには、以下のようなドキュメントが必要です：
+              - list [ref=e87]:
+                - listitem [ref=e88]: 安全管理規程
+                - listitem [ref=e89]: 作業安全基準書
+                - listitem [ref=e90]: 設備安全基準
+                - listitem [ref=e91]: 労働安全衛生関連資料
+              - generic [ref=e93]: ナレッジベースにこれらの関連ドキュメントを追加していただければ、具体的な安全基準についてお答えできます。
+            - generic [ref=e95]:
+              - button "メッセージをコピー" [ref=e96] [cursor=pointer]:
+                - generic [ref=e97]: ⎘
+                - generic [ref=e98]: コピー
+              - radiogroup "回答を評価" [ref=e99]:
+                - radio "1星" [ref=e100] [cursor=pointer]: ☆
+                - radio "2星" [ref=e101] [cursor=pointer]: ☆
+                - radio "3星" [ref=e102] [cursor=pointer]: ☆
+                - radio "4星" [ref=e103] [cursor=pointer]: ☆
+                - radio "5星" [ref=e104] [cursor=pointer]: ☆
+            - time [ref=e105]: 09:24
+        - region "メッセージ入力エリア" [ref=e59]:
+          - generic [ref=e60]:
+            - textbox "メッセージを入力 (Shift+Enterで改行)" [ref=e61]:
+              - /placeholder: メッセージを入力... (Shift+Enterで改行)
+            - button "音声入力を開始" [ref=e106] [cursor=pointer]:
+              - img [ref=e107]
+            - button "メッセージを送信" [disabled] [ref=e65]:
+              - generic [ref=e66]: ↑
+          - generic [ref=e67]:
+            - generic [ref=e68]:
+              - switch "検索モード切替" [checked] [ref=e69] [cursor=pointer]: 深掘り
+              - switch "回答モード切替" [ref=e72] [cursor=pointer]: コンパクト
+            - paragraph [ref=e75]: Enterで送信・Shift+Enterで改行

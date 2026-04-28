@@ -1,0 +1,99 @@
+- generic [ref=e3]:
+  - link "メインコンテンツへスキップ" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e5]:
+    - button "サイドバーを閉じる" [expanded] [ref=e6] [cursor=pointer]:
+      - generic [ref=e7]: ✕
+    - generic [ref=e8]: THE RAG
+    - search "セッション検索" [ref=e10]:
+      - combobox "セッションを検索" [ref=e11]
+  - generic [ref=e12]:
+    - navigation "サイドバーナビゲーション" [ref=e13]:
+      - list [ref=e15]:
+        - listitem [ref=e16]:
+          - link "チャット" [ref=e17] [cursor=pointer]:
+            - /url: /the-rag/chat
+        - listitem [ref=e18]:
+          - link "ナレッジベース" [ref=e19] [cursor=pointer]:
+            - /url: /the-rag/knowledge-bases
+        - listitem [ref=e20]:
+          - link "アップロード" [ref=e21] [cursor=pointer]:
+            - /url: /the-rag/upload
+        - listitem [ref=e22]:
+          - link "ドキュメント" [ref=e23] [cursor=pointer]:
+            - /url: /the-rag/documents
+        - listitem [ref=e24]:
+          - link "設定" [ref=e25] [cursor=pointer]:
+            - /url: /the-rag/settings
+      - separator [ref=e26]
+      - generic [ref=e27]:
+        - paragraph [ref=e28]: お気に入りKB
+        - paragraph [ref=e29]: なし
+      - separator [ref=e30]
+      - generic [ref=e31]:
+        - paragraph [ref=e32]: 最近のセッション
+        - list [ref=e49]:
+          - listitem [ref=e50]:
+            - 'button "セッション: MA043の3月21日のデータで、機種名ごとの件数を教えてください" [ref=e51] [cursor=pointer]': MA043の3月21日のデータで、機種名ごとの件数を教えてください
+          - listitem [ref=e52]:
+            - 'button "セッション: MA043の3月21日のデータで、機種名ごとの件数を教えてください" [ref=e53] [cursor=pointer]': MA043の3月21日のデータで、機種名ごとの件数を教えてください
+          - listitem [ref=e54]:
+            - 'button "セッション: データにどんなテーブルがありますか？概要を教えてください" [ref=e55] [cursor=pointer]': データにどんなテーブルがありますか？概要を教えてください
+      - separator [ref=e34]
+      - generic [ref=e35]:
+        - paragraph [ref=e36]: 開発者向け
+        - list [ref=e37]:
+          - listitem [ref=e38]:
+            - link "API仕様・動作確認 ↗" [ref=e39] [cursor=pointer]:
+              - /url: /the-rag/docs
+          - listitem [ref=e40]:
+            - link "外部連携ガイド ↗" [ref=e41] [cursor=pointer]:
+              - /url: /the-rag/guide.html
+    - main [ref=e42]:
+      - generic "チャット" [ref=e56]:
+        - heading "チャット - セッション 1d120ffa-f11e-4e3f-9901-215fe7320d8c" [level=1] [ref=e57]
+        - log "チャットメッセージ" [ref=e58]:
+          - article "あなたのメッセージ" [ref=e59]:
+            - generic [ref=e60]: あなた
+            - generic [ref=e61]: MA043の3月21日のデータで機種名ごとの件数を教えて
+            - time [ref=e62]: 09:13
+          - article "アシスタントが回答中" [ref=e63]:
+            - generic [ref=e64]: アシスタント
+            - generic [ref=e70]:
+              - status [ref=e71]: 検索戦略を検討中... (1/10)
+              - status [ref=e73]: 「ドキュメント一覧を取得」で検索中... (1/10)
+              - status [ref=e75]: 1件の結果を取得 (1/10)
+              - status [ref=e77]: 検索戦略を検討中... (2/10)
+              - status [ref=e95]: "「CSV データ分析: describe」で検索中... (2/10)"
+              - status [ref=e97]: 1件の結果を取得 (2/10)
+              - status [ref=e99]: 検索戦略を検討中... (3/10)
+              - status [ref=e101]: "「SQL 実行: WITH all_data AS ( SELECT 機種名, COUNT(*) as table_count F」で検索中... (3/10)"
+              - status [ref=e103]: 1件の結果を取得 (3/10)
+              - status [ref=e105]: 検索戦略を検討中... (4/10)
+              - status [ref=e107]: "「SQL 実行: SELECT 機種名, COUNT(*) as 件数 FROM ( SELECT 機種名 FROM t_001010」で検索中... (4/10)"
+              - status [ref=e109]: 1件の結果を取得 (4/10)
+              - status [ref=e111]: 検索戦略を検討中... (5/10)
+              - status [ref=e113]: "「SQL 実行: SELECT 機種名, SUM(行数) as 総件数 FROM ( SELECT '1' as batch, 機種名」で検索中... (5/10)"
+              - status [ref=e115]: 1件の結果を取得 (5/10)
+              - status [ref=e117]: 検索戦略を検討中... (6/10)
+              - status [ref=e119]: "「SQL 実行: SELECT 機種名, COUNT(*) as 件数 FROM ( SELECT 機種名 FROM t_001010」で検索中... (6/10)"
+              - status [ref=e121]: 1件の結果を取得 (6/10)
+              - status [ref=e123]: 検索戦略を検討中... (7/10)
+              - status [ref=e125]: "「SQL 実行: SELECT 機種名, COUNT(*) as 件数 FROM ( SELECT 機種名 FROM t_001010」で検索中... (7/10)"
+              - status [ref=e127]: 1件の結果を取得 (7/10)
+              - status [ref=e129]: 検索戦略を検討中... (8/10)
+              - status [ref=e131]: "「SQL 実行: SELECT 機種名, COUNT(*) as 件数 FROM ( SELECT 機種名 FROM t_001010」で検索中... (8/10)"
+              - status [ref=e133]: 1件の結果を取得 (8/10)
+              - status [ref=e135]: 検索戦略を検討中... (9/10)
+            - status "クエリを分析中..." [ref=e79]: クエリを分析中...
+        - region "メッセージ入力エリア" [ref=e81]:
+          - generic [ref=e82]:
+            - textbox "回答中です。入力できません。" [disabled] [ref=e83]:
+              - /placeholder: 回答中...
+            - button "回答を中断する" [ref=e84] [cursor=pointer]:
+              - generic [ref=e85]: ■
+          - generic [ref=e86]:
+            - generic [ref=e87]:
+              - switch "検索モード切替" [checked] [ref=e88] [cursor=pointer]: 深掘り
+              - switch "回答モード切替" [checked] [ref=e91] [cursor=pointer]: 詳細
+            - paragraph [ref=e94]: Enterで送信・Shift+Enterで改行

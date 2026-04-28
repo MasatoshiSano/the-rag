@@ -1,0 +1,103 @@
+- generic [ref=e3]:
+  - link "メインコンテンツへスキップ" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e5]:
+    - button "サイドバーを閉じる" [expanded] [ref=e6] [cursor=pointer]:
+      - generic [ref=e7]: ✕
+    - generic [ref=e8]: THE RAG
+    - search "セッション検索" [ref=e10]:
+      - combobox "セッションを検索" [ref=e11]
+  - generic [ref=e12]:
+    - navigation "サイドバーナビゲーション" [ref=e13]:
+      - list [ref=e15]:
+        - listitem [ref=e16]:
+          - link "チャット" [ref=e17] [cursor=pointer]:
+            - /url: /rag-phantom/chat
+        - listitem [ref=e18]:
+          - link "ナレッジベース" [ref=e19] [cursor=pointer]:
+            - /url: /rag-phantom/knowledge-bases
+        - listitem [ref=e20]:
+          - link "アップロード" [ref=e21] [cursor=pointer]:
+            - /url: /rag-phantom/upload
+        - listitem [ref=e22]:
+          - link "ドキュメント" [ref=e23] [cursor=pointer]:
+            - /url: /rag-phantom/documents
+        - listitem [ref=e24]:
+          - link "設定" [ref=e25] [cursor=pointer]:
+            - /url: /rag-phantom/settings
+      - separator [ref=e26]
+      - generic [ref=e27]:
+        - paragraph [ref=e28]: お気に入りKB
+        - paragraph [ref=e29]: なし
+      - separator [ref=e30]
+      - generic [ref=e31]:
+        - paragraph [ref=e32]: 最近のセッション
+        - paragraph [ref=e33]: セッションがありません
+      - separator [ref=e34]
+      - generic [ref=e35]:
+        - paragraph [ref=e36]: 開発者向け
+        - list [ref=e37]:
+          - listitem [ref=e38]:
+            - link "API仕様・動作確認 ↗" [ref=e39] [cursor=pointer]:
+              - /url: /rag-phantom/docs
+          - listitem [ref=e40]:
+            - link "外部連携ガイド ↗" [ref=e41] [cursor=pointer]:
+              - /url: /rag-phantom/guide.html
+    - main [ref=e42]:
+      - generic "チャット" [ref=e114]:
+        - heading "チャット - セッション ef3e967c-ce8a-458f-a62b-84c5d601d0bc" [level=1] [ref=e137]
+        - log "チャットメッセージ" [ref=e116]:
+          - article "あなたのメッセージ" [ref=e153]:
+            - generic [ref=e154]: あなた
+            - generic [ref=e155]: 高所作業時の安全対策について教えてください
+            - time [ref=e156]: 11:06
+          - article "アシスタントの回答" [ref=e157]:
+            - generic [ref=e158]: アシスタント
+            - generic [ref=e159]:
+              - generic [ref=e160]: 申し訳ございませんが、高所作業時の安全対策については、参照文書に記載がありません。
+              - generic [ref=e162]: 参照文書には以下の安全対策に関する情報が含まれています：
+              - strong [ref=e165]: プレス機作業の安全対策
+              - list [ref=e166]:
+                - listitem [ref=e167]: 個人保護具（PPE）の着用
+                - listitem [ref=e168]: 機械の安全装置確認
+                - listitem [ref=e169]: 作業中の基本ルール
+              - strong [ref=e172]: 化学物質取り扱いの安全対策
+              - list [ref=e173]:
+                - listitem [ref=e174]: 保管方法
+                - listitem [ref=e175]: 使用時の注意事項
+                - listitem [ref=e176]: 緊急時対応
+              - strong [ref=e179]: 一般的な安全管理
+              - list [ref=e180]:
+                - listitem [ref=e181]: KY（危険予知）活動
+                - listitem [ref=e182]: ヒヤリハット報告
+              - generic [ref=e184]: しかし、高所作業に特化した安全対策（安全帯の使用方法、足場の設置基準、高所作業車の操作手順など）については、現在の参照文書には含まれておりません。
+              - generic [ref=e186]: 高所作業時の安全対策について詳しい情報が必要でしたら、高所作業に関する専用の安全作業手順書や関連文書をご確認いただくか、安全管理者にお問い合わせください。
+            - generic [ref=e187]:
+              - region "参照ドキュメント" [ref=e188]:
+                - button "参照ドキュメント 2件を表示" [ref=e189] [cursor=pointer]:
+                  - generic [ref=e190]: ▶
+                  - text: 参照ドキュメント (2)
+              - generic [ref=e191]:
+                - button "メッセージをコピー" [ref=e192] [cursor=pointer]:
+                  - generic [ref=e193]: ⎘
+                  - generic [ref=e194]: コピー
+                - radiogroup "回答を評価" [ref=e195]:
+                  - radio "1星" [ref=e196] [cursor=pointer]: ☆
+                  - radio "2星" [ref=e197] [cursor=pointer]: ☆
+                  - radio "3星" [ref=e198] [cursor=pointer]: ☆
+                  - radio "4星" [ref=e199] [cursor=pointer]: ☆
+                  - radio "5星" [ref=e200] [cursor=pointer]: ☆
+            - time [ref=e201]: 11:06
+        - region "メッセージ入力エリア" [ref=e120]:
+          - generic [ref=e121]:
+            - textbox "メッセージを入力 (Shift+Enterで改行)" [ref=e202]:
+              - /placeholder: メッセージを入力... (Shift+Enterで改行)
+            - button "音声入力を開始" [ref=e203] [cursor=pointer]:
+              - img [ref=e204]
+            - button "メッセージを送信" [disabled] [ref=e206]:
+              - generic [ref=e127]: ↑
+          - generic [ref=e128]:
+            - generic [ref=e129]:
+              - switch "検索モード切替" [ref=e130] [cursor=pointer]: 通常
+              - switch "回答モード切替" [ref=e133] [cursor=pointer]: コンパクト
+            - paragraph [ref=e136]: Enterで送信・Shift+Enterで改行

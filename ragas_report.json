@@ -1,0 +1,188 @@
+{
+  "timestamp": "2026-03-24 11:20:46",
+  "knowledge_base_id": "ab4044cf-1970-4ec9-9b5e-ecce7b180071",
+  "num_cases": 10,
+  "aggregate": {
+    "context_relevancy": 0.695,
+    "context_recall": 1.0,
+    "faithfulness": 0.8,
+    "answer_relevancy": 0.874,
+    "overall": 0.842
+  },
+  "cases": [
+    {
+      "question": "MQTTとは何ですか？簡単に説明してください。",
+      "answer": "## MQTTとは\n\n参照文書に基づいて回答します：\n\n• **MQTT = 機械同士がメッセージをやり取りするための「共通言語」**\n\n• IoT（モノのインターネット）やスマートホームの世界では欠かせない技術\n\n• 人間がLINEやメールでメッセージを送り合うように、機械（センサーやカメラ、スマート家電など）もメッセージを送り合う際に使う「共通のルール」\n\n• 「伝言板」に例えて理解できる軽量メッセージプロトコル\n\n• 電池駆動のセンサーでも使える軽量性とリアルタイム性が特徴",
+      "ground_truth": "MQTTは機械同士がメッセージをやり取りするための共通言語（プロトコル）。伝言板のような仕組みで、Publisher（発信者）がBroker（仲介者）にメッセージを送り、Subscriber（購読者）が受け取る。",
+      "expected_doc": "01_mqtt_introduction",
+      "num_sources": 20,
+      "source_doc_ids": [
+        "d83d21a4-0323-4c9d-a75d-6d4030f1cde1",
+        "39ccead0-5005-457c-bee4-4b0eb45b58d4",
+        "a6af9d4b-884f-42ab-bee2-4e2c608016b5",
+        "b5aacd4a-b418-4987-81d0-b6c711473811",
+        "d2971370-6eca-4ee2-b9a6-7a6178aaeed6"
+      ],
+      "context_relevancy": 0.813,
+      "context_recall": 1.0,
+      "faithfulness": 0.8,
+      "answer_relevancy": 0.571
+    },
+    {
+      "question": "MQTTのQoSレベルにはどんな種類がありますか？",
+      "answer": "## MQTTのQoSレベル\n\n参照文書によると、MQTTには以下の3つのQoS（サービス品質）レベルがあります：\n\n• **QoS 0: 送りっぱなし（届かなくてもOK）**\n  - 温度データなど、多少欠けても問題ないデータに使用\n\n• **QoS 1: 最低1回届く（重複の可能性あり）**\n  - 通常のセンサーデータに使用\n\n• **QoS 2: 確実に1回届く（重複なし）**\n  - 課金データなど、絶対に失敗できないデータに使用",
+      "ground_truth": "QoS 0は送りっぱなし（届かなくてもOK）、QoS 1は最低1回届く（重複の可能性あり）、QoS 2は確実に1回届く（重複なし）の3種類。",
+      "expected_doc": "01_mqtt_introduction",
+      "num_sources": 20,
+      "source_doc_ids": [
+        "d83d21a4-0323-4c9d-a75d-6d4030f1cde1",
+        "39ccead0-5005-457c-bee4-4b0eb45b58d4",
+        "a6af9d4b-884f-42ab-bee2-4e2c608016b5",
+        "b5aacd4a-b418-4987-81d0-b6c711473811",
+        "d2971370-6eca-4ee2-b9a6-7a6178aaeed6"
+      ],
+      "context_relevancy": 0.588,
+      "context_recall": 1.0,
+      "faithfulness": 0.8,
+      "answer_relevancy": 1.0
+    },
+    {
+      "question": "MQTTのトピックのワイルドカード「+」と「#」の違いは？",
+      "answer": "## MQTTトピックのワイルドカード「+」と「#」の違い\n\n### 基本的な違い\n- **「+」**: 1階層のみをマッチ\n- **「#」**: 以降すべての階層をマッチ\n\n### 具体例\n\n#### 「+」の場合\n- `sensor/+/temp` \n  - マッチ: `sensor/A/temp`, `sensor/B/temp`\n  - 1階層のみ置換可能\n\n#### 「#」の場合  \n- `sensor/#`\n  - マッチ: `sensor/A/temp`, `sensor/B/humidity`など\n  - sensor以降のすべての階層をカバー\n\n### 使い分けのポイント\n- **「+」**: 特定の階層のみを柔軟にしたい場合\n- **「#」**: 特定の親階層以下のすべての情報を取得したい場合",
+      "ground_truth": "「+」は1階層のみのワイルドカード（例: sensor/+/temp）、「#」は以降のすべての階層にマッチするワイルドカード（例: sensor/#）。",
+      "expected_doc": "02_pubsub_topics",
+      "num_sources": 20,
+      "source_doc_ids": [
+        "d2971370-6eca-4ee2-b9a6-7a6178aaeed6",
+        "d83d21a4-0323-4c9d-a75d-6d4030f1cde1",
+        "b5aacd4a-b418-4987-81d0-b6c711473811",
+        "39ccead0-5005-457c-bee4-4b0eb45b58d4"
+      ],
+      "context_relevancy": 0.54,
+      "context_recall": 1.0,
+      "faithfulness": 0.8,
+      "answer_relevancy": 1.0
+    },
+    {
+      "question": "Pub/Subモデルのメリットは何ですか？",
+      "answer": "## Pub/Subモデルのメリット\n\n参照文書に記載されているPub/Subモデルのメリットは以下の通りです：\n\n• **疎結合（そけつごう）**\n  - 送信者と受信者がお互いを知らなくてOK\n\n• **スケーラブル**\n  - 受信者が100人でも1000人でも、送信者は1回送るだけ\n\n• **非同期**\n  - 受信者がオフラインでも、後で受け取れる\n\n• **フィルタリング**\n  - 興味のあるメッセージだけ受け取れる\n\n• **システム拡張が簡単**\n  - 新しい監視システムを追加する場合、購読するだけで済む\n  - センサー側の修正が不要",
+      "ground_truth": "疎結合（送信者と受信者がお互いを知らなくてOK）、スケーラブル（受信者が増えても送信者は1回送るだけ）、非同期（受信者がオフラインでも後で受け取れる）、フィルタリング（興味のあるメッセージだけ受け取れる）。",
+      "expected_doc": "02_pubsub_topics",
+      "num_sources": 20,
+      "source_doc_ids": [
+        "d83d21a4-0323-4c9d-a75d-6d4030f1cde1",
+        "39ccead0-5005-457c-bee4-4b0eb45b58d4",
+        "a6af9d4b-884f-42ab-bee2-4e2c608016b5",
+        "b5aacd4a-b418-4987-81d0-b6c711473811",
+        "d2971370-6eca-4ee2-b9a6-7a6178aaeed6"
+      ],
+      "context_relevancy": 0.688,
+      "context_recall": 1.0,
+      "faithfulness": 0.8,
+      "answer_relevancy": 1.0
+    },
+    {
+      "question": "設備監視システムでカメラの色検知はどのように動作しますか？",
+      "answer": "## カメラの色検知動作について\n\n### 基本動作\n- **カメラで設備のランプを撮影**\n- **色を判定して状態を識別**\n  - 緑 → status: 1 (稼働中)\n  - 赤 → status: 2 (停止)\n  - 黄 → status: 3 (異常)\n\n### 処理の流れ\n- **Step 1**: カメラが色を検知\n- **Step 2**: 色検知プログラムが状態を判定\n- **Step 3**: MQTTで中継機に送信\n\n### 実装方法\n- **メインループで継続監視**\n  ```\n  while True:\n      status = detect_color()  # 色検知\n      data = {\"status\": status, \"eq_code\": MY_EQUIPMENT}\n      client.publish(f\"equipment/status/{MY_EQUIPMENT}\", json.dumps(data))\n      time.sleep(1)\n  ```\n\n### 必要なもの\n- **Raspberry Pi + カメラ**\n- **color_detector.py（色検知プログラム）**\n- **paho-mqtt（MQTTライブラリ）**\n\n### 複数カメラ対応\n- **各カメラが独立して動作**\n- **設備コード（STA_NO3）で識別**\n- **同じトピック形式で送信**: equipment/status/XXX",
+      "ground_truth": "カメラで設備のランプを撮影し、色を判定する。緑はstatus 1（稼働中）、赤はstatus 2（停止）、黄はstatus 3（異常）。検知結果はJSONデータとしてMQTTで中継機に送信される。",
+      "expected_doc": "03_practical_implementation",
+      "num_sources": 20,
+      "source_doc_ids": [
+        "d2971370-6eca-4ee2-b9a6-7a6178aaeed6",
+        "d83d21a4-0323-4c9d-a75d-6d4030f1cde1",
+        "a6af9d4b-884f-42ab-bee2-4e2c608016b5",
+        "b5aacd4a-b418-4987-81d0-b6c711473811"
+      ],
+      "context_relevancy": 0.643,
+      "context_recall": 1.0,
+      "faithfulness": 0.8,
+      "answer_relevancy": 1.0
+    },
+    {
+      "question": "中継機を使うメリットは何ですか？直接クラウドに接続する場合と比較して。",
+      "answer": "参照文書に基づいて、中継機を使うメリットを直接クラウド接続と比較して回答します。\n\n## 中継機を使うメリット\n\n### セキュリティ面\n- クラウド認証情報は中継機だけに設定（セキュリティ向上）\n- 各カメラにクラウドの認証情報が不要（セキュリティリスク回避）\n\n### 障害耐性\n- ローカルで一時保存可能（障害耐性向上）\n- インターネット障害時も中継機にバッファリング\n- 復旧後に自動で再送信\n\n### 運用・管理面\n- カメラ追加が簡単（中継機を見るだけ）\n- カメラが増えるたびにクラウド設定が不要\n- 1台壊れても他に影響しない（疎結合のメリット）\n\n### 直接クラウド接続の問題点\n- 各カメラにクラウドの認証情報が必要（セキュリティリスク）\n- インターネット障害で全停止\n- カメラが増えるたびにクラウド設定が必要\n\n### 構成の違い\n**❌ 悪い例（直接接続）:**\n- 各カメラから個別にクラウドへ接続\n- 設定が複雑化\n\n**✅ 良い例（中継機経由）:**\n- ローカルネットワーク → 中継機 → クラウド\n- 設定の一元化",
+      "ground_truth": "中継機を使うメリットは、クラウド認証情報が中継機だけで済む（セキュリティ向上）、ローカルで一時保存が可能（障害耐性）、カメラ追加が簡単（中継機を見るだけ）。",
+      "expected_doc": "03_practical_implementation",
+      "num_sources": 20,
+      "source_doc_ids": [
+        "d2971370-6eca-4ee2-b9a6-7a6178aaeed6",
+        "a6af9d4b-884f-42ab-bee2-4e2c608016b5",
+        "b5aacd4a-b418-4987-81d0-b6c711473811",
+        "39ccead0-5005-457c-bee4-4b0eb45b58d4"
+      ],
+      "context_relevancy": 0.689,
+      "context_recall": 1.0,
+      "faithfulness": 0.8,
+      "answer_relevancy": 1.0
+    },
+    {
+      "question": "Mosquittoのインストールと設定方法を教えてください。",
+      "answer": "## Mosquittoのインストールと設定方法\n\n### インストール手順\n- `sudo apt update`\n- `sudo apt install mosquitto mosquitto-clients -y`\n\n### 設定手順\n- 設定ファイルを作成: `sudo nano /etc/mosquitto/conf.d/local.conf`\n- 設定内容:\n  - `listener 1883` (ポート1883で接続を待ち受ける)\n  - `allow_anonymous true` (パスワードなしで接続を許可、テスト環境用)\n\n### 起動・管理\n- 再起動: `sudo systemctl restart mosquitto`\n- 自動起動を有効化: `sudo systemctl enable mosquitto`\n- 起動確認: `sudo systemctl status mosquitto`\n\n### 動作確認\n- **ターミナル1** (購読者): `mosquitto_sub -t \"test/#\" -v`\n- **ターミナル2** (発信者): `mosquitto_pub -t \"test/hello\" -m \"こんにちは!\"`\n\n### 注意点\n- 本番環境では認証設定を推奨\n- ファイアウォール設定が必要な場合: `sudo ufw allow 1883`",
+      "ground_truth": "sudo apt install mosquitto mosquitto-clients -yでインストール。/etc/mosquitto/conf.d/local.confにlistener 1883とallow_anonymous trueを設定。sudo systemctl restart mosquittoで再起動。",
+      "expected_doc": "04_multi_pi_setup",
+      "num_sources": 20,
+      "source_doc_ids": [
+        "d83d21a4-0323-4c9d-a75d-6d4030f1cde1",
+        "39ccead0-5005-457c-bee4-4b0eb45b58d4",
+        "a6af9d4b-884f-42ab-bee2-4e2c608016b5",
+        "b5aacd4a-b418-4987-81d0-b6c711473811",
+        "d2971370-6eca-4ee2-b9a6-7a6178aaeed6"
+      ],
+      "context_relevancy": 0.726,
+      "context_recall": 1.0,
+      "faithfulness": 0.8,
+      "answer_relevancy": 1.0
+    },
+    {
+      "question": "子機を追加する手順はどうなりますか？",
+      "answer": "## 子機を追加する手順\n\n### 基本手順\n- **新しいRaspberry Piを用意**\n- **同じプログラムをコピー**\n\n### 設定で変更が必要な部分\n- **設定ファイル（config/settings.json）で設備コードを変更**\n  - 子機1: \"sta_no3\": \"EQ001\"\n  - 子機2: \"sta_no3\": \"EQ002\"\n  - 子機3: \"sta_no3\": \"EQ003\"\n\n### 必要な作業\n- **必要なライブラリをインストール**\n- **親機のIPアドレスを設定**\n- **接続テストを実行**\n\n### メリット\n- **子機の設定が簡単（IPアドレスとsta_no3だけ）**\n- **親機を1つ設定すれば、子機は何台でも追加可能**\n- **理論上は数百台まで対応可能**",
+      "ground_truth": "新しいRaspberry Piを用意し、同じプログラムをコピーし、settings.jsonのsta_no3だけ変更（例: EQ004）してプログラムを起動するだけ。親機（中継機）の設定変更は不要。",
+      "expected_doc": "04_multi_pi_setup",
+      "num_sources": 20,
+      "source_doc_ids": [
+        "d2971370-6eca-4ee2-b9a6-7a6178aaeed6",
+        "d83d21a4-0323-4c9d-a75d-6d4030f1cde1",
+        "b5aacd4a-b418-4987-81d0-b6c711473811"
+      ],
+      "context_relevancy": 0.646,
+      "context_recall": 1.0,
+      "faithfulness": 0.8,
+      "answer_relevancy": 0.625
+    },
+    {
+      "question": "MQTTの双方向通信ではどのようなユースケースがありますか？",
+      "answer": "## MQTTの双方向通信のユースケース\n\n参照文書に記載されている双方向通信のユースケースは以下の通りです：\n\n### **通信方向別の用途**\n- **上り（子機→クラウド）**\n  - 状態送信\n  - アラート送信\n  - トピック例：`equipment/status/#`\n\n- **下り（クラウド→子機）**\n  - 設定配信\n  - マスターデータ配信\n  - トピック例：`config/#`, `master/#`\n\n- **横（子機↔子機）**\n  - 他設備の状態取得\n  - トピック例：`equipment/status/#`\n\n### **双方向通信の基本概念**\n- 子機は「送る」だけでなく「受け取る」こともできる\n- トピック設計が重要（上り/下り/横を明確に分ける）\n\n### **実装上のメリット**\n- リアルタイムでの設定変更配信\n- 他の設備状態の相互監視\n- 集中管理からの制御指示\n\n文書には具体的な業務シナリオの詳細は記載されていませんが、これらの基本パターンを組み合わせることで様々な製造現場での活用が可能とされています。",
+      "ground_truth": "遠隔設定変更（MQTTで全子機に設定を配信）、マスターデータの配信（Oracleから設備名などを子機に配信）、他の設備の状態を取得（子機同士がBroker経由で状態を共有）。",
+      "expected_doc": "05_bidirectional_mqtt",
+      "num_sources": 20,
+      "source_doc_ids": [
+        "d83d21a4-0323-4c9d-a75d-6d4030f1cde1",
+        "39ccead0-5005-457c-bee4-4b0eb45b58d4",
+        "a6af9d4b-884f-42ab-bee2-4e2c608016b5",
+        "b5aacd4a-b418-4987-81d0-b6c711473811",
+        "d2971370-6eca-4ee2-b9a6-7a6178aaeed6"
+      ],
+      "context_relevancy": 0.722,
+      "context_recall": 1.0,
+      "faithfulness": 0.8,
+      "answer_relevancy": 0.714
+    },
+    {
+      "question": "ローカルDBとMQTT+クラウドDBの使い分けはどうすべきですか？",
+      "answer": "## ローカルDBとMQTT+クラウドDBの使い分け\n\n### **ローカルDBが向いているケース**\n- 子機が1-2台で、データ共有の必要がない\n- ネットワークが不安定 or ない環境\n- データは子機の近くでしか見ない\n- 短期間のテスト・実験\n\n### **MQTT + クラウドが向いているケース**\n- 中〜大規模(3台以上)\n- 複数人でのデータ閲覧が必要\n- リアルタイムでのデータ共有が必要\n- データの集計・分析を行う\n\n### **比較のポイント**\n\n| 項目 | ローカルDB | MQTT + クラウド |\n|------|-----------|----------------|\n| **適した規模** | 小規模(1-2台) | 中〜大規模(3台以上) |\n| **データ管理** | 分散 | 集中 |\n| **障害耐性** | 単独完結 | 中継機依存 |\n| **拡張性** | 低い | 高い |\n| **データ集計** | 各Piに接続して手動集計 | SQLで一発 |\n| **バックアップ** | SDカードごとにコピー | クラウドで自動 |\n\n### **推奨**\n⭐ **迷ったら MQTT + クラウド がおすすめ**\n- 理由: 後から「やっぱり集約したい」は大変\n- 最初から集約しておけば、後で困らない",
+      "ground_truth": "ローカルDBは小規模（1-2台）やネットワーク不安定な環境に適している。MQTT+クラウドは3台以上でデータを集約管理・分析したい場合に適している。迷ったらクラウド集約がおすすめ。ハイブリッド構成（ローカルバッファ+クラウド同期）がベストプラクティス。",
+      "expected_doc": "05_bidirectional_mqtt",
+      "num_sources": 20,
+      "source_doc_ids": [
+        "d2971370-6eca-4ee2-b9a6-7a6178aaeed6",
+        "a6af9d4b-884f-42ab-bee2-4e2c608016b5",
+        "b5aacd4a-b418-4987-81d0-b6c711473811",
+        "39ccead0-5005-457c-bee4-4b0eb45b58d4"
+      ],
+      "context_relevancy": 0.899,
+      "context_recall": 1.0,
+      "faithfulness": 0.8,
+      "answer_relevancy": 0.833
+    }
+  ]
+}

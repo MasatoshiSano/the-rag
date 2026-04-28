@@ -1,0 +1,111 @@
+- generic [ref=e3]:
+  - link "メインコンテンツへスキップ" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e5]:
+    - button "サイドバーを閉じる" [expanded] [ref=e6] [cursor=pointer]:
+      - generic [ref=e7]: ✕
+    - generic [ref=e8]: THE RAG
+    - search "セッション検索" [ref=e10]:
+      - combobox "セッションを検索" [ref=e11]
+  - generic [ref=e12]:
+    - navigation "サイドバーナビゲーション" [ref=e13]:
+      - list [ref=e15]:
+        - listitem [ref=e16]:
+          - link "チャット" [ref=e17] [cursor=pointer]:
+            - /url: /the-rag/chat
+        - listitem [ref=e18]:
+          - link "ナレッジベース" [ref=e19] [cursor=pointer]:
+            - /url: /the-rag/knowledge-bases
+        - listitem [ref=e20]:
+          - link "アップロード" [active] [ref=e21] [cursor=pointer]:
+            - /url: /the-rag/upload
+        - listitem [ref=e22]:
+          - link "ドキュメント" [ref=e23] [cursor=pointer]:
+            - /url: /the-rag/documents
+        - listitem [ref=e24]:
+          - link "設定" [ref=e25] [cursor=pointer]:
+            - /url: /the-rag/settings
+      - separator [ref=e26]
+      - generic [ref=e27]:
+        - paragraph [ref=e28]: お気に入りKB
+        - paragraph [ref=e29]: なし
+      - separator [ref=e30]
+      - generic [ref=e31]:
+        - paragraph [ref=e32]: 最近のセッション
+        - list [ref=e49]:
+          - listitem [ref=e50]:
+            - 'button "セッション: ワニス硬化炉の温度プロファイルについて教えてください" [ref=e51] [cursor=pointer]': ワニス硬化炉の温度プロファイルについて教えてください
+      - separator [ref=e34]
+      - generic [ref=e35]:
+        - paragraph [ref=e36]: 開発者向け
+        - list [ref=e37]:
+          - listitem [ref=e38]:
+            - link "API仕様・動作確認 ↗" [ref=e39] [cursor=pointer]:
+              - /url: /the-rag/docs
+          - listitem [ref=e40]:
+            - link "外部連携ガイド ↗" [ref=e41] [cursor=pointer]:
+              - /url: /the-rag/guide.html
+    - main [ref=e42]:
+      - region "ドキュメントアップロード" [ref=e205]:
+        - generic [ref=e206]:
+          - generic [ref=e207]:
+            - img [ref=e208]
+            - heading "ドキュメントアップロード" [level=1] [ref=e210]
+          - region "ナレッジベース" [ref=e211]:
+            - generic [ref=e212]:
+              - img [ref=e213]
+              - text: ナレッジベース
+            - combobox "ナレッジベース" [ref=e215] [cursor=pointer]:
+              - option "-- ナレッジベースを選択 --"
+              - option "DuckDB検証"
+              - option "データ"
+              - option "要領書とか"
+              - option "フォルダテスト" [selected]
+              - option "技術"
+              - option "ステーション"
+              - option "安全衛生ガイドライン"
+              - option "製造マニュアル"
+          - generic [ref=e216]:
+            - tablist [ref=e217]:
+              - tab "ローカル" [selected] [ref=e218] [cursor=pointer]
+              - tab "ファイル" [ref=e219] [cursor=pointer]
+              - tab "テキスト" [ref=e220] [cursor=pointer]
+              - tab "GitHub" [ref=e221] [cursor=pointer]
+              - tab "Gitea" [ref=e222] [cursor=pointer]
+            - tabpanel "ローカル" [ref=e223]:
+              - region "ローカルフォルダ連携" [ref=e224]:
+                - heading "ローカルフォルダ連携" [level=2] [ref=e225]
+                - generic [ref=e226]:
+                  - paragraph [ref=e227]: "Windowsのフォルダパスを登録すると、深掘り検索時にフォルダ内のファイルを直接読み取って検索します。 対応形式: .md, .txt, .csv, .json, .pdf, .pptx, .xlsx, .docx, .html"
+                  - generic [ref=e228]:
+                    - heading "登録済みフォルダ" [level=3] [ref=e229]
+                    - list [ref=e230]:
+                      - listitem [ref=e231]:
+                        - generic [ref=e232]:
+                          - generic [ref=e233]:
+                            - generic [ref=e234]: 文書
+                            - generic [ref=e235]: X:\98_PERSONAL\佐野\技術
+                          - generic [ref=e236]: 13件のファイル
+                        - 'button "削除: X:\\98_PERSONAL\\佐野\\技術" [ref=e237] [cursor=pointer]':
+                          - img [ref=e239]
+                  - generic [ref=e241]:
+                    - generic [ref=e242]: フォルダパス
+                    - textbox "フォルダパス" [ref=e244]:
+                      - /placeholder: C:\Users\username\Documents\knowledge
+                  - generic [ref=e247]:
+                    - generic [ref=e248]: ラベル（任意）
+                    - textbox "ラベル（任意）" [ref=e250]:
+                      - /placeholder: "例: 設計資料"
+                  - group "ソース種別" [ref=e252]:
+                    - generic [ref=e253]: ソース種別
+                    - generic [ref=e254] [cursor=pointer]:
+                      - radio "ドキュメント" [checked] [ref=e255]
+                      - text: ドキュメント
+                    - generic [ref=e256] [cursor=pointer]:
+                      - radio "データ（CSV/SQL）" [ref=e257]
+                      - text: データ（CSV/SQL）
+                  - generic [ref=e258]:
+                    - button "検証" [disabled] [ref=e259]:
+                      - generic [ref=e260]: 検証
+                    - button "登録" [disabled] [ref=e261]:
+                      - generic [ref=e262]: 登録

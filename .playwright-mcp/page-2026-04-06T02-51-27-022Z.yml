@@ -1,0 +1,124 @@
+- generic [ref=e3]:
+  - link "メインコンテンツへスキップ" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e5]:
+    - button "サイドバーを閉じる" [expanded] [ref=e6] [cursor=pointer]:
+      - generic [ref=e7]: ✕
+    - generic [ref=e8]: THE RAG
+    - search "セッション検索" [ref=e10]:
+      - combobox "セッションを検索" [ref=e11]
+  - generic [ref=e12]:
+    - navigation "サイドバーナビゲーション" [ref=e13]:
+      - list [ref=e15]:
+        - listitem [ref=e16]:
+          - link "チャット" [ref=e17] [cursor=pointer]:
+            - /url: /chat
+        - listitem [ref=e18]:
+          - link "ナレッジベース" [ref=e19] [cursor=pointer]:
+            - /url: /knowledge-bases
+        - listitem [ref=e20]:
+          - link "アップロード" [ref=e21] [cursor=pointer]:
+            - /url: /upload
+        - listitem [ref=e22]:
+          - link "ドキュメント" [ref=e23] [cursor=pointer]:
+            - /url: /documents
+        - listitem [ref=e24]:
+          - link "設定" [ref=e25] [cursor=pointer]:
+            - /url: /settings
+      - separator [ref=e26]
+      - generic [ref=e27]:
+        - paragraph [ref=e28]: お気に入りKB
+        - paragraph [ref=e29]: なし
+      - separator [ref=e30]
+      - generic:
+        - paragraph [ref=e31]: 最近のセッション
+        - paragraph [ref=e32]: セッションがありません
+      - separator [ref=e33]
+      - generic [ref=e34]:
+        - paragraph [ref=e35]: 開発者向け
+        - list [ref=e36]:
+          - listitem [ref=e37]:
+            - link "API仕様・動作確認 ↗" [ref=e38] [cursor=pointer]:
+              - /url: /docs
+          - listitem [ref=e39]:
+            - link "外部連携ガイド ↗" [ref=e40] [cursor=pointer]:
+              - /url: /guide.html
+    - main [ref=e41]:
+      - region "設定" [ref=e42]:
+        - heading "設定" [level=1] [ref=e44]
+        - region "検索設定" [ref=e45]:
+          - heading "検索設定" [level=2] [ref=e46]
+          - generic [ref=e48]:
+            - generic [ref=e49]:
+              - generic [ref=e50]: リランク
+              - generic [ref=e51]: 検索結果の関連度を再評価して精度を向上します
+            - checkbox "リランク" [ref=e54]
+          - separator [ref=e55]
+          - generic [ref=e57]:
+            - generic [ref=e58]:
+              - generic [ref=e59]: ハイブリッド検索
+              - generic [ref=e60]: キーワード検索とベクトル検索を組み合わせて検索します
+            - checkbox "ハイブリッド検索" [checked] [ref=e63]
+          - separator [ref=e64]
+          - generic [ref=e65]:
+            - generic [ref=e66]: 検索取得件数
+            - paragraph [ref=e67]: RAG検索で取得するドキュメントチャンクの件数です（1〜50）
+            - spinbutton "検索取得件数" [ref=e68]: "20"
+          - separator [ref=e69]
+          - group "応答モード" [ref=e70]:
+            - generic [ref=e71]: 応答モード
+            - radiogroup [ref=e72]:
+              - generic [ref=e73] [cursor=pointer]:
+                - radio "シンプル" [ref=e74]
+                - text: シンプル
+              - generic [ref=e75] [cursor=pointer]:
+                - radio "詳細" [checked] [ref=e76]
+                - text: 詳細
+        - region "プロフィール" [ref=e77]:
+          - heading "プロフィール" [level=2] [ref=e78]
+          - generic [ref=e79]:
+            - generic [ref=e81]:
+              - generic [ref=e82]: ニックネーム
+              - textbox "ニックネーム" [ref=e84]:
+                - /placeholder: ニックネームを入力
+            - button "ニックネームを保存" [disabled] [ref=e86]:
+              - generic [ref=e87]: 保存
+        - region "個人辞書" [ref=e88]:
+          - heading "個人辞書" [level=2] [ref=e89]
+          - paragraph [ref=e90]: 個人辞書は、あなたが普段使う用語とシステムのマスターデータを紐付けるための機能です。 登録した用語は、チャットでの質問時に自動的に正式な用語へ変換され、より正確な検索結果を得られます。
+          - form "用語追加フォーム" [ref=e91]:
+            - paragraph [ref=e92]: 新しい用語を追加
+            - generic [ref=e93]:
+              - generic [ref=e94]:
+                - generic [ref=e95]: 個人用語
+                - textbox "個人用語" [ref=e97]:
+                  - /placeholder: "例: コンベア"
+              - generic [ref=e99]:
+                - generic [ref=e100]: マスターキー
+                - textbox "マスターキー" [ref=e102]:
+                  - /placeholder: "例: conveyor_line_a"
+              - generic [ref=e104]:
+                - generic [ref=e105]: 種別
+                - combobox "マスター種別を選択" [ref=e106] [cursor=pointer]:
+                  - option "サイト" [selected]
+                  - option "ライン"
+                  - option "工程"
+              - button "用語を追加する" [ref=e107] [cursor=pointer]:
+                - img [ref=e109]
+                - generic [ref=e111]: 追加
+          - paragraph [ref=e113]: 個人辞書に登録された用語がありません。
+        - region "自分について" [ref=e114]:
+          - generic [ref=e115]:
+            - heading "自分について" [level=2] [ref=e116]
+            - paragraph [ref=e117]: ここに登録した情報はAIが回答時に参考にします
+          - list "登録済みメモリ一覧" [ref=e123]:
+            - listitem [ref=e124]:
+              - generic [ref=e125]:
+                - generic [ref=e126]: 生技14グループに所属しています
+                - button "「生技14グループに所属しています」を編集" [ref=e127] [cursor=pointer]: ✏️
+                - button "「生技14グループに所属しています」を削除" [ref=e128] [cursor=pointer]: ✕
+          - generic [ref=e119]:
+            - generic [ref=e120]: 新しいメモリを追加
+            - textbox "新しいメモリを追加" [ref=e121]:
+              - /placeholder: "例: 生技14グループに所属しています / よく使うラインはEPS成型#5です"
+            - button "追加" [disabled] [ref=e122] [cursor=pointer]

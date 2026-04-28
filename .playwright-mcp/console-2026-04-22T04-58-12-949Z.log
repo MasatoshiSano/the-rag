@@ -1,0 +1,5 @@
+[     596ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&family=Noto+Sans+Mono:wght@100..900&family=Roboto:wght@100;400;700&display=swap:0
+[     738ms] [WARNING] <Router basename="/the-rag"> is not able to match the URL "/rag-phantom/upload" because it does not start with the basename, so the <Router> won't render anything. @ http://localhost:3000/the-rag/assets/index-DaDH6Q17.js:48
+[   31624ms] [ERROR] Failed to load resource: net::ERR_FAILED @ https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&family=Noto+Sans+Mono:wght@100..900&family=Roboto:wght@100;400;700&display=swap:0
+[   31662ms] [WARNING] <Router basename="/the-rag"> is not able to match the URL "/rag-phantom/upload" because it does not start with the basename, so the <Router> won't render anything. @ http://localhost:3000/the-rag/assets/index-DaDH6Q17.js:48
+[   73086ms] [WARNING] <Router basename="/the-rag"> is not able to match the URL "/rag-phantom/chat" because it does not start with the basename, so the <Router> won't render anything. @ http://localhost:3000/the-rag/assets/index-DaDH6Q17.js:48

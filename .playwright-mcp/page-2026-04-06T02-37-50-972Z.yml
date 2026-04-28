@@ -1,0 +1,183 @@
+- generic [ref=e2]:
+  - navigation "ページナビゲーション" [ref=e3]:
+    - link "アプリのチャット画面に戻る" [ref=e4] [cursor=pointer]:
+      - /url: /chat
+      - img [ref=e5]
+      - text: アプリに戻る
+  - main [ref=e7]:
+    - heading "The RAG - 外部アプリ連携セットアップガイド" [level=1] [ref=e8]
+    - paragraph [ref=e9]: The RAG の API を外部アプリケーションから利用するための設定手順です。
+    - separator [ref=e10]
+    - heading "前提条件" [level=2] [ref=e11]
+    - list [ref=e12]:
+      - listitem [ref=e13]:
+        - text: The RAG が Docker で起動済み（
+        - code [ref=e14]: docker compose up -d
+        - text: ）
+      - listitem [ref=e15]: 外部アプリから The RAG ホストにネットワーク到達可能
+    - separator [ref=e16]
+    - 'heading "Step 1: API キーを設定する" [level=2] [ref=e17]'
+    - paragraph [ref=e18]:
+      - text: デフォルトの API キー（
+      - code [ref=e19]: rag-phantom-default-key
+      - text: ）を本番用に変更します。
+    - paragraph [ref=e20]:
+      - strong [ref=e21]:
+        - code [ref=e22]: docker-compose.yml
+      - text: の
+      - code [ref=e23]: backend > environment
+      - text: "に追加:"
+    - generic [ref=e24]:
+      - text: yaml
+      - code [ref=e25]: "backend: environment: # ... 既存の設定 ... - API_KEYS=[\"your-secure-api-key-here\"]"
+    - blockquote [ref=e26]:
+      - paragraph [ref=e27]:
+        - text: "複数キーを発行する場合:"
+        - code [ref=e28]: "[\"key-for-app-a\",\"key-for-app-b\"]"
+    - paragraph [ref=e29]: 設定後、コンテナを再起動します。
+    - generic [ref=e30]:
+      - text: bash
+      - code [ref=e31]: docker compose restart backend
+    - separator [ref=e32]
+    - 'heading "Step 2: CORS を設定する" [level=2] [ref=e33]'
+    - paragraph [ref=e34]: 外部アプリがブラウザから直接 API を呼ぶ場合（JavaScript fetch 等）、CORS の許可が必要です。
+    - paragraph [ref=e35]:
+      - strong [ref=e36]:
+        - code [ref=e37]: docker-compose.yml
+      - text: の
+      - code [ref=e38]: backend > environment
+      - text: "に追加:"
+    - generic [ref=e39]:
+      - text: yaml
+      - code [ref=e40]: "backend: environment: # ... 既存の設定 ... - ALLOWED_ORIGINS=[\"http://localhost:3000\",\"http://localhost:5173\",\"https://your-app.example.com\"]"
+    - paragraph [ref=e41]: 設定後、コンテナを再起動します。
+    - generic [ref=e42]:
+      - text: bash
+      - code [ref=e43]: docker compose restart backend
+    - blockquote [ref=e44]:
+      - paragraph [ref=e45]: サーバーサイドから API を呼ぶ場合（Python requests, Node.js fetch 等）は CORS 設定不要です。
+    - separator [ref=e46]
+    - 'heading "Step 3: ネットワークアクセスを確認する" [level=2] [ref=e47]'
+    - paragraph [ref=e48]: 外部アプリから The RAG のエンドポイントに到達できることを確認します。
+    - generic [ref=e49]:
+      - text: bash
+      - code [ref=e50]: "curl -k https://<The RAGホストIP>:3443/health # → {\"status\":\"ok\"} が返れば OK"
+    - paragraph [ref=e51]:
+      - strong [ref=e52]: 到達できない場合のチェックリスト
+      - text: ":"
+    - table [ref=e54]:
+      - rowgroup [ref=e55]:
+        - row "確認項目 コマンド" [ref=e56]:
+          - columnheader "確認項目" [ref=e57]
+          - columnheader "コマンド" [ref=e58]
+      - rowgroup [ref=e59]:
+        - row "Docker ポート公開 docker compose ps で 0.0.0.0:3443->443 を確認" [ref=e60]:
+          - cell "Docker ポート公開" [ref=e61]
+          - cell "docker compose ps で 0.0.0.0:3443->443 を確認" [ref=e62]:
+            - code [ref=e63]: docker compose ps
+            - text: で
+            - code [ref=e64]: 0.0.0.0:3443->443
+            - text: を確認
+        - row "Windows Firewall 受信ルールでポート 3443 が許可されているか" [ref=e65]:
+          - cell "Windows Firewall" [ref=e66]
+          - cell "受信ルールでポート 3443 が許可されているか" [ref=e67]
+        - row "WSL2 ポート転送 netsh interface portproxy show v4tov4 で確認" [ref=e68]:
+          - cell "WSL2 ポート転送" [ref=e69]
+          - cell "netsh interface portproxy show v4tov4 で確認" [ref=e70]:
+            - code [ref=e71]: netsh interface portproxy show v4tov4
+            - text: で確認
+    - separator [ref=e72]
+    - 'heading "Step 4: ナレッジベース ID を取得する" [level=2] [ref=e73]'
+    - paragraph [ref=e74]: API で使用するナレッジベース ID を確認します。
+    - generic [ref=e75]:
+      - text: bash
+      - code [ref=e76]: "curl -k https://<host>:3443/api/knowledge-bases/ \\ -H \"X-User-Id: external-app-user\""
+    - paragraph [ref=e77]:
+      - text: レスポンスの
+      - code [ref=e78]: id
+      - text: フィールドが、チャット API で指定する
+      - code [ref=e79]: knowledge_base_id
+      - text: です。
+    - separator [ref=e80]
+    - 'heading "Step 5: 外部アプリに組み込む" [level=2] [ref=e81]'
+    - heading "Python" [level=3] [ref=e82]
+    - generic [ref=e83]:
+      - text: python
+      - code [ref=e84]:
+        - text: "import requests THE_RAG_URL = \"https://10.168.124.32:3443\" API_KEY = \"your-secure-api-key-here\" KB_ID = \"取得したナレッジベースID\" def ask(question: str, session_id: str | None = None) -> dict: resp = requests.post("
+        - generic [ref=e85]: "f\"{THE_RAG_URL}/api/ext/chat/sync\""
+        - text: ", headers={ \"X-API-Key\": API_KEY, \"Content-Type\": \"application/json\", }, json={ \"question\": question, \"knowledge_base_id\": KB_ID, \"session_id\": session_id, }, verify=False, ) resp.raise_for_status() return resp.json() # 単発の質問 result = ask(\"設備Aの点検手順を教えて\") print(result[\"answer\"]) # 会話の継続 follow_up = ask(\"もっと詳しく\", session_id=result[\"session_id\"]) print(follow_up[\"answer\"])"
+    - heading "JavaScript / TypeScript" [level=3] [ref=e86]
+    - generic [ref=e87]:
+      - text: typescript
+      - code [ref=e88]:
+        - text: "const THE_RAG_URL = \"https://10.168.124.32:3443\"; const API_KEY = \"your-secure-api-key-here\"; const KB_ID = \"取得したナレッジベースID\"; async function ask(question: string, sessionId?: string) { const resp = await fetch("
+        - generic [ref=e89]: "`${THE_RAG_URL}/api/ext/chat/sync`"
+        - text: ", { method: \"POST\", headers: { \"X-API-Key\": API_KEY, \"Content-Type\": \"application/json\", }, body: JSON.stringify({ question, knowledge_base_id: KB_ID, session_id: sessionId ?? null, }), }); if (!resp.ok) throw new Error("
+        - generic [ref=e90]: "`API error: ${resp.status}`"
+        - text: "); return resp.json(); } // 使用例 const result = await ask(\"設備Aの点検手順を教えて\"); console.log(result.answer); console.log(result.sources);"
+    - heading "cURL" [level=3] [ref=e91]
+    - generic [ref=e92]:
+      - text: bash
+      - code [ref=e93]: "curl -k -X POST https://10.168.124.32:3443/api/ext/chat/sync \\ -H \"Content-Type: application/json\" \\ -H \"X-API-Key: your-secure-api-key-here\" \\ -d '{\"question\":\"設備Aの点検手順を教えて\",\"knowledge_base_id\":\"KB_ID\"}'"
+    - separator [ref=e94]
+    - heading "レスポンス例" [level=2] [ref=e95]
+    - generic [ref=e96]:
+      - text: json
+      - code [ref=e97]: "{ \"answer\": \"設備Aの点検手順は以下の通りです。\\n1. 電源を切る\\n2. ...\", \"sources\": [ { \"document_id\": \"doc-uuid\", \"document_name\": \"設備A_点検マニュアル.pdf\", \"section_title\": \"第3章 定期点検\", \"score\": 0.892, \"snippet\": \"点検手順として、まず電源を切り...\" } ], \"session_id\": \"session-uuid\", \"message_id\": \"msg-uuid\" }"
+    - separator [ref=e98]
+    - heading "エラー時の対応" [level=2] [ref=e99]
+    - table [ref=e101]:
+      - rowgroup [ref=e102]:
+        - row "ステータス 原因 対処" [ref=e103]:
+          - columnheader "ステータス" [ref=e104]
+          - columnheader "原因" [ref=e105]
+          - columnheader "対処" [ref=e106]
+      - rowgroup [ref=e107]:
+        - row "401 X-API-Key ヘッダーがない ヘッダーを追加する" [ref=e108]:
+          - cell "401" [ref=e109]:
+            - code [ref=e110]: "401"
+          - cell "X-API-Key ヘッダーがない" [ref=e111]:
+            - code [ref=e112]: X-API-Key
+            - text: ヘッダーがない
+          - cell "ヘッダーを追加する" [ref=e113]
+        - row "403 API キーが間違っている docker-compose.yml の API_KEYS と一致させる" [ref=e114]:
+          - cell "403" [ref=e115]:
+            - code [ref=e116]: "403"
+          - cell "API キーが間違っている" [ref=e117]
+          - cell "docker-compose.yml の API_KEYS と一致させる" [ref=e118]:
+            - code [ref=e119]: docker-compose.yml
+            - text: の
+            - code [ref=e120]: API_KEYS
+            - text: と一致させる
+        - row "404 session_id が存在しない session_id を null にして新規セッションで再送" [ref=e121]:
+          - cell "404" [ref=e122]:
+            - code [ref=e123]: "404"
+          - cell "session_id が存在しない" [ref=e124]:
+            - code [ref=e125]: session_id
+            - text: が存在しない
+          - cell "session_id を null にして新規セッションで再送" [ref=e126]:
+            - code [ref=e127]: session_id
+            - text: を
+            - code [ref=e128]: "null"
+            - text: にして新規セッションで再送
+        - row "422 リクエスト形式が不正 question と knowledge_base_id が必須" [ref=e129]:
+          - cell "422" [ref=e130]:
+            - code [ref=e131]: "422"
+          - cell "リクエスト形式が不正" [ref=e132]
+          - cell "question と knowledge_base_id が必須" [ref=e133]:
+            - code [ref=e134]: question
+            - text: と
+            - code [ref=e135]: knowledge_base_id
+            - text: が必須
+        - row "502 LLM（AWS Bedrock）が応答しない バックエンドのログを確認する" [ref=e136]:
+          - cell "502" [ref=e137]:
+            - code [ref=e138]: "502"
+          - cell "LLM（AWS Bedrock）が応答しない" [ref=e139]
+          - cell "バックエンドのログを確認する" [ref=e140]
+    - separator [ref=e141]
+    - 'heading "補足: ドキュメントを外部アプリから管理する場合" [level=2] [ref=e142]'
+    - paragraph [ref=e143]: ドキュメントのアップロード・削除も API 経由で可能です。詳細は API ドキュメント（/docs）を参照してください。
+    - generic [ref=e144]:
+      - text: bash
+      - code [ref=e145]: "# アップロード curl -k -X POST \"https://<host>:3443/api/documents/upload?knowledge_base_id=KB_ID\" \\ -H \"X-User-Id: external-app-user\" \\ -F \"files=@manual.pdf\" # 一覧確認 curl -k \"https://<host>:3443/api/documents/?knowledge_base_id=KB_ID\" \\ -H \"X-User-Id: external-app-user\" # 削除 curl -k -X DELETE \"https://<host>:3443/api/documents/DOC_ID\" \\ -H \"X-User-Id: external-app-user\""

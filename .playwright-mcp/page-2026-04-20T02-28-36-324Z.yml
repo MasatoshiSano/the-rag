@@ -1,0 +1,91 @@
+- generic [ref=e3]:
+  - link "メインコンテンツへスキップ" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e5]:
+    - button "サイドバーを閉じる" [expanded] [ref=e6] [cursor=pointer]:
+      - generic [ref=e7]: ✕
+    - generic [ref=e8]: THE RAG
+    - search "セッション検索" [ref=e10]:
+      - combobox "セッションを検索" [ref=e11]
+  - generic [ref=e12]:
+    - navigation "サイドバーナビゲーション" [ref=e13]:
+      - list [ref=e15]:
+        - listitem [ref=e16]:
+          - link "チャット" [ref=e17] [cursor=pointer]:
+            - /url: /rag-phantom/chat
+        - listitem [ref=e18]:
+          - link "ナレッジベース" [ref=e19] [cursor=pointer]:
+            - /url: /rag-phantom/knowledge-bases
+        - listitem [ref=e20]:
+          - link "アップロード" [ref=e21] [cursor=pointer]:
+            - /url: /rag-phantom/upload
+        - listitem [ref=e22]:
+          - link "ドキュメント" [ref=e23] [cursor=pointer]:
+            - /url: /rag-phantom/documents
+        - listitem [ref=e24]:
+          - link "設定" [ref=e25] [cursor=pointer]:
+            - /url: /rag-phantom/settings
+      - separator [ref=e26]
+      - generic [ref=e27]:
+        - paragraph [ref=e28]: お気に入りKB
+        - list [ref=e29]:
+          - listitem [ref=e30]:
+            - 'button "ナレッジベース: 技術ブログ" [pressed] [ref=e31] [cursor=pointer]':
+              - generic [ref=e33]: 技術ブログ
+      - separator [ref=e34]
+      - generic [ref=e35]:
+        - paragraph [ref=e36]: 最近のセッション
+        - list [ref=e37]:
+          - listitem [ref=e38]:
+            - 'button "セッション: Oracleリスナー接続不調の対応手順を教えてください" [ref=e39] [cursor=pointer]': Oracleリスナー接続不調の対応手順を教えてください
+          - listitem [ref=e40]:
+            - 'button "セッション: Oracleリスナー接続不調の対応手順を教えてください" [ref=e41] [cursor=pointer]': Oracleリスナー接続不調の対応手順を教えてください
+          - listitem [ref=e42]:
+            - 'button "セッション: AWSコスト最適化で54%削減を達成した方法について教えてください。" [ref=e43] [cursor=pointer]': AWSコスト最適化で54%削減を達成した方法について教えてください。
+          - listitem [ref=e44]:
+            - 'button "セッション: AWSコスト最適化で54%削減を達成した方法について教えてください。" [ref=e45] [cursor=pointer]': AWSコスト最適化で54%削減を達成した方法について教えてください。
+          - listitem [ref=e46]:
+            - 'button "セッション: Bedrock RuntimeとBedrock Agents APIの違いは何ですか？" [ref=e47] [cursor=pointer]': Bedrock RuntimeとBedrock Agents APIの違いは何ですか？
+          - listitem [ref=e48]:
+            - 'button "セッション: Bedrock RuntimeとBedrock Agents APIの違いは何ですか？" [ref=e49] [cursor=pointer]': Bedrock RuntimeとBedrock Agents APIの違いは何ですか？
+          - listitem [ref=e50]:
+            - 'button "セッション: 製造AI画像解析でLambdaストリーミングを使う理由は何ですか？" [ref=e51] [cursor=pointer]': 製造AI画像解析でLambdaストリーミングを使う理由は何ですか？
+          - listitem [ref=e52]:
+            - 'button "セッション: 製造AI画像解析でLambdaストリーミングを使う理由は何ですか？" [ref=e53] [cursor=pointer]': 製造AI画像解析でLambdaストリーミングを使う理由は何ですか？
+          - listitem [ref=e54]:
+            - 'button "セッション: DynamoDBのSingle Table Designについて、チャットデータの設計パターンを教え" [ref=e55] [cursor=pointer]': DynamoDBのSingle Table Designについて、チャットデータの設計パターンを教え
+          - listitem [ref=e56]:
+            - 'button "セッション: DynamoDBのSingle Table Designについて、チャットデータの設計パターンを教え" [ref=e57] [cursor=pointer]': DynamoDBのSingle Table Designについて、チャットデータの設計パターンを教え
+      - separator [ref=e58]
+      - generic [ref=e59]:
+        - paragraph [ref=e60]: 開発者向け
+        - list [ref=e61]:
+          - listitem [ref=e62]:
+            - link "API仕様・動作確認 ↗" [ref=e63] [cursor=pointer]:
+              - /url: /rag-phantom/docs
+          - listitem [ref=e64]:
+            - link "外部連携ガイド ↗" [ref=e65] [cursor=pointer]:
+              - /url: /rag-phantom/guide.html
+    - main [ref=e66]:
+      - generic "チャット" [ref=e67]:
+        - heading "チャット - セッション df47bb89-e630-4d7f-b659-7748cd753b7d" [level=1] [ref=e90]
+        - log "チャットメッセージ" [ref=e69]:
+          - article "あなたのメッセージ" [ref=e91]:
+            - generic [ref=e92]: あなた
+            - generic [ref=e93]: Oracleリスナー接続不調の対応手順を教えてください
+            - time [ref=e94]: 11:28
+          - article "アシスタントが回答中" [ref=e95]:
+            - generic [ref=e96]: アシスタント
+            - status [ref=e103]: 検索戦略を検討中... (1/5)
+            - status "クエリを分析中..." [ref=e105]: クエリを分析中...
+        - region "メッセージ入力エリア" [ref=e73]:
+          - generic [ref=e74]:
+            - textbox "回答中です。入力できません。" [disabled] [ref=e107]:
+              - /placeholder: 回答中...
+            - button "回答を中断する" [ref=e108] [cursor=pointer]:
+              - generic [ref=e80]: ■
+          - generic [ref=e81]:
+            - generic [ref=e82]:
+              - switch "検索モード切替" [checked] [ref=e83] [cursor=pointer]: 深掘り
+              - switch "回答モード切替" [ref=e86] [cursor=pointer]: コンパクト
+            - paragraph [ref=e89]: Enterで送信・Shift+Enterで改行

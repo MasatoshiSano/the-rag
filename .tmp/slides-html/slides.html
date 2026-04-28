@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>THE RAG - 社内ナレッジ検索AIチャット</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #174ECC;
+  --primary-dark: #0B2D7A;
+  --primary-50: #EEF3FF;
+  --primary-100: #DCE7FF;
+  --accent: #8A42FF;
+  --accent-50: #F3ECFF;
+  --success: #12A07F;
+  --success-50: #E0F6EF;
+  --warn: #E8820C;
+  --warn-50: #FFF4E3;
+  --danger: #E0364A;
+  --ink: #0F1629;
+  --ink-soft: #1F2A44;
+  --muted: #5F6B7A;
+  --line: #E3E8F0;
+  --bg: #FFFFFF;
+  --bg-soft: #F5F7FB;
+  --bg-mist: #FAFBFE;
+  --radius: 18px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #24324a; font-family: "Noto Sans JP", "Yu Gothic UI", sans-serif; }
+body { padding: 40px 0; display: flex; flex-direction: column; align-items: center; gap: 32px; }
+.slide { width: 1920px; height: 1080px; background: var(--bg); position: relative; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.25); }
+
+/* ---- Header Shell ---- */
+.header {
+  position: absolute; top: 56px; left: 80px; right: 80px;
+  display: flex; align-items: flex-end; justify-content: space-between;
+  padding-bottom: 28px; border-bottom: 1px solid var(--line);
+}
+.header .bar { width: 8px; height: 56px; background: var(--primary); border-radius: 4px; }
+.header .title-wrap { display: flex; gap: 20px; align-items: center; }
+.header .t { font-size: 42px; font-weight: 800; color: var(--ink); }
+.header .st { font-size: 18px; color: var(--muted); font-weight: 500; margin-top: 8px; }
+.header .logo { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 14px; font-weight: 700; }
+.header .logo .dot { width: 10px; height: 10px; background: var(--primary); border-radius: 50%; }
+.pager { position: absolute; bottom: 48px; right: 80px; font-size: 16px; color: var(--muted); font-weight: 700; }
+.brandline { position: absolute; bottom: 48px; left: 80px; display: flex; align-items: center; gap: 14px; font-size: 14px; color: var(--muted); font-weight: 700; }
+.brandline .bl-dot { width: 8px; height: 8px; background: var(--primary); border-radius: 50%; }
+.content { position: absolute; top: 200px; left: 80px; right: 80px; bottom: 120px; }
+
+/* ---- Cover ---- */
+#s1 {
+  background: radial-gradient(ellipse at 10% 20%, #2E6DE8, transparent 55%),
+              radial-gradient(ellipse at 90% 90%, #8A42FF, transparent 55%),
+              linear-gradient(135deg, #0B2D7A, #174ECC 60%, #2E75FF);
+  color: #fff;
+}
+.cover-wrap {
+  position: absolute; inset: 0; padding: 120px;
+  display: flex; flex-direction: column; justify-content: space-between; z-index: 2;
+}
+.main-ttl { font-size: 120px; font-weight: 900; line-height: .96; letter-spacing: -.03em; }
+.sub-ttl { font-size: 32px; font-weight: 500; opacity: .92; margin-top: 28px; line-height: 1.55; }
+.chips { display: flex; gap: 14px; margin-top: 32px; }
+.chip { background: rgba(255,255,255,.14); backdrop-filter: blur(8px); padding: 12px 22px; border-radius: 999px; font-size: 17px; font-weight: 700; border: 1px solid rgba(255,255,255,.25); }
+.cover-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+.cover-date { font-size: 18px; opacity: .7; }
+
+/* ---- One-liner ---- */
+.one-liner { display: flex; flex-direction: column; gap: 20px; align-items: center; justify-content: center; height: 100%; text-align: center; }
+.one-liner .kicker { font-size: 22px; font-weight: 800; letter-spacing: .12em; color: var(--primary); }
+.one-liner .big { font-size: 80px; font-weight: 900; line-height: 1.2; letter-spacing: -.02em; color: var(--ink); }
+.one-liner .desc { font-size: 24px; color: var(--muted); max-width: 1200px; line-height: 1.7; margin-top: 12px; }
+.hl { background: linear-gradient(180deg, transparent 60%, #FFE788 60%); padding: 0 4px; }
+.hl-ai { background: linear-gradient(180deg, transparent 60%, #E4D2FF 60%); padding: 0 4px; }
+
+/* ---- Chapter ---- */
+.ch-wrap { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; padding: 0 140px; }
+.ch-kicker { font-size: 22px; font-weight: 800; letter-spacing: .2em; color: var(--primary); margin-bottom: 28px; }
+.ch-title { font-size: 100px; font-weight: 900; line-height: 1.05; letter-spacing: -.02em; color: var(--ink); }
+.ch-sub { font-size: 28px; color: var(--muted); font-weight: 500; margin-top: 32px; line-height: 1.6; max-width: 1400px; }
+.ch-deco { position: absolute; right: -160px; top: -160px; width: 900px; height: 900px; background: radial-gradient(circle, var(--primary-50), transparent 65%); z-index: 0; }
+
+/* ---- Feature Layout ---- */
+.ft-layout { display: grid; grid-template-columns: 1fr 1.55fr; gap: 48px; height: 100%; }
+.ft-left { display: flex; flex-direction: column; gap: 22px; }
+.ft-title { font-size: 36px; font-weight: 800; color: var(--ink); line-height: 1.3; }
+.ft-desc { font-size: 20px; color: var(--ink-soft); line-height: 1.7; }
+
+/* ---- Screenshot ---- */
+.shot { border-radius: 14px; overflow: hidden; background: #fff; box-shadow: 0 30px 70px -25px rgba(15,22,41,.4), 0 6px 20px -4px rgba(15,22,41,.1); border: 1px solid var(--line); }
+.shot img { display: block; width: 100%; height: auto; }
+
+/* ---- Bullet List ---- */
+.blist { display: flex; flex-direction: column; gap: 18px; }
+.blist .bi { display: flex; gap: 16px; font-size: 22px; color: var(--ink-soft); line-height: 1.6; }
+.blist .bi::before { content: ""; width: 10px; height: 10px; background: var(--primary); border-radius: 50%; flex-shrink: 0; margin-top: 14px; }
+.blist.accent .bi::before { background: var(--accent); }
+
+/* ---- Tags ---- */
+.ai-badge { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #8A42FF, #B072FF); color: #fff; font-weight: 800; font-size: 16px; padding: 10px 18px; border-radius: 999px; box-shadow: 0 6px 20px rgba(138,66,255,.35); }
+.tag { display: inline-block; padding: 8px 16px; border-radius: 999px; font-size: 15px; font-weight: 800; letter-spacing: .08em; }
+.tag.primary { background: var(--primary-50); color: var(--primary); }
+.tag.accent { background: var(--accent-50); color: var(--accent); }
+.tag.success { background: var(--success-50); color: var(--success); }
+.tag.warn { background: var(--warn-50); color: var(--warn); }
+
+/* ---- Step Pill ---- */
+.step-pill { display: inline-flex; align-items: center; gap: 14px; padding: 10px 16px 10px 10px; background: var(--primary); color: #fff; border-radius: 999px; font-weight: 800; font-size: 18px; }
+.step-pill .num { background: #fff; color: var(--primary); border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; }
+
+/* ---- Two-col cards ---- */
+.two-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; }
+.two-cards .card-box { background: var(--bg-mist); border: 1px solid var(--line); border-radius: 20px; padding: 36px; display: flex; flex-direction: column; gap: 16px; }
+.two-cards .card-box .ttl { font-size: 28px; font-weight: 800; color: var(--ink); display: flex; align-items: center; gap: 12px; }
+.two-cards .card-box .desc { font-size: 19px; color: var(--ink-soft); line-height: 1.65; }
+
+/* ---- Three-col cards ---- */
+.three-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+.three-cards .card-box { background: var(--bg-mist); border: 1px solid var(--line); border-radius: 20px; padding: 32px; display: flex; flex-direction: column; gap: 14px; }
+.three-cards .card-box .icon { font-size: 48px; }
+.three-cards .card-box .ttl { font-size: 26px; font-weight: 800; color: var(--ink); }
+.three-cards .card-box .desc { font-size: 18px; color: var(--ink-soft); line-height: 1.6; }
+
+/* ---- Callout ---- */
+.callout { display: flex; align-items: center; gap: 16px; padding: 20px 28px; background: linear-gradient(90deg, var(--primary-50), #fff); border-left: 5px solid var(--primary); border-radius: 14px; font-size: 20px; color: var(--ink-soft); font-weight: 700; }
+
+/* ---- Flow / Journey ---- */
+.flow-row { display: flex; align-items: center; gap: 0; justify-content: center; }
+.flow-step { display: flex; flex-direction: column; align-items: center; gap: 12px; width: 240px; }
+.flow-circle { width: 80px; height: 80px; border-radius: 50%; background: var(--primary); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 36px; font-weight: 900; }
+.flow-circle.accent { background: var(--accent); }
+.flow-circle.success { background: var(--success); }
+.flow-label { font-size: 22px; font-weight: 800; color: var(--ink); text-align: center; }
+.flow-desc { font-size: 16px; color: var(--muted); text-align: center; line-height: 1.5; }
+.flow-arrow { font-size: 36px; color: var(--line); margin: 0 8px; margin-bottom: 40px; }
+
+/* ---- Thank You ---- */
+#s15 {
+  background: linear-gradient(135deg, #0B2D7A, #174ECC 55%, #2E75FF);
+  color: #fff; position: relative; overflow: hidden;
+}
+#s15::before { content: ""; position: absolute; top: -200px; left: -100px; width: 700px; height: 700px; background: radial-gradient(circle, rgba(255,255,255,.18), transparent 60%); }
+#s15::after { content: ""; position: absolute; bottom: -200px; right: -100px; width: 600px; height: 600px; background: radial-gradient(circle, rgba(138,66,255,.4), transparent 60%); }
+.ty-wrap { position: relative; z-index: 2; padding: 140px 120px; height: 100%; display: flex; flex-direction: column; justify-content: center; gap: 36px; }
+.ty-big { font-size: 180px; font-weight: 900; line-height: .96; letter-spacing: -.03em; }
+.ty-sub { font-size: 28px; opacity: .8; line-height: 1.6; }
+.ty-contact { font-size: 20px; opacity: .6; margin-top: 20px; }
+
+/* ---- Gradient text ---- */
+.gradient-text { background: linear-gradient(135deg, #8A42FF, #174ECC); -webkit-background-clip: text; background-clip: text; color: transparent; }
+</style>
+</head>
+<body>
+
+<!-- ===================== S1: COVER ===================== -->
+<section class="slide" id="s1">
+  <div class="cover-wrap">
+    <div>
+      <div class="main-ttl">THE RAG</div>
+      <div class="sub-ttl">社内ナレッジ検索AIチャット<br>聞くだけで、必要な情報にアクセス</div>
+      <div class="chips">
+        <div class="chip">🤖 AIチャット</div>
+        <div class="chip">📄 ドキュメント管理</div>
+        <div class="chip">🔍 ベクトル検索</div>
+        <div class="chip">🏭 製造現場対応</div>
+      </div>
+    </div>
+    <div class="cover-bottom">
+      <div class="cover-date">2026年4月</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== S2: ONE-LINER ===================== -->
+<section class="slide" id="s2">
+  <div class="content">
+    <div class="one-liner">
+      <div class="kicker">WHAT IS THE RAG?</div>
+      <div class="big">社内の知識に、<br><span class="hl">聞くだけ</span>でアクセス</div>
+      <div class="desc">マニュアル、手順書、規格書、議事録…<br>散らばった社内ドキュメントをAIが横断検索し、<span class="hl-ai">自然な日本語で回答</span>します。</div>
+    </div>
+  </div>
+  <div class="brandline"><span class="bl-dot"></span>THE RAG</div>
+  <div class="pager">02 / 15</div>
+</section>
+
+<!-- ===================== S3: CHAPTER - 基本機能 ===================== -->
+<section class="slide" id="s3">
+  <div class="ch-wrap">
+    <div class="ch-kicker">SECTION 01</div>
+    <div class="ch-title">基本機能</div>
+    <div class="ch-sub">AIチャットで社内ナレッジに質問し、<br>根拠付きの回答をリアルタイムで受け取れます。</div>
+  </div>
+  <div class="ch-deco"></div>
+  <div class="brandline"><span class="bl-dot"></span>THE RAG</div>
+  <div class="pager">03 / 15</div>
+</section>
+
+<!-- ===================== S4: FEATURE - AIチャット ===================== -->
+<section class="slide" id="s4">
+  <div class="header">
+    <div class="title-wrap">
+      <div class="bar"></div>
+      <div><div class="t">AIチャットで質問</div><div class="st">社内ドキュメントを根拠に、AIがリアルタイムで回答</div></div>
+    </div>
+    <div class="logo"><div class="dot"></div>THE RAG</div>
+  </div>
+  <div class="content">
+    <div class="ft-layout">
+      <div class="ft-left">
+        <div class="ai-badge">🤖 AI Powered</div>
+        <div class="ft-title">自然な日本語で<br>なんでも聞ける</div>
+        <div class="blist">
+          <div class="bi">ナレッジベースを選んで質問するだけ</div>
+          <div class="bi">AIがリアルタイムにストリーミング回答</div>
+          <div class="bi">参照ドキュメントを根拠として表示</div>
+          <div class="bi">音声入力にも対応（マイクボタン）</div>
+          <div class="bi">回答の品質を星で評価・フィードバック</div>
+        </div>
+      </div>
+      <div class="shot" style="align-self: center;">
+        <img src="screenshots/chat-full.png" alt="チャット画面">
+      </div>
+    </div>
+  </div>
+  <div class="brandline"><span class="bl-dot"></span>THE RAG</div>
+  <div class="pager">04 / 15</div>
+</section>
+
+<!-- ===================== S5: FEATURE - 検索モード ===================== -->
+<section class="slide" id="s5">
+  <div class="header">
+    <div class="title-wrap">
+      <div class="bar"></div>
+      <div><div class="t">2つの検索モード</div><div class="st">目的に応じて使い分け</div></div>
+    </div>
+    <div class="logo"><div class="dot"></div>THE RAG</div>
+  </div>
+  <div class="content">
+    <div class="two-cards">
+      <div class="card-box">
+        <div class="ttl"><span class="tag primary">通常モード</span></div>
+        <div style="font-size: 64px; text-align: center; margin: 16px 0;">⚡</div>
+        <div class="ttl">すばやく回答</div>
+        <div class="desc">ベクトル検索で関連チャンクを取得し、AIが即座に回答を生成します。シンプルな質問に最適です。</div>
+        <div class="blist" style="margin-top: 8px;">
+          <div class="bi">応答が速い</div>
+          <div class="bi">一問一答に向いている</div>
+          <div class="bi">手順の確認、用語の意味など</div>
+        </div>
+      </div>
+      <div class="card-box" style="border-color: var(--accent); border-width: 2px;">
+        <div class="ttl"><span class="tag accent">深掘りモード</span></div>
+        <div style="font-size: 64px; text-align: center; margin: 16px 0;">🔬</div>
+        <div class="ttl">徹底的に調査</div>
+        <div class="desc">AIが自律的にドキュメントを読み込み、複数回の検索を繰り返して回答精度を高めます。</div>
+        <div class="blist accent" style="margin-top: 8px;">
+          <div class="bi">最大5回まで自動で深掘り</div>
+          <div class="bi">複雑な質問に強い</div>
+          <div class="bi">原因調査、比較分析など</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="brandline"><span class="bl-dot"></span>THE RAG</div>
+  <div class="pager">05 / 15</div>
+</section>
+
+<!-- ===================== S6: CHAPTER - ドキュメント管理 ===================== -->
+<section class="slide" id="s6">
+  <div class="ch-wrap">
+    <div class="ch-kicker">SECTION 02</div>
+    <div class="ch-title">ドキュメント<br>管理</div>
+    <div class="ch-sub">マニュアルや手順書をアップロードすると、<br>AIが自動で解析・タグ付け・インデックス化します。</div>
+  </div>
+  <div class="ch-deco"></div>
+  <div class="brandline"><span class="bl-dot"></span>THE RAG</div>
+  <div class="pager">06 / 15</div>
+</section>
+
+<!-- ===================== S7: FEATURE - ナレッジベース ===================== -->
+<section class="slide" id="s7">
+  <div class="header">
+    <div class="title-wrap">
+      <div class="bar"></div>
+      <div><div class="t">ナレッジベース</div><div class="st">目的別にドキュメントを整理・管理</div></div>
+    </div>
+    <div class="logo"><div class="dot"></div>THE RAG</div>
+  </div>
+  <div class="content">
+    <div class="ft-layout">
+      <div class="ft-left">
+        <div class="ft-title">用途ごとに<br>ナレッジを分類</div>
+        <div class="ft-desc">ナレッジベースを作成して、関連するドキュメントをグループ化。チャット時に検索対象を絞り込めます。</div>
+        <div class="blist" style="margin-top: 12px;">
+          <div class="bi">「安全衛生ガイドライン」「製造マニュアル」など用途別に作成</div>
+          <div class="bi">お気に入り登録でサイドバーからすぐアクセス</div>
+          <div class="bi">ドキュメント数を一覧で確認</div>
+        </div>
+      </div>
+      <div class="shot" style="align-self: center;">
+        <img src="screenshots/knowledge-bases.png" alt="ナレッジベース画面">
+      </div>
+    </div>
+  </div>
+  <div class="brandline"><span class="bl-dot"></span>THE RAG</div>
+  <div class="pager">07 / 15</div>
+</section>
+
+<!-- ===================== S8: FEATURE - アップロード ===================== -->
+<section class="slide" id="s8">
+  <div class="header">
+    <div class="title-wrap">
+      <div class="bar"></div>
+      <div><div class="t">ドキュメントアップロード</div><div class="st">多様な形式に対応、ドラッグ&ドロップで簡単登録</div></div>
+    </div>
+    <div class="logo"><div class="dot"></div>THE RAG</div>
+  </div>
+  <div class="content">
+    <div class="ft-layout">
+      <div class="ft-left">
+        <div class="ft-title">かんたん<br>ドキュメント登録</div>
+        <div class="ft-desc">ファイルをドラッグ&ドロップするだけで登録完了。あとはAIが自動でインデックスを作成します。</div>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px;">
+          <span class="tag primary">PDF</span>
+          <span class="tag primary">Word</span>
+          <span class="tag primary">Excel</span>
+          <span class="tag primary">PowerPoint</span>
+          <span class="tag success">Markdown</span>
+          <span class="tag success">テキスト</span>
+          <span class="tag accent">画像</span>
+          <span class="tag accent">HTML</span>
+        </div>
+        <div class="blist" style="margin-top: 16px;">
+          <div class="bi">最大20ファイルを一括アップロード</div>
+          <div class="bi">テキスト直接入力にも対応</div>
+          <div class="bi">GitHub / Gitea リポジトリから自動同期も可能</div>
+        </div>
+      </div>
+      <div class="shot" style="align-self: center;">
+        <img src="screenshots/upload.png" alt="アップロード画面">
+      </div>
+    </div>
+  </div>
+  <div class="brandline"><span class="bl-dot"></span>THE RAG</div>
+  <div class="pager">08 / 15</div>
+</section>
+
+<!-- ===================== S9: FEATURE - インデックスパイプライン ===================== -->
+<section class="slide" id="s9">
+  <div class="header">
+    <div class="title-wrap">
+      <div class="bar"></div>
+      <div><div class="t">自動インデックス処理</div><div class="st">アップロード後、AIが全自動でドキュメントを検索可能にします</div></div>
+    </div>
+    <div class="logo"><div class="dot"></div>THE RAG</div>
+  </div>
+  <div class="content">
+    <div class="flow-row" style="margin-top: 60px;">
+      <div class="flow-step">
+        <div class="flow-circle">1</div>
+        <div class="flow-label">変換</div>
+        <div class="flow-desc">PDF・Wordなどを<br>テキストに変換</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-circle">2</div>
+        <div class="flow-label">タグ付け</div>
+        <div class="flow-desc">AIが内容を分析し<br>自動でタグを付与</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-circle accent">3</div>
+        <div class="flow-label">分割</div>
+        <div class="flow-desc">検索に最適な<br>チャンクに分割</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-circle accent">4</div>
+        <div class="flow-label">ベクトル化</div>
+        <div class="flow-desc">意味を数値化し<br>ベクトルDBに格納</div>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-step">
+        <div class="flow-circle success">5</div>
+        <div class="flow-label">検索可能</div>
+        <div class="flow-desc">チャットから<br>質問できる状態に</div>
+      </div>
+    </div>
+    <div class="callout" style="margin-top: 64px;">
+      💡 すべて自動で処理されます。ユーザーはアップロードして待つだけです。
+    </div>
+  </div>
+  <div class="brandline"><span class="bl-dot"></span>THE RAG</div>
+  <div class="pager">09 / 15</div>
+</section>
+
+<!-- ===================== S10: CHAPTER - パーソナライズ ===================== -->
+<section class="slide" id="s10">
+  <div class="ch-wrap">
+    <div class="ch-kicker">SECTION 03</div>
+    <div class="ch-title">パーソナライズ</div>
+    <div class="ch-sub">自分だけの辞書や設定で、<br>より正確な回答を得られます。</div>
+  </div>
+  <div class="ch-deco"></div>
+  <div class="brandline"><span class="bl-dot"></span>THE RAG</div>
+  <div class="pager">10 / 15</div>
+</section>
+
+<!-- ===================== S11: FEATURE - 設定 ===================== -->
+<section class="slide" id="s11">
+  <div class="header">
+    <div class="title-wrap">
+      <div class="bar"></div>
+      <div><div class="t">設定とカスタマイズ</div><div class="st">個人辞書・検索設定・プロファイルで回答精度を向上</div></div>
+    </div>
+    <div class="logo"><div class="dot"></div>THE RAG</div>
+  </div>
+  <div class="content">
+    <div class="ft-layout">
+      <div class="ft-left">
+        <div class="ft-title">あなた専用に<br>チューニング</div>
+        <div class="blist" style="margin-top: 12px;">
+          <div class="bi"><strong>個人辞書</strong> — 社内略語や独自用語を正式名称にマッピング（例: 「SA」→「システムアーキテクト」）</div>
+          <div class="bi"><strong>検索設定</strong> — リランク、ハイブリッド検索のON/OFF、取得件数の調整</div>
+          <div class="bi"><strong>行動プロファイル</strong> — よく参照するラインや工程をAIが自動学習</div>
+          <div class="bi"><strong>ニックネーム</strong> — チャット内で呼ばれる名前を設定</div>
+        </div>
+      </div>
+      <div class="shot" style="align-self: center;">
+        <img src="screenshots/settings.png" alt="設定画面">
+      </div>
+    </div>
+  </div>
+  <div class="brandline"><span class="bl-dot"></span>THE RAG</div>
+  <div class="pager">11 / 15</div>
+</section>
+
+<!-- ===================== S12: CHAPTER - 使い方 ===================== -->
+<section class="slide" id="s12">
+  <div class="ch-wrap">
+    <div class="ch-kicker">SECTION 04</div>
+    <div class="ch-title">使い方の流れ</div>
+    <div class="ch-sub">3つのステップで、すぐに使い始められます。</div>
+  </div>
+  <div class="ch-deco"></div>
+  <div class="brandline"><span class="bl-dot"></span>THE RAG</div>
+  <div class="pager">12 / 15</div>
+</section>
+
+<!-- ===================== S13: STEPS ===================== -->
+<section class="slide" id="s13">
+  <div class="header">
+    <div class="title-wrap">
+      <div class="bar"></div>
+      <div><div class="t">かんたん3ステップ</div><div class="st">誰でもすぐに使えます</div></div>
+    </div>
+    <div class="logo"><div class="dot"></div>THE RAG</div>
+  </div>
+  <div class="content">
+    <div class="three-cards" style="height: 100%;">
+      <div class="card-box" style="justify-content: flex-start; gap: 20px;">
+        <div class="step-pill"><div class="num">1</div>選ぶ</div>
+        <div class="icon" style="font-size: 72px; text-align: center;">📚</div>
+        <div class="ttl" style="font-size: 32px;">ナレッジベースを選択</div>
+        <div class="desc" style="font-size: 20px;">サイドバーまたはナレッジベース一覧から、質問したいカテゴリを選びます。</div>
+      </div>
+      <div class="card-box" style="justify-content: flex-start; gap: 20px;">
+        <div class="step-pill" style="background: var(--accent);"><div class="num" style="color: var(--accent);">2</div>聞く</div>
+        <div class="icon" style="font-size: 72px; text-align: center;">💬</div>
+        <div class="ttl" style="font-size: 32px;">質問を入力</div>
+        <div class="desc" style="font-size: 20px;">知りたいことを自然な日本語で入力。音声入力も使えます。</div>
+      </div>
+      <div class="card-box" style="justify-content: flex-start; gap: 20px;">
+        <div class="step-pill" style="background: var(--success);"><div class="num" style="color: var(--success);">3</div>得る</div>
+        <div class="icon" style="font-size: 72px; text-align: center;">✅</div>
+        <div class="ttl" style="font-size: 32px;">回答を受け取る</div>
+        <div class="desc" style="font-size: 20px;">AIがドキュメントを根拠に回答。参照元も確認できます。</div>
+      </div>
+    </div>
+  </div>
+  <div class="brandline"><span class="bl-dot"></span>THE RAG</div>
+  <div class="pager">13 / 15</div>
+</section>
+
+<!-- ===================== S14: まとめ ===================== -->
+<section class="slide" id="s14">
+  <div class="header">
+    <div class="title-wrap">
+      <div class="bar"></div>
+      <div><div class="t">THE RAG でできること</div><div class="st">まとめ</div></div>
+    </div>
+    <div class="logo"><div class="dot"></div>THE RAG</div>
+  </div>
+  <div class="content">
+    <div class="three-cards">
+      <div class="card-box" style="border-left: 4px solid var(--primary);">
+        <div class="icon">🔍</div>
+        <div class="ttl">すばやく検索</div>
+        <div class="desc">マニュアルを探し回る必要はありません。質問するだけで、必要な情報がすぐに見つかります。</div>
+      </div>
+      <div class="card-box" style="border-left: 4px solid var(--accent);">
+        <div class="icon">🤖</div>
+        <div class="ttl">AIが要約・回答</div>
+        <div class="desc">長い文書を読む手間なし。AIが要点を整理して、分かりやすく回答します。</div>
+      </div>
+      <div class="card-box" style="border-left: 4px solid var(--success);">
+        <div class="icon">📄</div>
+        <div class="ttl">根拠を確認</div>
+        <div class="desc">回答の参照元ドキュメントを表示。情報の出典を確認して安心して活用できます。</div>
+      </div>
+    </div>
+    <div class="callout" style="margin-top: 40px; font-size: 24px;">
+      🏭 製造現場のナレッジを、チーム全員がいつでも活用できる環境を実現します。
+    </div>
+  </div>
+  <div class="brandline"><span class="bl-dot"></span>THE RAG</div>
+  <div class="pager">14 / 15</div>
+</section>
+
+<!-- ===================== S15: THANK YOU ===================== -->
+<section class="slide" id="s15">
+  <div class="ty-wrap">
+    <div class="ty-big">Thank<br>You.</div>
+    <div class="ty-sub">ご質問・ご要望がございましたら、<br>お気軽にお問い合わせください。</div>
+    <div class="ty-contact">THE RAG — 社内ナレッジ検索AIチャット</div>
+  </div>
+</section>
+
+</body>
+</html>

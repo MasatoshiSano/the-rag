@@ -1,0 +1,106 @@
+- generic [ref=e3]:
+  - link "メインコンテンツへスキップ" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e5]:
+    - button "サイドバーを閉じる" [expanded] [ref=e6] [cursor=pointer]:
+      - generic [ref=e7]: ✕
+    - generic [ref=e8]: THE RAG
+    - search "セッション検索" [ref=e10]:
+      - combobox "セッションを検索" [ref=e11]
+  - generic [ref=e12]:
+    - navigation "サイドバーナビゲーション" [ref=e13]:
+      - list [ref=e15]:
+        - listitem [ref=e16]:
+          - link "チャット" [ref=e17] [cursor=pointer]:
+            - /url: /the-rag/chat
+        - listitem [ref=e18]:
+          - link "ナレッジベース" [ref=e19] [cursor=pointer]:
+            - /url: /the-rag/knowledge-bases
+        - listitem [ref=e20]:
+          - link "アップロード" [ref=e21] [cursor=pointer]:
+            - /url: /the-rag/upload
+        - listitem [ref=e22]:
+          - link "ドキュメント" [ref=e23] [cursor=pointer]:
+            - /url: /the-rag/documents
+        - listitem [ref=e24]:
+          - link "設定" [ref=e25] [cursor=pointer]:
+            - /url: /the-rag/settings
+      - separator [ref=e26]
+      - generic [ref=e27]:
+        - paragraph [ref=e28]: お気に入りKB
+        - paragraph [ref=e29]: なし
+      - separator [ref=e30]
+      - generic [ref=e31]:
+        - paragraph [ref=e32]: 最近のセッション
+        - paragraph [ref=e33]: セッションがありません
+      - separator [ref=e34]
+      - generic [ref=e35]:
+        - paragraph [ref=e36]: 開発者向け
+        - list [ref=e37]:
+          - listitem [ref=e38]:
+            - link "API仕様・動作確認 ↗" [ref=e39] [cursor=pointer]:
+              - /url: /the-rag/docs
+          - listitem [ref=e40]:
+            - link "外部連携ガイド ↗" [ref=e41] [cursor=pointer]:
+              - /url: /the-rag/guide.html
+    - main [ref=e42]:
+      - region "ナレッジベース管理" [ref=e43]:
+        - generic [ref=e44]:
+          - heading "ナレッジベース" [level=1] [ref=e45]
+          - button "新しいナレッジベースを作成" [ref=e46] [cursor=pointer]:
+            - generic [ref=e47]: ＋
+            - text: 新規作成
+        - region "ナレッジベース一覧" [ref=e48]:
+          - generic [ref=e49]:
+            - 'button "ナレッジベース: フォルダテスト" [ref=e152] [cursor=pointer]':
+              - generic [ref=e153]:
+                - heading "フォルダテスト" [level=3] [ref=e156]
+                - button "フォルダテストをお気に入りに追加" [ref=e157]: ☆
+              - generic [ref=e158]:
+                - generic [ref=e159]: 📄
+                - generic [ref=e160]: 0 ドキュメント
+              - generic [ref=e161]:
+                - button "フォルダテストを編集" [ref=e162]: 編集
+                - button "フォルダテストを削除" [ref=e163]: 削除
+            - 'button "ナレッジベース: 技術" [ref=e50] [cursor=pointer]':
+              - generic [ref=e51]:
+                - heading "技術" [level=3] [ref=e54]
+                - button "技術をお気に入りに追加" [ref=e55]: ☆
+              - generic [ref=e56]:
+                - generic [ref=e57]: 📄
+                - generic [ref=e58]: 25 ドキュメント
+              - generic [ref=e59]:
+                - button "技術を編集" [ref=e60]: 編集
+                - button "技術を削除" [ref=e61]: 削除
+            - 'button "ナレッジベース: ステーション" [ref=e62] [cursor=pointer]':
+              - generic [ref=e63]:
+                - heading "ステーション" [level=3] [ref=e66]
+                - button "ステーションをお気に入りに追加" [ref=e67]: ☆
+              - generic [ref=e68]:
+                - generic [ref=e69]: 📄
+                - generic [ref=e70]: 1 ドキュメント
+              - generic [ref=e71]:
+                - button "ステーションを編集" [ref=e72]: 編集
+                - button "ステーションを削除" [ref=e73]: 削除
+            - 'button "ナレッジベース: 安全衛生ガイドライン" [ref=e74] [cursor=pointer]':
+              - generic [ref=e75]:
+                - heading "安全衛生ガイドライン" [level=3] [ref=e78]
+                - button "安全衛生ガイドラインをお気に入りに追加" [ref=e79]: ☆
+              - paragraph [ref=e80]: 労働安全衛生法に基づく安全作業手順・危険予知・緊急時対応マニュアル
+              - generic [ref=e81]:
+                - generic [ref=e82]: 📄
+                - generic [ref=e83]: 2 ドキュメント
+              - generic [ref=e84]:
+                - button "安全衛生ガイドラインを編集" [ref=e85]: 編集
+                - button "安全衛生ガイドラインを削除" [ref=e86]: 削除
+            - 'button "ナレッジベース: 製造マニュアル" [ref=e87] [cursor=pointer]':
+              - generic [ref=e88]:
+                - heading "製造マニュアル" [level=3] [ref=e91]
+                - button "製造マニュアルをお気に入りに追加" [ref=e92]: ☆
+              - paragraph [ref=e93]: 工場の製造プロセスに関するドキュメント
+              - generic [ref=e94]:
+                - generic [ref=e95]: 📄
+                - generic [ref=e96]: 1 ドキュメント
+              - generic [ref=e97]:
+                - button "製造マニュアルを編集" [ref=e98]: 編集
+                - button "製造マニュアルを削除" [ref=e99]: 削除

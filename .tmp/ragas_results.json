@@ -1,0 +1,1826 @@
+{
+  "normal": [
+    {
+      "answer": "MQTTについて参照文書から回答します：\n\n• **IoTやスマートホーム分野で欠かせない通信プロトコル**\n• **「伝言板」のような仕組みで機器間の情報交換を行う**\n• **軽量で効率的な通信が可能**\n• **Pub/Subモデルとトピック機能を使用**\n• **設備監視システムなど製造現場でも活用される**",
+      "sources": [
+        {
+          "chunk_id": "0ad6a99a-613a-5464-a0c4-578130b3defc",
+          "document_id": "e23a73f3-d78e-49c4-a14f-a42bf01035f7",
+          "document_name": "01_mqtt_introduction.md",
+          "section_title": "はじめに",
+          "score": 0.515,
+          "snippet": "## はじめに\n\n「MQTT」という言葉を聞いたことはありますか?\n\nIoT(モノのインターネット)やスマートホームの世界では欠かせない技術ですが、\n初めて聞く方には「なんだか難しそう...」と感じるかもしれません。\n\nこの記事では、MQTTを**「伝言板」**に例えて、誰でもわかるように解説します。\n\n---"
+        },
+        {
+          "chunk_id": "00981497-758f-53c0-b1f3-4d13f0dc48a7",
+          "document_id": "85b2485c-7b41-4815-a7dc-84904c7f4986",
+          "document_name": "01_mqtt_introduction.md",
+          "section_title": "はじめに",
+          "score": 0.515,
+          "snippet": "## はじめに\n\n「MQTT」という言葉を聞いたことはありますか?\n\nIoT(モノのインターネット)やスマートホームの世界では欠かせない技術ですが、\n初めて聞く方には「なんだか難しそう...」と感じるかもしれません。\n\nこの記事では、MQTTを**「伝言板」**に例えて、誰でもわかるように解説します。\n\n---"
+        },
+        {
+          "chunk_id": "dc347433-3e38-5aa2-ba15-52cf4c7483fb",
+          "document_id": "39ccead0-5005-457c-bee4-4b0eb45b58d4",
+          "document_name": "01_mqtt_introduction.md",
+          "section_title": "はじめに",
+          "score": 0.515,
+          "snippet": "## はじめに\n\n「MQTT」という言葉を聞いたことはありますか?\n\nIoT(モノのインターネット)やスマートホームの世界では欠かせない技術ですが、\n初めて聞く方には「なんだか難しそう...」と感じるかもしれません。\n\nこの記事では、MQTTを**「伝言板」**に例えて、誰でもわかるように解説します。\n\n---"
+        },
+        {
+          "chunk_id": "f3d20a1d-107b-51ee-8fd2-14bd12549685",
+          "document_id": "85b2485c-7b41-4815-a7dc-84904c7f4986",
+          "document_name": "01_mqtt_introduction.md",
+          "section_title": "なぜMQTTが選ばれるの?",
+          "score": 0.411,
+          "snippet": "## なぜMQTTが選ばれるの?"
+        },
+        {
+          "chunk_id": "8515e637-708f-5c43-b805-1d5f71a868b2",
+          "document_id": "e23a73f3-d78e-49c4-a14f-a42bf01035f7",
+          "document_name": "01_mqtt_introduction.md",
+          "section_title": "なぜMQTTが選ばれるの?",
+          "score": 0.411,
+          "snippet": "## なぜMQTTが選ばれるの?"
+        },
+        {
+          "chunk_id": "60b5ecc5-7238-593a-94fe-ee9ff3fa743e",
+          "document_id": "39ccead0-5005-457c-bee4-4b0eb45b58d4",
+          "document_name": "01_mqtt_introduction.md",
+          "section_title": "なぜMQTTが選ばれるの?",
+          "score": 0.411,
+          "snippet": "## なぜMQTTが選ばれるの?"
+        },
+        {
+          "chunk_id": "c97052f2-49f1-5113-8b78-8ca05ce732e5",
+          "document_id": "b5aacd4a-b418-4987-81d0-b6c711473811",
+          "document_name": "04_multi_pi_setup.md",
+          "section_title": "関連記事",
+          "score": 0.342,
+          "snippet": "## 関連記事\n\n- [第1回: MQTTとは?初心者向け入門](./01_mqtt_introduction.md)\n- [第2回: Pub/Subモデルとトピックの仕組み](./02_pubsub_topics.md)\n- [第3回: 実践:Raspberry Piで設備監視システムを作る](./03_practical_implementation.md)"
+        },
+        {
+          "chunk_id": "2f637bac-8b94-4750-bebd-ffb29ccbff0e",
+          "document_id": "35f3c912-8178-4055-962b-d127bf214524",
+          "document_name": "04_multi_pi_setup.md",
+          "section_title": "関連記事",
+          "score": 0.342,
+          "snippet": "# [INFO] Waiting for messages...\n\n```\n\n---\n\n## 関連記事\n\n- [第1回: MQTTとは?初心者向け入門](./01_mqtt_introduction.md)\n- [第2回: Pub/Subモデルとトピックの仕組み](./02_pubsub_topics.md)\n- [第3回: 実践:Raspberry Piで設備監視システムを作る](./03_practical_implementation.md)"
+        },
+        {
+          "chunk_id": "c5398b5d-0e54-5f52-8858-00d0de3833bd",
+          "document_id": "d48e1be4-a8d8-47a8-8355-a248fbabfff6",
+          "document_name": "04_multi_pi_setup.md",
+          "section_title": "関連記事",
+          "score": 0.342,
+          "snippet": "## 関連記事\n\n- [第1回: MQTTとは?初心者向け入門](./01_mqtt_introduction.md)\n- [第2回: Pub/Subモデルとトピックの仕組み](./02_pubsub_topics.md)\n- [第3回: 実践:Raspberry Piで設備監視システムを作る](./03_practical_implementation.md)"
+        },
+        {
+          "chunk_id": "c78b2aa6-a467-5487-9d1e-7fd6ebd2d0c0",
+          "document_id": "85b2485c-7b41-4815-a7dc-84904c7f4986",
+          "document_name": "01_mqtt_introduction.md",
+          "section_title": "なぜMQTTが生まれたの?",
+          "score": 0.314,
+          "snippet": "## なぜMQTTが生まれたの?"
+        }
+      ],
+      "agentic_steps": [],
+      "message_id": "28cd9ea9-ff1c-4b80-996e-8e5450b53162",
+      "elapsed_sec": 18.9,
+      "question": "MQTTとはどのようなプロトコルですか？主な特徴を教えてください。",
+      "search_mode": "normal",
+      "scores": {
+        "answer_length": 159,
+        "source_count": 10,
+        "keyword_coverage": 0.158,
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.333
+      }
+    },
+    {
+      "answer": "## トピックの役割と構造\n\n**役割:**\n- メッセージの「住所」として機能し、配信先を決定\n- Publisher（発行者）とSubscriber（購読者）を仲介\n- ブローカーがメッセージを適切な受信者に振り分け\n\n**構造:**\n- 階層構造で整理（例：factory/line/sensor）\n- スラッシュ（/）で階層を区切る\n- ワイルドカード使用可能（+は1階層、#は全階層）\n\n**特徴:**\n- 送信者と受信者が直接つながらない疎結合設計\n- システムの追加・削除が容易",
+      "sources": [
+        {
+          "chunk_id": "1c61d6c0-73e7-5116-82b8-f26a5b28ffc5",
+          "document_id": "d83d21a4-0323-4c9d-a75d-6d4030f1cde1",
+          "document_name": "02_pubsub_topics.md",
+          "section_title": "",
+          "score": 0.843,
+          "snippet": "---\ntitle: \"Pub/Subモデルとトピックの仕組み\"\nemoji: \"🔀\"\ntype: \"tech\"\ntopics: [\"MQTT\", \"IoT\", \"PubSub\"]\npublished: true\ncategory: \"HowTo\"\ndate: \"2026-03-16\"\ndescription: \"MQTTのPub/Subモデルとトピック構造を解説。ブローカーを介したメッセージ配信の仕組みを理解する。\"\nseries: \"MQTTとRaspberry Piで作る設備監視システム\"\nseriesOrder: 2\ncoverImage: \"/images/posts/coding-"
+        },
+        {
+          "chunk_id": "8bd1e78a-84a0-53f2-af89-265228c1d7d6",
+          "document_id": "f1fc8c0b-ba1a-45e9-8219-7f750562ea13",
+          "document_name": "02_pubsub_topics.md",
+          "section_title": "",
+          "score": 0.843,
+          "snippet": "---\ntitle: \"Pub/Subモデルとトピックの仕組み\"\nemoji: \"🔀\"\ntype: \"tech\"\ntopics: [\"MQTT\", \"IoT\", \"PubSub\"]\npublished: true\ncategory: \"HowTo\"\ndate: \"2026-03-16\"\ndescription: \"MQTTのPub/Subモデルとトピック構造を解説。ブローカーを介したメッセージ配信の仕組みを理解する。\"\nseries: \"MQTTとRaspberry Piで作る設備監視システム\"\nseriesOrder: 2\ncoverImage: \"/images/posts/coding-"
+        },
+        {
+          "chunk_id": "dc923f3f-72bd-5307-bd43-c6bbc9d40c84",
+          "document_id": "46439440-8036-4008-aad7-25022c3a6c82",
+          "document_name": "02_pubsub_topics.md",
+          "section_title": "",
+          "score": 0.843,
+          "snippet": "---\ntitle: \"Pub/Subモデルとトピックの仕組み\"\nemoji: \"🔀\"\ntype: \"tech\"\ntopics: [\"MQTT\", \"IoT\", \"PubSub\"]\npublished: true\ncategory: \"HowTo\"\ndate: \"2026-03-16\"\ndescription: \"MQTTのPub/Subモデルとトピック構造を解説。ブローカーを介したメッセージ配信の仕組みを理解する。\"\nseries: \"MQTTとRaspberry Piで作る設備監視システム\"\nseriesOrder: 2\ncoverImage: \"/images/posts/coding-"
+        },
+        {
+          "chunk_id": "33057d4a-7354-5e7d-8e5c-18a564c93e58",
+          "document_id": "85b2485c-7b41-4815-a7dc-84904c7f4986",
+          "document_name": "01_mqtt_introduction.md",
+          "section_title": "次の記事",
+          "score": 0.772,
+          "snippet": "## 次の記事\n\n👉 [Pub/Subモデルとトピックの仕組み](./02_pubsub_topics.md)\n\nMQTTの心臓部である「Publish/Subscribe」パターンと、\nメッセージを分類する「トピック」について詳しく解説します。"
+        },
+        {
+          "chunk_id": "699fb953-ee4e-5c79-896c-93c35bfd5651",
+          "document_id": "e23a73f3-d78e-49c4-a14f-a42bf01035f7",
+          "document_name": "01_mqtt_introduction.md",
+          "section_title": "次の記事",
+          "score": 0.772,
+          "snippet": "## 次の記事\n\n👉 [Pub/Subモデルとトピックの仕組み](./02_pubsub_topics.md)\n\nMQTTの心臓部である「Publish/Subscribe」パターンと、\nメッセージを分類する「トピック」について詳しく解説します。"
+        },
+        {
+          "chunk_id": "3a75b95a-799a-5917-a6ab-463e87f56d13",
+          "document_id": "39ccead0-5005-457c-bee4-4b0eb45b58d4",
+          "document_name": "01_mqtt_introduction.md",
+          "section_title": "次の記事",
+          "score": 0.772,
+          "snippet": "## 次の記事\n\n👉 [Pub/Subモデルとトピックの仕組み](./02_pubsub_topics.md)\n\nMQTTの心臓部である「Publish/Subscribe」パターンと、\nメッセージを分類する「トピック」について詳しく解説します。"
+        },
+        {
+          "chunk_id": "8ccbf6d6-8093-50be-bbee-8e1eb03abfab",
+          "document_id": "f1fc8c0b-ba1a-45e9-8219-7f750562ea13",
+          "document_name": "02_pubsub_topics.md",
+          "section_title": "はじめに",
+          "score": 0.704,
+          "snippet": "## はじめに\n\n前回の記事では、MQTTの基本概念を「伝言板」に例えて説明しました。\n\n今回は、MQTTの心臓部である:\n- **Pub/Sub(パブサブ)モデル**\n- **トピック**\n\nについて、図解で詳しく解説します。\n\n---"
+        },
+        {
+          "chunk_id": "a9b608f4-6500-51c4-84c3-98f39bcea74c",
+          "document_id": "d83d21a4-0323-4c9d-a75d-6d4030f1cde1",
+          "document_name": "02_pubsub_topics.md",
+          "section_title": "はじめに",
+          "score": 0.704,
+          "snippet": "## はじめに\n\n前回の記事では、MQTTの基本概念を「伝言板」に例えて説明しました。\n\n今回は、MQTTの心臓部である:\n- **Pub/Sub(パブサブ)モデル**\n- **トピック**\n\nについて、図解で詳しく解説します。\n\n---"
+        },
+        {
+          "chunk_id": "014e2982-82ff-53a3-af57-1ad065096640",
+          "document_id": "46439440-8036-4008-aad7-25022c3a6c82",
+          "document_name": "02_pubsub_topics.md",
+          "section_title": "はじめに",
+          "score": 0.704,
+          "snippet": "## はじめに\n\n前回の記事では、MQTTの基本概念を「伝言板」に例えて説明しました。\n\n今回は、MQTTの心臓部である:\n- **Pub/Sub(パブサブ)モデル**\n- **トピック**\n\nについて、図解で詳しく解説します。\n\n---"
+        },
+        {
+          "chunk_id": "2d6c80aa-c323-568a-8ac0-4b8a1311cf16",
+          "document_id": "f1fc8c0b-ba1a-45e9-8219-7f750562ea13",
+          "document_name": "02_pubsub_topics.md",
+          "section_title": "まとめ",
+          "score": 0.702,
+          "snippet": "## まとめ\n\n| 概念 | 説明 | ポイント |\n|------|------|----------|\n| Pub/Sub | 発行/購読モデル | 送信者と受信者が直接つながらない |\n| Topic | メッセージの住所 | 階層構造で整理(factory/line/sensor) |\n| + | 1階層ワイルドカード | sensor/+/temp |\n| # | 全階層ワイルドカード | sensor/# |\n| 疎結合 | ゆるいつながり | 追加・削除が簡単 |\n\n---"
+        }
+      ],
+      "agentic_steps": [],
+      "message_id": "b4f873ed-0582-4cae-beed-f46d2f2f3718",
+      "elapsed_sec": 19.38,
+      "question": "Pub/Subモデルにおけるトピックの役割と構造について説明してください。",
+      "search_mode": "normal",
+      "scores": {
+        "answer_length": 246,
+        "source_count": 10,
+        "keyword_coverage": 0.429,
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.429
+      }
+    },
+    {
+      "answer": "Raspberry Piを使ったMQTT設備監視システムの構成について説明します：\n\n• **Raspberry Pi**: センサーデータを取得し、MQTTブローカーに送信する役割\n• **MQTTブローカー**: データの中継・配信を行う中央サーバー（Mosquittoなど）\n• **センサー**: 温度、湿度、振動などの設備状態を監視\n• **Pub/Subモデル**: Raspberry Piがパブリッシャー、監視システムがサブスクライバーとして動作\n• **トピック構造**: 設備ごとに階層化されたトピックでデータを分類・管理",
+      "sources": [
+        {
+          "chunk_id": "4859bf9f-9702-5974-8f5d-b7813761f12e",
+          "document_id": "69a2c1c5-f369-4959-bf58-8e9304fa97ac",
+          "document_name": "03_practical_implementation.md",
+          "section_title": "",
+          "score": 0.904,
+          "snippet": "---\ntitle: \"実践:Raspberry Piで設備監視システムを作る\"\nemoji: \"🔧\"\ntype: \"tech\"\ntopics: [\"MQTT\", \"RaspberryPi\", \"Python\", \"IoT\"]\npublished: true\ncategory: \"HowTo\"\ndate: \"2026-03-16\"\ndescription: \"Raspberry PiとMQTTを使って実際に設備監視システムを構築する手順を解説。センサーデータの取得からブローカーへの送信まで。\"\nseries: \"MQTTとRaspberry Piで作る設備監視システム\"\nseriesOrder"
+        },
+        {
+          "chunk_id": "9b8203b1-b04a-577b-89a3-3dc2d257a8b9",
+          "document_id": "5e0e0f1c-b625-4959-b302-5a2d3030a16a",
+          "document_name": "03_practical_implementation.md",
+          "section_title": "",
+          "score": 0.904,
+          "snippet": "---\ntitle: \"実践:Raspberry Piで設備監視システムを作る\"\nemoji: \"🔧\"\ntype: \"tech\"\ntopics: [\"MQTT\", \"RaspberryPi\", \"Python\", \"IoT\"]\npublished: true\ncategory: \"HowTo\"\ndate: \"2026-03-16\"\ndescription: \"Raspberry PiとMQTTを使って実際に設備監視システムを構築する手順を解説。センサーデータの取得からブローカーへの送信まで。\"\nseries: \"MQTTとRaspberry Piで作る設備監視システム\"\nseriesOrder"
+        },
+        {
+          "chunk_id": "b62d04bf-054c-5cbf-b61a-2f6f0a4e2f67",
+          "document_id": "a6af9d4b-884f-42ab-bee2-4e2c608016b5",
+          "document_name": "03_practical_implementation.md",
+          "section_title": "",
+          "score": 0.904,
+          "snippet": "---\ntitle: \"実践:Raspberry Piで設備監視システムを作る\"\nemoji: \"🔧\"\ntype: \"tech\"\ntopics: [\"MQTT\", \"RaspberryPi\", \"Python\", \"IoT\"]\npublished: true\ncategory: \"HowTo\"\ndate: \"2026-03-16\"\ndescription: \"Raspberry PiとMQTTを使って実際に設備監視システムを構築する手順を解説。センサーデータの取得からブローカーへの送信まで。\"\nseries: \"MQTTとRaspberry Piで作る設備監視システム\"\nseriesOrder"
+        },
+        {
+          "chunk_id": "12e5de84-30e6-566e-bf7e-78bbf1f803f4",
+          "document_id": "69a2c1c5-f369-4959-bf58-8e9304fa97ac",
+          "document_name": "03_practical_implementation.md",
+          "section_title": "はじめに",
+          "score": 0.862,
+          "snippet": "## はじめに\n\n前回までの記事で、MQTTとPub/Subモデルの概念を理解しました。\n\n今回は実際に**Raspberry Pi**を使って、\n工場の設備監視システムを構築してみましょう。\n\n---"
+        },
+        {
+          "chunk_id": "6a28fca3-4d5e-5747-9fb9-630857da9153",
+          "document_id": "a6af9d4b-884f-42ab-bee2-4e2c608016b5",
+          "document_name": "03_practical_implementation.md",
+          "section_title": "はじめに",
+          "score": 0.862,
+          "snippet": "## はじめに\n\n前回までの記事で、MQTTとPub/Subモデルの概念を理解しました。\n\n今回は実際に**Raspberry Pi**を使って、\n工場の設備監視システムを構築してみましょう。\n\n---"
+        },
+        {
+          "chunk_id": "a64458fa-1336-5d0d-af4b-cce8a7d06c44",
+          "document_id": "5e0e0f1c-b625-4959-b302-5a2d3030a16a",
+          "document_name": "03_practical_implementation.md",
+          "section_title": "はじめに",
+          "score": 0.862,
+          "snippet": "## はじめに\n\n前回までの記事で、MQTTとPub/Subモデルの概念を理解しました。\n\n今回は実際に**Raspberry Pi**を使って、\n工場の設備監視システムを構築してみましょう。\n\n---"
+        },
+        {
+          "chunk_id": "c97052f2-49f1-5113-8b78-8ca05ce732e5",
+          "document_id": "b5aacd4a-b418-4987-81d0-b6c711473811",
+          "document_name": "04_multi_pi_setup.md",
+          "section_title": "関連記事",
+          "score": 0.721,
+          "snippet": "## 関連記事\n\n- [第1回: MQTTとは?初心者向け入門](./01_mqtt_introduction.md)\n- [第2回: Pub/Subモデルとトピックの仕組み](./02_pubsub_topics.md)\n- [第3回: 実践:Raspberry Piで設備監視システムを作る](./03_practical_implementation.md)"
+        },
+        {
+          "chunk_id": "2f637bac-8b94-4750-bebd-ffb29ccbff0e",
+          "document_id": "35f3c912-8178-4055-962b-d127bf214524",
+          "document_name": "04_multi_pi_setup.md",
+          "section_title": "関連記事",
+          "score": 0.721,
+          "snippet": "# [INFO] Waiting for messages...\n\n```\n\n---\n\n## 関連記事\n\n- [第1回: MQTTとは?初心者向け入門](./01_mqtt_introduction.md)\n- [第2回: Pub/Subモデルとトピックの仕組み](./02_pubsub_topics.md)\n- [第3回: 実践:Raspberry Piで設備監視システムを作る](./03_practical_implementation.md)"
+        },
+        {
+          "chunk_id": "c5398b5d-0e54-5f52-8858-00d0de3833bd",
+          "document_id": "d48e1be4-a8d8-47a8-8355-a248fbabfff6",
+          "document_name": "04_multi_pi_setup.md",
+          "section_title": "関連記事",
+          "score": 0.721,
+          "snippet": "## 関連記事\n\n- [第1回: MQTTとは?初心者向け入門](./01_mqtt_introduction.md)\n- [第2回: Pub/Subモデルとトピックの仕組み](./02_pubsub_topics.md)\n- [第3回: 実践:Raspberry Piで設備監視システムを作る](./03_practical_implementation.md)"
+        },
+        {
+          "chunk_id": "f9fff7c7-f71d-5c70-b0be-d08c260a5ac7",
+          "document_id": "d83d21a4-0323-4c9d-a75d-6d4030f1cde1",
+          "document_name": "02_pubsub_topics.md",
+          "section_title": "次の記事",
+          "score": 0.714,
+          "snippet": "## 次の記事\n\n👉 [実践:Raspberry Piで設備監視システムを作る](./03_practical_implementation.md)\n\n実際にRaspberry PiとMosquittoを使って、\n設備監視システムを構築する手順を解説します。"
+        }
+      ],
+      "agentic_steps": [],
+      "message_id": "44ddeb86-086f-4812-8ba0-f74b4134cc90",
+      "elapsed_sec": 18.85,
+      "question": "Raspberry Piを使ったMQTTの設備監視システムの構成について教えてください。",
+      "search_mode": "normal",
+      "scores": {
+        "answer_length": 271,
+        "source_count": 10,
+        "keyword_coverage": 0.588,
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.6
+      }
+    },
+    {
+      "answer": "AWS Amplify Gen 2でのCognito認証設定は非常にシンプルです：\n\n• **基本設定**: `amplify/auth/resource.ts`で`defineAuth`を使用\n• **最小構成**: `loginWith: { email: true }`の数行だけで完了\n• **自動生成**: User Pool、User Pool Client、Identity Poolが自動作成\n• **認証フロー**: SRPフロー、メール確認フローが自動有効化\n• **パスワードポリシー**: 8文字以上、大文字・小文字・数字・記号必須で自動設定\n\n```typescript\n// amplify/auth/resource.ts\nimport { defineAuth } from '@aws-amplify/backend'\n\nexport const auth = defineAuth({\n  loginWith: {\n    email: true,\n  },\n})\n```",
+      "sources": [
+        {
+          "chunk_id": "ecfa3930-b6d3-5fa4-a7ca-d60ee604a643",
+          "document_id": "57f55b1c-ab7a-446b-8913-0570de66c3cd",
+          "document_name": "2026-03-01-amplify-gen2-cognito-auth-part1.md",
+          "section_title": "概要",
+          "score": 0.924,
+          "snippet": "## 概要\n\nAWS Amplify Gen 2 は、TypeScriptでインフラをコードとして定義する「コード・ファースト」なDXを提供する。中でもCognito認証の構築は驚くほどシンプルで、`defineAuth` の数行でユーザープール・IDプール・認証フローが丸ごと立ち上がる。\n\nこの記事では、**defineAuthの設定からReactでのログイン・登録・パスワードリセットUIの実装まで**をステップバイステップで解説する。Amplify UI (`@aws-amplify/ui-react`) の `Authenticator` コンポーネントは使わず、自前のフォームで実装する"
+        },
+        {
+          "chunk_id": "aa562e29-81bb-4749-a76f-bd32fd396fa8",
+          "document_id": "bd7af342-a0a6-455b-ba22-c2bb7ba8585d",
+          "document_name": "2026-03-01-amplify-gen2-cognito-auth-part1.md",
+          "section_title": "概要",
+          "score": 0.924,
+          "snippet": "## 概要\n\nAWS Amplify Gen 2 は、TypeScriptでインフラをコードとして定義する「コード・ファースト」なDXを提供する。中でもCognito認証の構築は驚くほどシンプルで、`defineAuth` の数行でユーザープール・IDプール・認証フローが丸ごと立ち上がる。\n\nこの記事では、**defineAuthの設定からReactでのログイン・登録・パスワードリセットUIの実装まで**をステップバイステップで解説する。Amplify UI (`@aws-amplify/ui-react`) の `Authenticator` コンポーネントは使わず、自前のフォームで実装する"
+        },
+        {
+          "chunk_id": "da04febb-ecf4-55ba-8800-ca96ac4842a4",
+          "document_id": "57f55b1c-ab7a-446b-8913-0570de66c3cd",
+          "document_name": "2026-03-01-amplify-gen2-cognito-auth-part1.md",
+          "section_title": "1. defineAuth — バックエンドの認証リソースを定義する",
+          "score": 0.889,
+          "snippet": "### 1. defineAuth — バックエンドの認証リソースを定義する\n\nAmplify Gen 2 では `amplify/auth/resource.ts` に認証リソースを定義する。驚くべきことに、メール認証のセットアップはたった数行で完了する。\n\n```typescript\n// amplify/auth/resource.ts\nimport { defineAuth } from '@aws-amplify/backend'\n\nexport const auth = defineAuth({\n  loginWith: {\n    email: true,\n  },\n})\n```"
+        },
+        {
+          "chunk_id": "944ade83-0436-4ab4-b48f-2177e0b7ce17",
+          "document_id": "bd7af342-a0a6-455b-ba22-c2bb7ba8585d",
+          "document_name": "2026-03-01-amplify-gen2-cognito-auth-part1.md",
+          "section_title": "1. defineAuth — バックエンドの認証リソースを定義する",
+          "score": 0.889,
+          "snippet": "## 手順\n\n### 1. defineAuth — バックエンドの認証リソースを定義する\n\nAmplify Gen 2 では `amplify/auth/resource.ts` に認証リソースを定義する。驚くべきことに、メール認証のセットアップはたった数行で完了する。\n\n```typescript\n// amplify/auth/resource.ts\nimport { defineAuth } from '@aws-amplify/backend'\n\nexport const auth = defineAuth({\n  loginWith: {\n    email: true,\n  },"
+        },
+        {
+          "chunk_id": "c1cae4f2-e5ba-46ea-83c3-5fc9a57d74b2",
+          "document_id": "bd7af342-a0a6-455b-ba22-c2bb7ba8585d",
+          "document_name": "2026-03-01-amplify-gen2-cognito-auth-part1.md",
+          "section_title": "",
+          "score": 0.855,
+          "snippet": "---\ntitle: \"Amplify Gen 2でCognito認証を最短構築する(第1回)— defineAuth 1行からログインUIまで\"\nemoji: \"🔐\"\ntype: \"tech\"\ntopics: [\"Amplify\", \"Cognito\", \"React\", \"AWS\", \"Auth\"]\npublished: true\ncategory: \"HowTo\"\ndate: \"2026-03-01\"\ndescription: \"AWS Amplify Gen 2のdefineAuthを使い、Cognito認証のバックエンド構築からReactログインUI実装までを一気通貫で解説。メール認"
+        },
+        {
+          "chunk_id": "51ea9292-f94d-5fc6-9094-da13723ce5f7",
+          "document_id": "57f55b1c-ab7a-446b-8913-0570de66c3cd",
+          "document_name": "2026-03-01-amplify-gen2-cognito-auth-part1.md",
+          "section_title": "",
+          "score": 0.855,
+          "snippet": "---\ntitle: \"Amplify Gen 2でCognito認証を最短構築する(第1回)— defineAuth 1行からログインUIまで\"\nemoji: \"🔐\"\ntype: \"tech\"\ntopics: [\"Amplify\", \"Cognito\", \"React\", \"AWS\", \"Auth\"]\npublished: true\ncategory: \"HowTo\"\ndate: \"2026-03-01\"\ndescription: \"AWS Amplify Gen 2のdefineAuthを使い、Cognito認証のバックエンド構築からReactログインUI実装までを一気通貫で解説。メール認"
+        },
+        {
+          "chunk_id": "d3c3356e-ef95-54a3-b35c-58754b3f0cf0",
+          "document_id": "46f76324-b91c-4e41-b531-24d3d4b65d6f",
+          "document_name": "2026-03-01-amplify-gen2-cognito-auth-part3.md",
+          "section_title": "概要",
+          "score": 0.852,
+          "snippet": "## 概要\n\n[第1回](/posts/amplify-gen2-cognito-auth-part1)でCognitoの認証基盤を構築し、[第2回](/posts/amplify-gen2-cognito-auth-part2)でフロントエンドの認証状態管理を実装した。最終回では**バックエンド側の認証**を扱う。\n\nAmplify Gen 2 の AppSync(GraphQL API)はCognitoと自動連携するので認証不要だが、**Lambda Function URL** を使う場合は自分でJWTを検証する必要がある。本記事では以下を解説する:\n\n- `backend.ts` でC"
+        },
+        {
+          "chunk_id": "8ed6554e-292f-4104-9b28-416564869b7d",
+          "document_id": "511c712f-acee-4b8d-8102-f45750bc2a84",
+          "document_name": "2026-03-01-amplify-gen2-cognito-auth-part3.md",
+          "section_title": "概要",
+          "score": 0.852,
+          "snippet": "## 概要\n\n[第1回](/posts/amplify-gen2-cognito-auth-part1)でCognitoの認証基盤を構築し、[第2回](/posts/amplify-gen2-cognito-auth-part2)でフロントエンドの認証状態管理を実装した。最終回では**バックエンド側の認証**を扱う。\n\nAmplify Gen 2 の AppSync(GraphQL API)はCognitoと自動連携するので認証不要だが、**Lambda Function URL** を使う場合は自分でJWTを検証する必要がある。本記事では以下を解説する:\n\n- `backend.ts` でC"
+        },
+        {
+          "chunk_id": "16d80ec0-261b-5ff4-949a-5bca6794aa12",
+          "document_id": "57f55b1c-ab7a-446b-8913-0570de66c3cd",
+          "document_name": "2026-03-01-amplify-gen2-cognito-auth-part1.md",
+          "section_title": "まとめ",
+          "score": 0.834,
+          "snippet": "## まとめ\n\n- Amplify Gen 2の `defineAuth` はたった数行でCognitoの認証基盤を構築できる\n- `Authenticator` コンポーネントを使わず自前のUIを実装することで、デザインシステムへの統合とエラーメッセージの日本語化が自由にできる\n- Cognitoの2段階フロー(登録→確認、リセット→確認)はステート管理で自然に表現できる\n- エラーハンドリングは `name` プロパティで分岐するのがポイント"
+        },
+        {
+          "chunk_id": "1eb6072a-3b37-4ed4-a6c1-38969ebbe068",
+          "document_id": "bd7af342-a0a6-455b-ba22-c2bb7ba8585d",
+          "document_name": "2026-03-01-amplify-gen2-cognito-auth-part1.md",
+          "section_title": "まとめ",
+          "score": 0.834,
+          "snippet": "## まとめ\n\n- Amplify Gen 2の `defineAuth` はたった数行でCognitoの認証基盤を構築できる\n- `Authenticator` コンポーネントを使わず自前のUIを実装することで、デザインシステムへの統合とエラーメッセージの日本語化が自由にできる\n- Cognitoの2段階フロー(登録→確認、リセット→確認)はステート管理で自然に表現できる\n- エラーハンドリングは `name` プロパティで分岐するのがポイント"
+        }
+      ],
+      "agentic_steps": [],
+      "message_id": "47791ff9-3e0a-4fc4-9e51-7528bb86bca0",
+      "elapsed_sec": 16.71,
+      "question": "AWS Amplify Gen 2でのCognito認証の設定方法を教えてください。",
+      "search_mode": "normal",
+      "scores": {
+        "answer_length": 454,
+        "source_count": 10,
+        "keyword_coverage": 0.048,
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.5
+      }
+    },
+    {
+      "answer": "Lambda Function URLでのJWT検証実装方法：\n\n• **環境変数設定**: `backend.ts`でCognito User Pool IDとClient IDをLambda環境変数に注入\n• **Function URL設定**: `authType: NONE`、CORS設定で`allowedHeaders`に`authorization`を含める\n• **JWT検証フロー**: JWTデコード→クレーム検証(issuer/token_use/client_id/exp)→JWKS取得→Web Crypto APIで署名検証\n• **実装方式**: `jsonwebtoken`等のライブラリを使わず、`crypto.subtle`(Web Crypto API)のみで実装\n• **フロントエンド**: `fetchAuthSession()`でIDトークン取得し、`Authorization: Bearer {token}`で送信",
+      "sources": [
+        {
+          "chunk_id": "f9fce3b5-f269-518e-bfa6-9de80f7c58fb",
+          "document_id": "46f76324-b91c-4e41-b531-24d3d4b65d6f",
+          "document_name": "2026-03-01-amplify-gen2-cognito-auth-part3.md",
+          "section_title": "バイブコーディングで実装する",
+          "score": 0.886,
+          "snippet": "## バイブコーディングで実装する\n\nこの記事の内容をAIコーディングアシスタントに実装させるためのプロンプト例:\n\n> Amplify Gen 2プロジェクトのLambda Function URLにCognito JWT認証を追加してください。\n>\n> 要件:\n> - `backend.ts` で `backend.auth.resources.userPool.userPoolId` と `backend.auth.resources.cfnResources.cfnUserPoolClient.ref` をLambda環境変数(USER_POOL_ID, USER_POOL_CLIEN"
+        },
+        {
+          "chunk_id": "361ee705-f740-43c0-b1c1-329b05e6b29a",
+          "document_id": "511c712f-acee-4b8d-8102-f45750bc2a84",
+          "document_name": "2026-03-01-amplify-gen2-cognito-auth-part3.md",
+          "section_title": "バイブコーディングで実装する",
+          "score": 0.886,
+          "snippet": "## バイブコーディングで実装する\n\nこの記事の内容をAIコーディングアシスタントに実装させるためのプロンプト例:\n\n> Amplify Gen 2プロジェクトのLambda Function URLにCognito JWT認証を追加してください。\n>\n> 要件:\n> - `backend.ts` で `backend.auth.resources.userPool.userPoolId` と `backend.auth.resources.cfnResources.cfnUserPoolClient.ref` をLambda環境変数(USER_POOL_ID, USER_POOL_CLIEN"
+        },
+        {
+          "chunk_id": "09c73670-7ad2-5f8f-a61c-cadc7baf2d8b",
+          "document_id": "46f76324-b91c-4e41-b531-24d3d4b65d6f",
+          "document_name": "2026-03-01-amplify-gen2-cognito-auth-part3.md",
+          "section_title": "",
+          "score": 0.862,
+          "snippet": "---\ntitle: \"Amplify Gen 2のバックエンドでCognito JWTを検証する(第3回)— Lambda Function URLでの認証と監査ログ\"\nemoji: \"🔑\"\ntype: \"tech\"\ntopics: [\"Amplify\", \"Cognito\", \"Lambda\", \"JWT\", \"Auth\"]\npublished: true\ncategory: \"HowTo\"\ndate: \"2026-03-01\"\ndescription: \"Lambda Function URLでCognito JWTトークンを検証する実装方法を解説。JWKS取得・署名検証・クレーム検証の"
+        },
+        {
+          "chunk_id": "4cd0f985-92f9-4b89-a085-34c917f4d864",
+          "document_id": "511c712f-acee-4b8d-8102-f45750bc2a84",
+          "document_name": "2026-03-01-amplify-gen2-cognito-auth-part3.md",
+          "section_title": "",
+          "score": 0.862,
+          "snippet": "---\ntitle: \"Amplify Gen 2のバックエンドでCognito JWTを検証する(第3回)— Lambda Function URLでの認証と監査ログ\"\nemoji: \"🔑\"\ntype: \"tech\"\ntopics: [\"Amplify\", \"Cognito\", \"Lambda\", \"JWT\", \"Auth\"]\npublished: true\ncategory: \"HowTo\"\ndate: \"2026-03-01\"\ndescription: \"Lambda Function URLでCognito JWTトークンを検証する実装方法を解説。JWKS取得・署名検証・クレーム検証の"
+        },
+        {
+          "chunk_id": "3d41b16a-0920-5d8b-aee1-a5419e8b7314",
+          "document_id": "46f76324-b91c-4e41-b531-24d3d4b65d6f",
+          "document_name": "2026-03-01-amplify-gen2-cognito-auth-part3.md",
+          "section_title": "2. Lambda内でCognito JWTを検証する",
+          "score": 0.78,
+          "snippet": "### 2. Lambda内でCognito JWTを検証する\n\nJWT検証の全体フローは以下の通り:\n\n```\nAuthorization: Bearer <token>\n  ↓\n1. JWTをデコード(ヘッダー、ペイロード、署名)\n  ↓\n2. クレーム検証\n  ├─ issuer: Cognito User Pool のURL\n  ├─ token_use: \"id\"(IDトークン)\n  ├─ client_id: User Pool Client ID\n  └─ exp: 現在時刻より未来\n  ↓\n3. JWKS取得(Cognito公開鍵)\n  ↓\n4. JWKから公開鍵をインポート("
+        },
+        {
+          "chunk_id": "20926e16-b765-44d3-acec-b615afe6c510",
+          "document_id": "511c712f-acee-4b8d-8102-f45750bc2a84",
+          "document_name": "2026-03-01-amplify-gen2-cognito-auth-part3.md",
+          "section_title": "2. Lambda内でCognito JWTを検証する",
+          "score": 0.78,
+          "snippet": "## 手順\n\n### 2. Lambda内でCognito JWTを検証する\n\nJWT検証の全体フローは以下の通り:\n\n```\nAuthorization: Bearer <token>\n  ↓\n1. JWTをデコード(ヘッダー、ペイロード、署名)\n  ↓\n2. クレーム検証\n  ├─ issuer: Cognito User Pool のURL\n  ├─ token_use: \"id\"(IDトークン)\n  ├─ client_id: User Pool Client ID\n  └─ exp: 現在時刻より未来\n  ↓\n3. JWKS取得(Cognito公開鍵)\n  ↓\n4. JWKから公開鍵"
+        },
+        {
+          "chunk_id": "62b33c82-439e-54de-a353-b783798ea0e5",
+          "document_id": "46f76324-b91c-4e41-b531-24d3d4b65d6f",
+          "document_name": "2026-03-01-amplify-gen2-cognito-auth-part3.md",
+          "section_title": "バイブコーディングで実装する",
+          "score": 0.775,
+          "snippet": "dHeaders` に `authorization` を含める\n> - Lambda ハンドラー内で JWT 検証関数を実装:>   - JWKS を `https://cognito-idp.{region}.amazonaws.com/{userPoolId}/.well-known/jwks.json` から取得してキャッシュ\n>   - `crypto.subtle`(Web Crypto API)で RSA-SHA256 署名を検証\n>   - クレーム検証: issuer, token_use=\"id\", client_id, exp\n>   - 検証成功で `payload.s"
+        },
+        {
+          "chunk_id": "366f3253-0ef1-4acb-9174-6d732b436063",
+          "document_id": "511c712f-acee-4b8d-8102-f45750bc2a84",
+          "document_name": "2026-03-01-amplify-gen2-cognito-auth-part3.md",
+          "section_title": "バイブコーディングで実装する",
+          "score": 0.775,
+          "snippet": "## バイブコーディングで実装する\n\nこの記事の内容をAIコーディングアシスタントに実装させるためのプロンプト例:\n\n> Amplify Gen 2プロジェクトのLambda Function URLにCognito JWT認証を追加してください。\n>\n> 要件:\n> - `backend.ts` で `backend.auth.resources.userPool.userPoolId` と `backend.auth.resources.cfnResources.cfnUserPoolClient.ref` をLambda環境変数(USER_POOL_ID, USER_POOL_CLIEN"
+        },
+        {
+          "chunk_id": "a13a5e4a-07bf-5847-9e4d-ab04edbdf22c",
+          "document_id": "46f76324-b91c-4e41-b531-24d3d4b65d6f",
+          "document_name": "2026-03-01-amplify-gen2-cognito-auth-part3.md",
+          "section_title": "こんな人向け",
+          "score": 0.712,
+          "snippet": "## こんな人向け\n\n- Amplify Gen 2 の Lambda Function URL で認証を実装したい人\n- Cognito JWTの検証ロジックを自前で書きたい(ライブラリに頼りたくない)人\n- AppSync以外のエンドポイント(REST API、Function URL)でCognito認証を使いたい人\n- 認証イベントの監査ログを残したい人"
+        },
+        {
+          "chunk_id": "58a88f25-df43-438c-a37c-09bb5c35fb52",
+          "document_id": "511c712f-acee-4b8d-8102-f45750bc2a84",
+          "document_name": "2026-03-01-amplify-gen2-cognito-auth-part3.md",
+          "section_title": "こんな人向け",
+          "score": 0.712,
+          "snippet": "## こんな人向け\n\n- Amplify Gen 2 の Lambda Function URL で認証を実装したい人\n- Cognito JWTの検証ロジックを自前で書きたい(ライブラリに頼りたくない)人\n- AppSync以外のエンドポイント(REST API、Function URL)でCognito認証を使いたい人\n- 認証イベントの監査ログを残したい人"
+        }
+      ],
+      "agentic_steps": [],
+      "message_id": "3d50cb57-82e5-4c1c-a382-e0f9112cba85",
+      "elapsed_sec": 25.07,
+      "question": "Lambda Function URLでのJWT検証の実装方法を教えてください。",
+      "search_mode": "normal",
+      "scores": {
+        "answer_length": 433,
+        "source_count": 10,
+        "keyword_coverage": 0.286,
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.333
+      }
+    },
+    {
+      "answer": "WebSocketを選んだ理由は以下の通りです：\n\n• **双方向通信が必要** - チャットでは送信・受信両方向のリアルタイム通信が必須\n• **低レイテンシ要求** - メッセージの即座な配信でユーザー体験を向上\n• **多人数対応** - 複数ユーザーが同時参加するチャットルームに最適\n• **API Gateway WebSocket API活用** - サーバーレスアーキテクチャの恩恵を受けながら実装可能\n\nポーリングは更新頻度が低い用途、SSEは一方向通知に適していますが、チャットのような「双方向・低レイテンシ・多人数」要件にはWebSocketが最適解です。",
+      "sources": [
+        {
+          "chunk_id": "3971fc69-d4fd-43a3-8a09-b8ab30784e30",
+          "document_id": "9d482e8f-f835-430e-82f3-879996ac44b5",
+          "document_name": "2026-03-01-aws-serverless-chat-part1.md",
+          "section_title": "概要",
+          "score": 0.887,
+          "snippet": "## 概要\n\n「チャットアプリを作りたい」と思ったとき、最初にぶつかるのが **「サーバーからクライアントへ、どうやってリアルタイムにデータを届けるか」** という問題だ。\n\nHTTPは基本的に「クライアントが聞きに行く」プロトコルなので、サーバー側から能動的にデータを送る仕組みが必要になる。選択肢は大きく3つある:\n\n1. **ポーリング**(Short Polling / Long Polling)\n2. **Server-Sent Events(SSE)**\n3. **WebSocket**\n\nこの記事では、それぞれの仕組み・メリット・デメリットを比較し、なぜAWSでチャットアプリを作る"
+        },
+        {
+          "chunk_id": "25747757-ebb4-50e9-8220-54a5800a911f",
+          "document_id": "791392d6-2758-4560-abbf-6ab6bdca889e",
+          "document_name": "2026-03-01-aws-serverless-chat-part1.md",
+          "section_title": "概要",
+          "score": 0.887,
+          "snippet": "## 概要\n\n「チャットアプリを作りたい」と思ったとき、最初にぶつかるのが **「サーバーからクライアントへ、どうやってリアルタイムにデータを届けるか」** という問題だ。\n\nHTTPは基本的に「クライアントが聞きに行く」プロトコルなので、サーバー側から能動的にデータを送る仕組みが必要になる。選択肢は大きく3つある:\n\n1. **ポーリング**(Short Polling / Long Polling)\n2. **Server-Sent Events(SSE)**\n3. **WebSocket**\n\nこの記事では、それぞれの仕組み・メリット・デメリットを比較し、なぜAWSでチャットアプリを作る"
+        },
+        {
+          "chunk_id": "d55d411d-d063-5bbc-be63-05d6c15687dd",
+          "document_id": "791392d6-2758-4560-abbf-6ab6bdca889e",
+          "document_name": "2026-03-01-aws-serverless-chat-part1.md",
+          "section_title": "まとめ",
+          "score": 0.877,
+          "snippet": "## まとめ\n\n| 方式 | 適しているケース |\n|------|-----------------|\n| **ポーリング** | 更新頻度が低い、既存REST APIに追加、MVP |\n| **SSE** | サーバーからの一方向push(通知、ストリーミング) |\n| **WebSocket** | 双方向リアルタイム通信(チャット、ゲーム、コラボ編集) |\n\nチャットアプリのように「双方向・低レイテンシ・多人数」が求められる場合、WebSocketが最適解。AWSならAPI Gateway WebSocket APIを使うことで、サーバーレスアーキテクチャの恩恵を受けながらリアルタイム"
+        },
+        {
+          "chunk_id": "dd377c15-0407-4a39-b5ac-46c5e43fbe9b",
+          "document_id": "9d482e8f-f835-430e-82f3-879996ac44b5",
+          "document_name": "2026-03-01-aws-serverless-chat-part1.md",
+          "section_title": "まとめ",
+          "score": 0.877,
+          "snippet": "## まとめ\n\n| 方式 | 適しているケース |\n|------|-----------------|\n| **ポーリング** | 更新頻度が低い、既存REST APIに追加、MVP |\n| **SSE** | サーバーからの一方向push(通知、ストリーミング) |\n| **WebSocket** | 双方向リアルタイム通信(チャット、ゲーム、コラボ編集) |\n\nチャットアプリのように「双方向・低レイテンシ・多人数」が求められる場合、WebSocketが最適解。AWSならAPI Gateway WebSocket APIを使うことで、サーバーレスアーキテクチャの恩恵を受けながらリアルタイム"
+        },
+        {
+          "chunk_id": "b8af8714-1c84-47d0-ab2e-45d6ec31564c",
+          "document_id": "9d482e8f-f835-430e-82f3-879996ac44b5",
+          "document_name": "2026-03-01-aws-serverless-chat-part1.md",
+          "section_title": "",
+          "score": 0.765,
+          "snippet": "---\ntitle: \"リアルタイム通信の選択肢 — ポーリング・SSE・WebSocketを比較する\"\nemoji: \"⚡\"\ntype: \"tech\"\ntopics: [\"AWS\", \"WebSocket\", \"API Gateway\", \"Architecture\", \"Chat\"]\npublished: true\ncategory: \"Architecture\"\ndate: \"2026-03-01\"\ndescription: \"チャットアプリに必要なリアルタイム通信を、ポーリング・SSE・WebSocketの3方式で比較。API Gateway WebSocket APIを選んだ設計判断"
+        },
+        {
+          "chunk_id": "22e4a5cb-10d9-5ab7-9aa7-665e2f47bba9",
+          "document_id": "791392d6-2758-4560-abbf-6ab6bdca889e",
+          "document_name": "2026-03-01-aws-serverless-chat-part1.md",
+          "section_title": "",
+          "score": 0.765,
+          "snippet": "---\ntitle: \"リアルタイム通信の選択肢 — ポーリング・SSE・WebSocketを比較する\"\nemoji: \"⚡\"\ntype: \"tech\"\ntopics: [\"AWS\", \"WebSocket\", \"API Gateway\", \"Architecture\", \"Chat\"]\npublished: true\ncategory: \"Architecture\"\ndate: \"2026-03-01\"\ndescription: \"チャットアプリに必要なリアルタイム通信を、ポーリング・SSE・WebSocketの3方式で比較。API Gateway WebSocket APIを選んだ設計判断"
+        },
+        {
+          "chunk_id": "686a3345-e723-4815-a1b4-117bc11782a7",
+          "document_id": "9d482e8f-f835-430e-82f3-879996ac44b5",
+          "document_name": "2026-03-01-aws-serverless-chat-part1.md",
+          "section_title": "チャットアプリにWebSocketを選んだ理由",
+          "score": 0.741,
+          "snippet": "## チャットアプリにWebSocketを選んだ理由\n\n今回のプロジェクトでWebSocketを選んだ判断基準は3つ:"
+        },
+        {
+          "chunk_id": "a5da30d0-0d21-56a1-aa67-4486af41de00",
+          "document_id": "791392d6-2758-4560-abbf-6ab6bdca889e",
+          "document_name": "2026-03-01-aws-serverless-chat-part1.md",
+          "section_title": "チャットアプリにWebSocketを選んだ理由",
+          "score": 0.741,
+          "snippet": "## チャットアプリにWebSocketを選んだ理由\n\n今回のプロジェクトでWebSocketを選んだ判断基準は3つ:"
+        },
+        {
+          "chunk_id": "e5c10318-c62e-56af-8850-21e7cfd6ed30",
+          "document_id": "791392d6-2758-4560-abbf-6ab6bdca889e",
+          "document_name": "2026-03-01-aws-serverless-chat-part1.md",
+          "section_title": "こんな人向け",
+          "score": 0.642,
+          "snippet": "## こんな人向け\n\n- リアルタイム通信の方式を比較検討している\n- AWS上でチャットやリアルタイム機能を設計しようとしている\n- WebSocketを選ぶべきかSSEで十分か判断に迷っている\n- API Gateway WebSocket APIのコスト感を知りたい"
+        },
+        {
+          "chunk_id": "a5875705-8ab3-402e-ac8b-ef14593222f5",
+          "document_id": "9d482e8f-f835-430e-82f3-879996ac44b5",
+          "document_name": "2026-03-01-aws-serverless-chat-part1.md",
+          "section_title": "こんな人向け",
+          "score": 0.642,
+          "snippet": "## こんな人向け\n\n- リアルタイム通信の方式を比較検討している\n- AWS上でチャットやリアルタイム機能を設計しようとしている\n- WebSocketを選ぶべきかSSEで十分か判断に迷っている\n- API Gateway WebSocket APIのコスト感を知りたい"
+        }
+      ],
+      "agentic_steps": [],
+      "message_id": "11d17880-6432-4e11-97cb-c9849aa528bb",
+      "elapsed_sec": 23.59,
+      "question": "AWSサーバーレスチャットでリアルタイム通信にWebSocketを選んだ理由は？",
+      "search_mode": "normal",
+      "scores": {
+        "answer_length": 289,
+        "source_count": 10,
+        "keyword_coverage": 0.188,
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.5
+      }
+    },
+    {
+      "answer": "DynamoDBのSingle Table Designでチャットデータを設計する際の主要パターンをご説明します：\n\n## 基本設計方針\n- **1テーブルに全エンティティを格納**（USER、CHATROOM、CONNECTION、MESSAGEなど）\n- **PK/SKの汎用キー設計**でエンティティ種別を識別\n\n## 主要なPK/SKパターン\n- **接続管理**: `CONNECTION#{connectionId}` / `METADATA`\n- **ユーザー**: `USER#{userId}` / `CONNECTION#{connectionId}`（逆引き用）\n- **チャット参加**: `USER#{userId}` / `CHATROOM#{chatRoomId}`\n- **メッセージ**: `CHATROOM#{chatRoomId}` / `MESSAGE#{timestamp}#{messageId}`\n\n## 設計のポイント\n- **双方向レコード**: ConnectionId⇔UserIdの相互参照を両方向で保持\n- **時系列ソート**: メッセージのSKにタイムスタンプを含めて自然ソート\n- **キャッシュ最適化**: LASTMESSAGEレコードでN+1問題を回避\n- **TTL活用**: 接続レコードに24時間TTLでクリーンアップ",
+      "sources": [
+        {
+          "chunk_id": "fb7bdf72-5c93-4863-b052-cb72693a4958",
+          "document_id": "fb690646-59eb-41d7-a50f-7c961cd15b1d",
+          "document_name": "2026-03-01-aws-serverless-chat-part2.md",
+          "section_title": "概要",
+          "score": 0.902,
+          "snippet": "## 概要\n\n前回の記事でリアルタイム通信にWebSocketを選んだ理由を解説した。今回は、そのWebSocketチャットの **データをどう保存するか** を設計する。\n\nDynamoDBの **Single Table Design(STD)** は、すべてのエンティティを1つのテーブルに詰め込む設計手法だ。RDBの常識からすると異質に見えるが、サーバーレスアーキテクチャとの相性が抜群に良い。\n\nこの記事では、STDの考え方を整理した上で、チャットアプリに必要な6種類のエンティティを具体的なPK/SK値で設計する。"
+        },
+        {
+          "chunk_id": "0d7c3402-7d05-5229-b234-4b85bccd35cc",
+          "document_id": "5c66d759-6f4c-4a66-ac20-46c9df166af9",
+          "document_name": "2026-03-01-aws-serverless-chat-part2.md",
+          "section_title": "概要",
+          "score": 0.902,
+          "snippet": "## 概要\n\n前回の記事でリアルタイム通信にWebSocketを選んだ理由を解説した。今回は、そのWebSocketチャットの **データをどう保存するか** を設計する。\n\nDynamoDBの **Single Table Design(STD)** は、すべてのエンティティを1つのテーブルに詰め込む設計手法だ。RDBの常識からすると異質に見えるが、サーバーレスアーキテクチャとの相性が抜群に良い。\n\nこの記事では、STDの考え方を整理した上で、チャットアプリに必要な6種類のエンティティを具体的なPK/SK値で設計する。"
+        },
+        {
+          "chunk_id": "68a2f701-2f88-5375-80f1-d6742d563d10",
+          "document_id": "5c66d759-6f4c-4a66-ac20-46c9df166af9",
+          "document_name": "2026-03-01-aws-serverless-chat-part2.md",
+          "section_title": "",
+          "score": 0.888,
+          "snippet": "---\ntitle: \"DynamoDB Single Table Designでチャットを設計する — PK/SKとアクセスパターン\"\nemoji: \"🗄️\"\ntype: \"tech\"\ntopics: [\"AWS\", \"DynamoDB\", \"Database\", \"Architecture\", \"Chat\"]\npublished: true\ncategory: \"Architecture\"\ndate: \"2026-03-01\"\ndescription: \"DynamoDB Single Table Designのメリット・デメリットを解説し、チャットアプリのコネクション管理・ルーム・メッセ"
+        },
+        {
+          "chunk_id": "2b6ab10d-28e0-4d47-bd7a-2e5c1daa9ddc",
+          "document_id": "fb690646-59eb-41d7-a50f-7c961cd15b1d",
+          "document_name": "2026-03-01-aws-serverless-chat-part2.md",
+          "section_title": "",
+          "score": 0.888,
+          "snippet": "---\ntitle: \"DynamoDB Single Table Designでチャットを設計する — PK/SKとアクセスパターン\"\nemoji: \"🗄️\"\ntype: \"tech\"\ntopics: [\"AWS\", \"DynamoDB\", \"Database\", \"Architecture\", \"Chat\"]\npublished: true\ncategory: \"Architecture\"\ndate: \"2026-03-01\"\ndescription: \"DynamoDB Single Table Designのメリット・デメリットを解説し、チャットアプリのコネクション管理・ルーム・メッセ"
+        },
+        {
+          "chunk_id": "80c00e34-0b3e-44e2-aa73-ae178b7d4b6d",
+          "document_id": "fb690646-59eb-41d7-a50f-7c961cd15b1d",
+          "document_name": "2026-03-01-aws-serverless-chat-part2.md",
+          "section_title": "まとめ",
+          "score": 0.854,
+          "snippet": "## まとめ\n\n| 設計ポイント | 判断 |\n|-------------|------|\n| テーブル設計 | Single Table Design(1テーブルに全エンティティ) |\n| PK設計 | `エンティティ種別#ID` 形式(`USER#xxx`, `CHATROOM#xxx`, `CONNECTION#xxx`) |\n| SK設計 | `METADATA` / `CONNECTION#xxx` / `CHATROOM#xxx` / `MESSAGE#timestamp#id` |\n| 逆引き | コネクション: 双方向レコード(CONNECTION→USER, USER→CO"
+        },
+        {
+          "chunk_id": "4191af43-e221-53ef-9266-922fd72be053",
+          "document_id": "5c66d759-6f4c-4a66-ac20-46c9df166af9",
+          "document_name": "2026-03-01-aws-serverless-chat-part2.md",
+          "section_title": "まとめ",
+          "score": 0.854,
+          "snippet": "## まとめ\n\n| 設計ポイント | 判断 |\n|-------------|------|\n| テーブル設計 | Single Table Design(1テーブルに全エンティティ) |\n| PK設計 | `エンティティ種別#ID` 形式(`USER#xxx`, `CHATROOM#xxx`, `CONNECTION#xxx`) |\n| SK設計 | `METADATA` / `CONNECTION#xxx` / `CHATROOM#xxx` / `MESSAGE#timestamp#id` |\n| 逆引き | コネクション: 双方向レコード(CONNECTION→USER, USER→CO"
+        },
+        {
+          "chunk_id": "3405ee71-0bb4-5bd9-a344-094cdd579332",
+          "document_id": "5c66d759-6f4c-4a66-ac20-46c9df166af9",
+          "document_name": "2026-03-01-aws-serverless-chat-part2.md",
+          "section_title": "こんな人向け",
+          "score": 0.801,
+          "snippet": "## こんな人向け\n\n- DynamoDB Single Table Designの「なぜ1テーブル?」がピンと来ていない\n- PK/SKの設計パターンを具体例で理解したい\n- チャットアプリのデータモデリングに取り組んでいる\n- GSI(Global Secondary Index)をいつ使うか判断に迷っている"
+        },
+        {
+          "chunk_id": "6085bd1c-916c-46c8-b81f-9058ad55511d",
+          "document_id": "fb690646-59eb-41d7-a50f-7c961cd15b1d",
+          "document_name": "2026-03-01-aws-serverless-chat-part2.md",
+          "section_title": "こんな人向け",
+          "score": 0.801,
+          "snippet": "## こんな人向け\n\n- DynamoDB Single Table Designの「なぜ1テーブル?」がピンと来ていない\n- PK/SKの設計パターンを具体例で理解したい\n- チャットアプリのデータモデリングに取り組んでいる\n- GSI(Global Secondary Index)をいつ使うか判断に迷っている"
+        },
+        {
+          "chunk_id": "bc609e52-70f4-5e58-a773-b32fa3d4913b",
+          "document_id": "5c66d759-6f4c-4a66-ac20-46c9df166af9",
+          "document_name": "2026-03-01-aws-serverless-chat-part2.md",
+          "section_title": "エージェントに指示するときの注意点",
+          "score": 0.756,
+          "snippet": "### エージェントに指示するときの注意点\n\n- 「DynamoDBでチャットを作って」だけだとMulti Table Designで設計されがち。**Single Table Design** であることとPK/SKのフォーマットを明示する\n- `ConnectionId → UserId` と `UserId → ConnectionId` の**双方向レコード**が必要な理由を伝えないと、片方だけ作って終わる\n- メッセージのSKに `timestamp` + `messageId` を入れる理由(時系列ソート + 衝突回避)を明記しないと、`MESSAGE#{messageId}` だ"
+        },
+        {
+          "chunk_id": "1ee6910e-5f79-4acb-9abd-f442a57fa45c",
+          "document_id": "fb690646-59eb-41d7-a50f-7c961cd15b1d",
+          "document_name": "2026-03-01-aws-serverless-chat-part2.md",
+          "section_title": "エージェントに指示するときの注意点",
+          "score": 0.756,
+          "snippet": "## バイブコーディングで実装する\n\nこの記事の内容をAIコーディングアシスタントに実装させるためのプロンプト例:\n\n> DynamoDB Single Table Designでチャットアプリのデータを管理したい。\n>\n> テーブル構造:\n> - PK/SKの汎用キー設計(`PK: string`, `SK: string`)\n> - オンデマンドキャパシティ(PAY_PER_REQUEST)\n> - TTL属性: `ttl`\n> - GSI1: `GSI1PK` / `GSI1SK`\n>\n> エンティティ(PK / SK の形式):\n> 1. `CONNECTION#{connection"
+        }
+      ],
+      "agentic_steps": [],
+      "message_id": "1170d322-09be-4a9b-9768-0663f34dbb4d",
+      "elapsed_sec": 29.38,
+      "question": "DynamoDBのSingle Table Designについて、チャットデータの設計パターンを教えてください。",
+      "search_mode": "normal",
+      "scores": {
+        "answer_length": 597,
+        "source_count": 10,
+        "keyword_coverage": 0.438,
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.429
+      }
+    },
+    {
+      "answer": "## このユーザーについて\nこのセクションにユーザー情報が記載されていないため、一般的な回答をします。\n\n## 製造AI画像解析でLambdaストリーミングを使う理由\n\n• **29秒タイムアウト制限の回避** - AIの画像分析処理が長時間かかる場合でも応答を継続\n• **リアルタイム応答の実現** - 分析結果を段階的に返すことで待機時間を短縮  \n• **ユーザー体験の向上** - 処理中でも進捗が分かり、応答性が向上\n• **コスト効率** - 必要な分だけ使用し、エージェント課金なしで運用可能",
+      "sources": [
+        {
+          "chunk_id": "0bbce083-345d-54c2-85db-a73cb14be8d5",
+          "document_id": "8733a5e9-3e0e-4b3d-8bad-f54cfcf36274",
+          "document_name": "2026-03-16-image-analysis-01-lambda-streaming.md",
+          "section_title": "",
+          "score": 0.395,
+          "snippet": "面を作る](/posts/2026-03-16-image-analysis-09-react-typescript-chat)> 10. [第10回: サーバー代を半分にした話](/posts/2026-03-16-image-analysis-10-aws-cost-optimization)\n\n\nAWS Lambda ストリーミングで実現するリアルタイム応答"
+        },
+        {
+          "chunk_id": "f98c73b0-bc7f-40dd-af61-9ab52148b617",
+          "document_id": "854446aa-8caa-457e-8d83-2cdbf906e612",
+          "document_name": "2026-03-16-image-analysis-01-lambda-streaming.md",
+          "section_title": "",
+          "score": 0.395,
+          "snippet": "---\ntitle: \"AIの回答を待ちきれない?30秒の壁を乗り越える方法\"\nemoji: \"🚀\"\ntype: \"tech\"\ntopics: [\"AWS\", \"Lambda\", \"Bedrock\", \"Streaming\"]\npublished: true\ncategory: \"HowTo\"\ndate: \"2026-03-16\"\ndescription: \"AWS LambdaのストリーミングとAPI Gateway Response Streamingで、AIの29秒タイムアウト制限を回避する方法を解説。\"\nseries: \"製造業向けAI画像分析システムを作る\"\nseriesOrder:"
+        },
+        {
+          "chunk_id": "df57d59b-c0b1-4529-8215-731e251ca716",
+          "document_id": "206b8de5-e50c-46e5-aa93-671303621c21",
+          "document_name": "2026-03-16-image-analysis-03-bedrock-api-guide.md",
+          "section_title": "Runtime APIを選んだ理由",
+          "score": 0.393,
+          "snippet": "## 本プロジェクトでの選択\n\n### Runtime APIを選んだ理由\n\n製造業向け画像分析アプリでは、**Runtime API**を選択しました。理由は以下の通りです。\n\n1. **画像分析がメイン**\n   - ユーザーが画像をアップロード\n   - AIがその画像を分析\n   - 外部ツール不要\n\n2. **会話履歴は自前で管理**\n   - DynamoDBに保存\n   - 直近5件を次のリクエストに含める\n   - シンプルな実装で十分\n\n3. **コスト効率**\n   - エージェント課金なし\n   - 必要な分だけ使う"
+        },
+        {
+          "chunk_id": "68765d7c-43a4-5cb3-ab2c-44f9ba5b49ad",
+          "document_id": "79855ace-c19c-4567-921d-e7647f48cfc1",
+          "document_name": "2026-03-16-image-analysis-03-bedrock-api-guide.md",
+          "section_title": "Runtime APIを選んだ理由",
+          "score": 0.393,
+          "snippet": "### Runtime APIを選んだ理由\n\n製造業向け画像分析アプリでは、**Runtime API**を選択しました。理由は以下の通りです。\n\n1. **画像分析がメイン**\n   - ユーザーが画像をアップロード\n   - AIがその画像を分析\n   - 外部ツール不要\n\n2. **会話履歴は自前で管理**\n   - DynamoDBに保存\n   - 直近5件を次のリクエストに含める\n   - シンプルな実装で十分\n\n3. **コスト効率**\n   - エージェント課金なし\n   - 必要な分だけ使う"
+        },
+        {
+          "chunk_id": "b006b2b0-cfb0-42dd-8068-c36e03b49d2f",
+          "document_id": "8f8f6a65-aa98-4fa6-8fd4-7873036a00c0",
+          "document_name": "2026-03-16-image-analysis-10-aws-cost-optimization.md",
+          "section_title": "はじめに",
+          "score": 0.188,
+          "snippet": "## はじめに\n\n「サーバーレスはお金がかからない」\n\nそう思っていた時期が私にもありました。\n\n実際にアプリを公開してみると、予想以上にコストがかかることに気づきます。特にAI関連のサービスは、使い方次第で請求額が大きく変わります。\n\n本記事では、製造業向け画像分析アプリで実践したコスト最適化の方法を紹介します。結果として、**月額コストを54%削減**できました。"
+        },
+        {
+          "chunk_id": "8db2328f-ed3a-5988-ab33-0b59b2c4a506",
+          "document_id": "6034fa85-12a5-494c-aadc-60929bff35e1",
+          "document_name": "2026-03-16-image-analysis-10-aws-cost-optimization.md",
+          "section_title": "はじめに",
+          "score": 0.188,
+          "snippet": "## はじめに\n\n「サーバーレスはお金がかからない」\n\nそう思っていた時期が私にもありました。\n\n実際にアプリを公開してみると、予想以上にコストがかかることに気づきます。特にAI関連のサービスは、使い方次第で請求額が大きく変わります。\n\n本記事では、製造業向け画像分析アプリで実践したコスト最適化の方法を紹介します。結果として、**月額コストを54%削減**できました。"
+        },
+        {
+          "chunk_id": "a85373fc-facb-52f6-88c1-1d48d5c94a9d",
+          "document_id": "d83d21a4-0323-4c9d-a75d-6d4030f1cde1",
+          "document_name": "02_pubsub_topics.md",
+          "section_title": "なぜこの仕組みが便利なの?",
+          "score": 0.175,
+          "snippet": "## なぜこの仕組みが便利なの?"
+        },
+        {
+          "chunk_id": "536582df-2c3a-53a6-962b-f95da25d3070",
+          "document_id": "f1fc8c0b-ba1a-45e9-8219-7f750562ea13",
+          "document_name": "02_pubsub_topics.md",
+          "section_title": "なぜこの仕組みが便利なの?",
+          "score": 0.175,
+          "snippet": "## なぜこの仕組みが便利なの?"
+        },
+        {
+          "chunk_id": "7066af6d-ae98-56a4-8eb3-337781bc706b",
+          "document_id": "46439440-8036-4008-aad7-25022c3a6c82",
+          "document_name": "02_pubsub_topics.md",
+          "section_title": "なぜこの仕組みが便利なの?",
+          "score": 0.175,
+          "snippet": "## なぜこの仕組みが便利なの?"
+        },
+        {
+          "chunk_id": "35a9c090-c317-5fd8-a58b-369f5e028ad9",
+          "document_id": "7362de63-ddf0-4e42-8f48-65c7ed869fe0",
+          "document_name": "2026-03-16-image-analysis-02-factory-image-analysis.md",
+          "section_title": "製造業でよく使う画像形式",
+          "score": 0.171,
+          "snippet": "## 製造業でよく使う画像形式"
+        }
+      ],
+      "agentic_steps": [],
+      "message_id": "ca13d45e-8187-456e-b6ff-72fb43da75cc",
+      "elapsed_sec": 22.03,
+      "question": "製造AI画像解析でLambdaストリーミングを使う理由は何ですか？",
+      "search_mode": "normal",
+      "scores": {
+        "answer_length": 254,
+        "source_count": 10,
+        "keyword_coverage": 0.667,
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8
+      }
+    },
+    {
+      "answer": "Amazon BedrockのRuntime APIとAgents APIの主な違いは以下の通りです：\n\n**セットアップ・実装**\n- Runtime API：数行のコードで簡単に開始可能\n- Agents API：AWS Consoleでの設定が必要でやや複雑\n\n**機能・カスタマイズ**\n- Runtime API：全て自前実装、高いカスタマイズ性\n- Agents API：RAGや外部ツール連携が組み込み機能として提供\n\n**コスト・予測可能性**\n- Runtime API：低コスト、動作が予測しやすい\n- Agents API：エージェント課金で高め、AIが判断するため予測困難\n\n**適用場面**\n- Runtime API：シンプルなQ&A、画像分析向け\n- Agents API：複雑なワークフロー、外部DB検索が必要な場合",
+      "sources": [
+        {
+          "chunk_id": "1958a8f7-8b81-4c1e-8e70-6ba60abf3ecc",
+          "document_id": "206b8de5-e50c-46e5-aa93-671303621c21",
+          "document_name": "2026-03-16-image-analysis-03-bedrock-api-guide.md",
+          "section_title": "はじめに",
+          "score": 0.902,
+          "snippet": "## はじめに\n\n「AWSでAIチャットを作りたい」と思ったとき、Amazon Bedrockは有力な選択肢です。しかし、いざ使おうとすると「APIが2種類ある」ことに気づきます。\n\n- **Bedrock Runtime API**\n- **Bedrock Agents API**\n\nどちらを使えばいいのでしょうか?本記事では、この2つの違いと選び方を解説します。"
+        },
+        {
+          "chunk_id": "2a2f2a92-b0d8-5ad0-a5d9-8b41a6b7d539",
+          "document_id": "79855ace-c19c-4567-921d-e7647f48cfc1",
+          "document_name": "2026-03-16-image-analysis-03-bedrock-api-guide.md",
+          "section_title": "はじめに",
+          "score": 0.902,
+          "snippet": "## はじめに\n\n「AWSでAIチャットを作りたい」と思ったとき、Amazon Bedrockは有力な選択肢です。しかし、いざ使おうとすると「APIが2種類ある」ことに気づきます。\n\n- **Bedrock Runtime API**\n- **Bedrock Agents API**\n\nどちらを使えばいいのでしょうか?本記事では、この2つの違いと選び方を解説します。"
+        },
+        {
+          "chunk_id": "3ecebb54-30c3-4b67-94d9-758922a375a0",
+          "document_id": "206b8de5-e50c-46e5-aa93-671303621c21",
+          "document_name": "2026-03-16-image-analysis-03-bedrock-api-guide.md",
+          "section_title": "参考リンク",
+          "score": 0.799,
+          "snippet": "# 複数画像の場合\n\nuser_content = [\n    {\"type\": \"image\", \"source\": {...}},  # 画像1\n    {\"type\": \"image\", \"source\": {...}},  # 画像2\n    {\"type\": \"text\", \"text\": \"これらの画像を比較してください\"}\n]\n```\n\n## 参考リンク\n\n- [Amazon Bedrock Runtime API](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_InvokeModel.ht"
+        },
+        {
+          "chunk_id": "ae77d90a-8700-5a18-abb3-9450b3d07efe",
+          "document_id": "79855ace-c19c-4567-921d-e7647f48cfc1",
+          "document_name": "2026-03-16-image-analysis-03-bedrock-api-guide.md",
+          "section_title": "参考リンク",
+          "score": 0.799,
+          "snippet": "## 参考リンク\n\n- [Amazon Bedrock Runtime API](https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_InvokeModel.html)\n- [Amazon Bedrock Agents](https://docs.aws.amazon.com/bedrock/latest/userguide/agents.html)\n- [Claude Vision Documentation](https://docs.anthropic.com/claude/docs/vision)"
+        },
+        {
+          "chunk_id": "bec003fc-0a89-5a3c-a02d-25771880a4d7",
+          "document_id": "79855ace-c19c-4567-921d-e7647f48cfc1",
+          "document_name": "2026-03-16-image-analysis-03-bedrock-api-guide.md",
+          "section_title": "",
+          "score": 0.789,
+          "snippet": "---\ntitle: \"Amazon BedrockでAIチャットを作る\"\nemoji: \"🤖\"\ntype: \"tech\"\ntopics: [\"AWS\", \"Bedrock\", \"Claude\", \"AI\"]\npublished: true\ncategory: \"HowTo\"\ndate: \"2026-03-16\"\ndescription: \"Bedrock Runtime APIとAgents APIの違いを比較。画像分析・チャット・RAGそれぞれのユースケースで選ぶべきAPIを解説。\"\nseries: \"製造業向けAI画像分析システムを作る\"\nseriesOrder: 3\ncoverImag"
+        },
+        {
+          "chunk_id": "09892e4c-4030-4f97-a14c-ac043378359b",
+          "document_id": "206b8de5-e50c-46e5-aa93-671303621c21",
+          "document_name": "2026-03-16-image-analysis-03-bedrock-api-guide.md",
+          "section_title": "",
+          "score": 0.789,
+          "snippet": "---\ntitle: \"Amazon BedrockでAIチャットを作る\"\nemoji: \"🤖\"\ntype: \"tech\"\ntopics: [\"AWS\", \"Bedrock\", \"Claude\", \"AI\"]\npublished: true\ncategory: \"HowTo\"\ndate: \"2026-03-16\"\ndescription: \"Bedrock Runtime APIとAgents APIの違いを比較。画像分析・チャット・RAGそれぞれのユースケースで選ぶべきAPIを解説。\"\nseries: \"製造業向けAI画像分析システムを作る\"\nseriesOrder: 3\ncoverImag"
+        },
+        {
+          "chunk_id": "4619f759-eadc-4a70-a04a-dc51ab0201c8",
+          "document_id": "206b8de5-e50c-46e5-aa93-671303621c21",
+          "document_name": "2026-03-16-image-analysis-03-bedrock-api-guide.md",
+          "section_title": "機能比較",
+          "score": 0.778,
+          "snippet": "## 比較表で選ぼう\n\n### 機能比較\n\n| 項目 | Runtime API | Agents API |\n|------|-------------|------------|\n| セットアップ | 簡単(数行) | やや複雑(Console操作) |\n| カスタマイズ | 高い(全て自前) | 中程度(設定ベース) |\n| 外部ツール連携 | 自前実装 | 組み込み機能 |\n| RAG | 自前実装 | 組み込み機能 |\n| コスト | 低め | 高め(エージェント課金) |\n| 予測可能性 | 高い | 低い(AIが判断) |"
+        },
+        {
+          "chunk_id": "3c785f12-963c-576b-b341-0ed92c7185f4",
+          "document_id": "79855ace-c19c-4567-921d-e7647f48cfc1",
+          "document_name": "2026-03-16-image-analysis-03-bedrock-api-guide.md",
+          "section_title": "機能比較",
+          "score": 0.778,
+          "snippet": "### 機能比較\n\n| 項目 | Runtime API | Agents API |\n|------|-------------|------------|\n| セットアップ | 簡単(数行) | やや複雑(Console操作) |\n| カスタマイズ | 高い(全て自前) | 中程度(設定ベース) |\n| 外部ツール連携 | 自前実装 | 組み込み機能 |\n| RAG | 自前実装 | 組み込み機能 |\n| コスト | 低め | 高め(エージェント課金) |\n| 予測可能性 | 高い | 低い(AIが判断) |"
+        },
+        {
+          "chunk_id": "a2c50399-c1ad-52f3-b97a-8bb839959f8c",
+          "document_id": "79855ace-c19c-4567-921d-e7647f48cfc1",
+          "document_name": "2026-03-16-image-analysis-03-bedrock-api-guide.md",
+          "section_title": "選び方の基準",
+          "score": 0.542,
+          "snippet": "### 選び方の基準\n\n| 要件 | 選択 |\n|-----|-----|\n| シンプルなQ&A | Runtime API |\n| 画像分析 | Runtime API |\n| 外部DB検索が必須 | 検討が必要 |\n| 複雑なワークフロー | Agents API |\n| コスト重視 | Runtime API |\n| 開発速度重視 | 要件による |"
+        },
+        {
+          "chunk_id": "35c93ca1-6afe-4e92-a002-342aa815a951",
+          "document_id": "206b8de5-e50c-46e5-aa93-671303621c21",
+          "document_name": "2026-03-16-image-analysis-03-bedrock-api-guide.md",
+          "section_title": "選び方の基準",
+          "score": 0.542,
+          "snippet": "## まとめ\n\n### 選び方の基準\n\n| 要件 | 選択 |\n|-----|-----|\n| シンプルなQ&A | Runtime API |\n| 画像分析 | Runtime API |\n| 外部DB検索が必須 | 検討が必要 |\n| 複雑なワークフロー | Agents API |\n| コスト重視 | Runtime API |\n| 開発速度重視 | 要件による |"
+        }
+      ],
+      "agentic_steps": [],
+      "message_id": "dfd48080-928e-4190-8646-0407e468c6db",
+      "elapsed_sec": 19.5,
+      "question": "Bedrock RuntimeとBedrock Agents APIの違いは何ですか？",
+      "search_mode": "normal",
+      "scores": {
+        "answer_length": 374,
+        "source_count": 10,
+        "keyword_coverage": 0.267,
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0
+      }
+    },
+    {
+      "answer": "参照文書から、製造業向け画像分析アプリで実践されたAWSコスト最適化の方法をご紹介します：\n\n• **S3ライフサイクル設定** - 古いデータを自動的に低コストストレージクラスに移行\n• **DynamoDB TTL機能** - 不要なデータを自動削除してストレージコストを削減  \n• **Bedrockトークン削減** - AI処理の効率化でトークン使用量を最適化\n• **CloudFront最適化** - CDN設定の見直しで配信コストを削減\n\nこれらの施策により月額コストを54%削減することに成功しています。特にAI関連サービスは使い方次第で請求額が大きく変わるため、適切な最適化が重要です。",
+      "sources": [
+        {
+          "chunk_id": "c1372889-3aa0-4c1b-bbb0-d12bb5a393c7",
+          "document_id": "8f8f6a65-aa98-4fa6-8fd4-7873036a00c0",
+          "document_name": "2026-03-16-image-analysis-10-aws-cost-optimization.md",
+          "section_title": "",
+          "score": 0.955,
+          "snippet": "---\ntitle: \"サーバー代を半分にした話\"\nemoji: \"💰\"\ntype: \"tech\"\ntopics: [\"AWS\", \"CostOptimization\", \"Bedrock\", \"Lambda\"]\npublished: true\ncategory: \"HowTo\"\ndate: \"2026-03-16\"\ndescription: \"AWSコストを54%削減した実践例。S3ライフサイクル・DynamoDB TTL・Bedrockトークン削減・CloudFrontの最適化。\"\nseries: \"製造業向けAI画像分析システムを作る\"\nseriesOrder: 10\ncoverImag"
+        },
+        {
+          "chunk_id": "e5392fd6-f5a5-589e-bed2-5f3cd439efd1",
+          "document_id": "6034fa85-12a5-494c-aadc-60929bff35e1",
+          "document_name": "2026-03-16-image-analysis-10-aws-cost-optimization.md",
+          "section_title": "",
+          "score": 0.955,
+          "snippet": "---\ntitle: \"サーバー代を半分にした話\"\nemoji: \"💰\"\ntype: \"tech\"\ntopics: [\"AWS\", \"CostOptimization\", \"Bedrock\", \"Lambda\"]\npublished: true\ncategory: \"HowTo\"\ndate: \"2026-03-16\"\ndescription: \"AWSコストを54%削減した実践例。S3ライフサイクル・DynamoDB TTL・Bedrockトークン削減・CloudFrontの最適化。\"\nseries: \"製造業向けAI画像分析システムを作る\"\nseriesOrder: 10\ncoverImag"
+        },
+        {
+          "chunk_id": "8db2328f-ed3a-5988-ab33-0b59b2c4a506",
+          "document_id": "6034fa85-12a5-494c-aadc-60929bff35e1",
+          "document_name": "2026-03-16-image-analysis-10-aws-cost-optimization.md",
+          "section_title": "はじめに",
+          "score": 0.811,
+          "snippet": "## はじめに\n\n「サーバーレスはお金がかからない」\n\nそう思っていた時期が私にもありました。\n\n実際にアプリを公開してみると、予想以上にコストがかかることに気づきます。特にAI関連のサービスは、使い方次第で請求額が大きく変わります。\n\n本記事では、製造業向け画像分析アプリで実践したコスト最適化の方法を紹介します。結果として、**月額コストを54%削減**できました。"
+        },
+        {
+          "chunk_id": "b006b2b0-cfb0-42dd-8068-c36e03b49d2f",
+          "document_id": "8f8f6a65-aa98-4fa6-8fd4-7873036a00c0",
+          "document_name": "2026-03-16-image-analysis-10-aws-cost-optimization.md",
+          "section_title": "はじめに",
+          "score": 0.811,
+          "snippet": "## はじめに\n\n「サーバーレスはお金がかからない」\n\nそう思っていた時期が私にもありました。\n\n実際にアプリを公開してみると、予想以上にコストがかかることに気づきます。特にAI関連のサービスは、使い方次第で請求額が大きく変わります。\n\n本記事では、製造業向け画像分析アプリで実践したコスト最適化の方法を紹介します。結果として、**月額コストを54%削減**できました。"
+        },
+        {
+          "chunk_id": "32f09acb-570b-4445-9ae6-ae5eeeae39bd",
+          "document_id": "8f8f6a65-aa98-4fa6-8fd4-7873036a00c0",
+          "document_name": "2026-03-16-image-analysis-10-aws-cost-optimization.md",
+          "section_title": "",
+          "score": 0.529,
+          "snippet": "---\ntitle: \"サーバー代を半分にした話\"\nemoji: \"💰\"\ntype: \"tech\"\ntopics: [\"AWS\", \"CostOptimization\", \"Bedrock\", \"Lambda\"]\npublished: true\ncategory: \"HowTo\"\ndate: \"2026-03-16\"\ndescription: \"AWSコストを54%削減した実践例。S3ライフサイクル・DynamoDB TTL・Bedrockトークン削減・CloudFrontの最適化。\"\nseries: \"製造業向けAI画像分析システムを作る\"\nseriesOrder: 10\ncoverImag"
+        },
+        {
+          "chunk_id": "07915590-0946-5adb-b6a0-38fb87b5d996",
+          "document_id": "6034fa85-12a5-494c-aadc-60929bff35e1",
+          "document_name": "2026-03-16-image-analysis-10-aws-cost-optimization.md",
+          "section_title": "",
+          "score": 0.529,
+          "snippet": "面を作る](/posts/2026-03-16-image-analysis-09-react-typescript-chat)> 10. [第10回: サーバー代を半分にした話](/posts/2026-03-16-image-analysis-10-aws-cost-optimization) ← 今ここ\n\n\nAWSコスト最適化の実践"
+        },
+        {
+          "chunk_id": "cee4b635-a529-5c64-bba1-4b27373c4e9a",
+          "document_id": "c30a7001-73b9-4a03-969a-93b81f000d4c",
+          "document_name": "2026-03-16-image-analysis-05-system-prompt-s3.md",
+          "section_title": "",
+          "score": 0.466,
+          "snippet": "面を作る](/posts/2026-03-16-image-analysis-09-react-typescript-chat)> 10. [第10回: サーバー代を半分にした話](/posts/2026-03-16-image-analysis-10-aws-cost-optimization)\n\n\nS3を使ったシステムプロンプト管理"
+        },
+        {
+          "chunk_id": "93946d54-7f6d-4f0d-b621-6958394b2aca",
+          "document_id": "8b4e8e68-64bc-4b01-9c95-8e3ad70700b9",
+          "document_name": "2026-03-16-image-analysis-05-system-prompt-s3.md",
+          "section_title": "",
+          "score": 0.466,
+          "snippet": "---\ntitle: \"AIの性格は設定ファイルで変える\"\nemoji: \"💬\"\ntype: \"tech\"\ntopics: [\"AWS\", \"S3\", \"Bedrock\", \"PromptEngineering\"]\npublished: true\ncategory: \"HowTo\"\ndate: \"2026-03-16\"\ndescription: \"システムプロンプトをS3に外部化し、再デプロイなしで変更する方法。キャッシュとA/Bテストの実装例。\"\nseries: \"製造業向けAI画像分析システムを作る\"\nseriesOrder: 5\ncoverImage: \"/images/posts/la"
+        },
+        {
+          "chunk_id": "cbd617f4-5657-4f43-b809-ec25b107982b",
+          "document_id": "9e2478aa-3678-4792-9f85-7813c482ffdd",
+          "document_name": "2026-03-16-image-analysis-07-cognito-auth.md",
+          "section_title": "",
+          "score": 0.394,
+          "snippet": "---\ntitle: \"ログイン機能を30分で実装\"\nemoji: \"🔐\"\ntype: \"tech\"\ntopics: [\"AWS\", \"Cognito\", \"React\", \"Auth\"]\npublished: true\ncategory: \"HowTo\"\ndate: \"2026-03-16\"\ndescription: \"Amazon Cognitoで認証機能を30分で実装。User Pool・App Client・JWT・Cognito Authorizerの設定方法。\"\nseries: \"製造業向けAI画像分析システムを作る\"\nseriesOrder: 7\ncoverImage: \"/im"
+        },
+        {
+          "chunk_id": "4077ee16-ee5c-5ce9-8464-2c7fde17cbd0",
+          "document_id": "6ba29d1b-3d0c-422e-a4c2-bc34d73a91a7",
+          "document_name": "2026-03-16-image-analysis-07-cognito-auth.md",
+          "section_title": "",
+          "score": 0.394,
+          "snippet": "面を作る](/posts/2026-03-16-image-analysis-09-react-typescript-chat)> 10. [第10回: サーバー代を半分にした話](/posts/2026-03-16-image-analysis-10-aws-cost-optimization)\n\n\nAmazon Cognitoではじめる認証"
+        }
+      ],
+      "agentic_steps": [],
+      "message_id": "f9aa6136-be27-44cf-91d0-e1d3c12954f5",
+      "elapsed_sec": 20.11,
+      "question": "AWSコスト最適化で54%削減を達成した方法について教えてください。",
+      "search_mode": "normal",
+      "scores": {
+        "answer_length": 303,
+        "source_count": 10,
+        "keyword_coverage": 0.294,
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.667
+      }
+    }
+  ],
+  "agentic": [
+    {
+      "answer": "**情報源**: 01_mqtt_introduction.md\n\n**MQTTの主な特徴:**\n\n• **軽量プロトコル**: HTTP通信が数百バイト〜数キロバイトに対し、MQTTは数十バイトで済む\n• **リアルタイム通信**: 変化があった時に自動で通知、待機するだけで即座にデータを受信\n• **省電力設計**: 電池駆動のセンサーに最適な軽い通信方式\n• **信頼性の選択**: QoS 0-2で用途に応じた配信保証レベルを設定可能\n• **Pub/Sub方式**: 伝言板のように1つのブローカーを介して多対多通信が可能",
+      "sources": [
+        {
+          "chunk_id": "",
+          "document_id": "e23a73f3-d78e-49c4-a14f-a42bf01035f7",
+          "document_name": "01_mqtt_introduction.md",
+          "section_title": "",
+          "score": 1.0,
+          "snippet": ""
+        }
+      ],
+      "agentic_steps": [
+        {
+          "iteration": 1,
+          "max_iterations": 5,
+          "status": "thinking"
+        },
+        {
+          "iteration": 1,
+          "max_iterations": 5,
+          "status": "searching",
+          "search_query": "ドキュメント一覧を取得"
+        },
+        {
+          "iteration": 1,
+          "max_iterations": 5,
+          "status": "found",
+          "result_count": 23
+        },
+        {
+          "iteration": 2,
+          "max_iterations": 5,
+          "status": "thinking"
+        },
+        {
+          "iteration": 2,
+          "max_iterations": 5,
+          "status": "searching",
+          "search_query": "文書を読み込み中 (ID: e23a73f3...)"
+        },
+        {
+          "iteration": 2,
+          "max_iterations": 5,
+          "status": "found",
+          "result_count": 1
+        },
+        {
+          "iteration": 3,
+          "max_iterations": 5,
+          "status": "thinking"
+        }
+      ],
+      "message_id": "fb1d7a67-4528-44bc-871a-402080cb5189",
+      "elapsed_sec": 14.14,
+      "question": "MQTTとはどのようなプロトコルですか？主な特徴を教えてください。",
+      "search_mode": "agentic",
+      "scores": {
+        "answer_length": 267,
+        "source_count": 1,
+        "keyword_coverage": 0.316,
+        "faithfulness": 1.0,
+        "answer_relevancy": 1.0
+      }
+    },
+    {
+      "answer": "**Pub/Subモデルにおけるトピックの役割と構造**\n\n**情報源**: 02_pubsub_topics.md、01_mqtt_introduction.md\n\n• **トピックの役割**: メッセージを分類する「住所」として機能し、階層構造でデータを整理\n• **構造**: スラッシュ(/)で区切られた階層形式（例：factory/line1/sensor/temperature）\n• **ワイルドカード**: 「+」で1階層、「#」で全階層をまとめて購読可能\n• **疎結合の実現**: 送信者と受信者が直接つながらず、トピックを介して通信\n• **スケーラビリティ**: 新システム追加時もトピック購読だけで対応可能",
+      "sources": [
+        {
+          "chunk_id": "",
+          "document_id": "46439440-8036-4008-aad7-25022c3a6c82",
+          "document_name": "02_pubsub_topics.md",
+          "section_title": "",
+          "score": 1.0,
+          "snippet": ""
+        },
+        {
+          "chunk_id": "",
+          "document_id": "e23a73f3-d78e-49c4-a14f-a42bf01035f7",
+          "document_name": "01_mqtt_introduction.md",
+          "section_title": "",
+          "score": 1.0,
+          "snippet": ""
+        }
+      ],
+      "agentic_steps": [
+        {
+          "iteration": 1,
+          "max_iterations": 5,
+          "status": "thinking"
+        },
+        {
+          "iteration": 1,
+          "max_iterations": 5,
+          "status": "searching",
+          "search_query": "ドキュメント一覧を取得"
+        },
+        {
+          "iteration": 1,
+          "max_iterations": 5,
+          "status": "found",
+          "result_count": 23
+        },
+        {
+          "iteration": 2,
+          "max_iterations": 5,
+          "status": "thinking"
+        },
+        {
+          "iteration": 2,
+          "max_iterations": 5,
+          "status": "searching",
+          "search_query": "文書を読み込み中 (ID: 46439440...)"
+        },
+        {
+          "iteration": 2,
+          "max_iterations": 5,
+          "status": "found",
+          "result_count": 1
+        },
+        {
+          "iteration": 3,
+          "max_iterations": 5,
+          "status": "thinking"
+        },
+        {
+          "iteration": 3,
+          "max_iterations": 5,
+          "status": "searching",
+          "search_query": "文書を読み込み中 (ID: e23a73f3...)"
+        },
+        {
+          "iteration": 3,
+          "max_iterations": 5,
+          "status": "found",
+          "result_count": 1
+        },
+        {
+          "iteration": 4,
+          "max_iterations": 5,
+          "status": "thinking"
+        }
+      ],
+      "message_id": "66321e2e-7819-48c8-84ab-b46f2f05fd8d",
+      "elapsed_sec": 19.58,
+      "question": "Pub/Subモデルにおけるトピックの役割と構造について説明してください。",
+      "search_mode": "agentic",
+      "scores": {
+        "answer_length": 316,
+        "source_count": 2,
+        "keyword_coverage": 0.214,
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.857
+      }
+    },
+    {
+      "answer": "**Raspberry PiとMQTTを使った設備監視システムの構成:**\n\n**基本構成**\n- **子機(複数台)**: カメラ付きRaspberry Pi → 設備のランプ色を検知してMQTT送信\n- **親機(1台)**: 中継機 → Mosquittoブローカー + Oracle連携ブリッジ\n- **クラウド**: Oracle Cloud Database → データ蓄積・分析\n\n**システムの特徴**\n- 子機は設備コード(sta_no3)のみ変更で簡単追加可能\n- 親機が全子機のデータを集約してクラウドに送信\n- ローカルネットワーク内でMQTT通信、インターネット障害に強い\n\n**データフロー**\n- 子機: 色検知(緑→稼働、赤→停止、黄→異常) → MQTT送信\n- 親機: MQTTメッセージ受信 → JSON解析 → Oracle DB保存\n\n情報源: 01_mqtt_introduction.md, 03_practical_implementation.md, 04_multi_pi_setup.md",
+      "sources": [
+        {
+          "chunk_id": "",
+          "document_id": "e23a73f3-d78e-49c4-a14f-a42bf01035f7",
+          "document_name": "01_mqtt_introduction.md",
+          "section_title": "",
+          "score": 1.0,
+          "snippet": ""
+        },
+        {
+          "chunk_id": "",
+          "document_id": "5e0e0f1c-b625-4959-b302-5a2d3030a16a",
+          "document_name": "03_practical_implementation.md",
+          "section_title": "",
+          "score": 1.0,
+          "snippet": ""
+        },
+        {
+          "chunk_id": "",
+          "document_id": "35f3c912-8178-4055-962b-d127bf214524",
+          "document_name": "04_multi_pi_setup.md",
+          "section_title": "",
+          "score": 1.0,
+          "snippet": ""
+        }
+      ],
+      "agentic_steps": [
+        {
+          "iteration": 1,
+          "max_iterations": 5,
+          "status": "thinking"
+        },
+        {
+          "iteration": 1,
+          "max_iterations": 5,
+          "status": "searching",
+          "search_query": "ドキュメント一覧を取得"
+        },
+        {
+          "iteration": 1,
+          "max_iterations": 5,
+          "status": "found",
+          "result_count": 23
+        },
+        {
+          "iteration": 2,
+          "max_iterations": 5,
+          "status": "thinking"
+        },
+        {
+          "iteration": 2,
+          "max_iterations": 5,
+          "status": "searching",
+          "search_query": "文書を読み込み中 (ID: e23a73f3...)"
+        },
+        {
+          "iteration": 2,
+          "max_iterations": 5,
+          "status": "found",
+          "result_count": 1
+        },
+        {
+          "iteration": 3,
+          "max_iterations": 5,
+          "status": "thinking"
+        },
+        {
+          "iteration": 3,
+          "max_iterations": 5,
+          "status": "searching",
+          "search_query": "文書を読み込み中 (ID: 5e0e0f1c...)"
+        },
+        {
+          "iteration": 3,
+          "max_iterations": 5,
+          "status": "found",
+          "result_count": 1
+        },
+        {
+          "iteration": 4,
+          "max_iterations": 5,
+          "status": "thinking"
+        },
+        {
+          "iteration": 4,
+          "max_iterations": 5,
+          "status": "searching",
+          "search_query": "文書を読み込み中 (ID: 35f3c912...)"
+        },
+        {
+          "iteration": 4,
+          "max_iterations": 5,
+          "status": "found",
+          "result_count": 1
+        },
+        {
+          "iteration": 5,
+          "max_iterations": 5,
+          "status": "thinking"
+        }
+      ],
+      "message_id": "7c0b574a-1965-4a8d-845d-be5a8c7e926b",
+      "elapsed_sec": 38.02,
+      "question": "Raspberry Piを使ったMQTTの設備監視システムの構成について教えてください。",
+      "search_mode": "agentic",
+      "scores": {
+        "answer_length": 471,
+        "source_count": 3,
+        "keyword_coverage": 0.412,
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.8
+      }
+    },
+    {
+      "answer": "AWS Amplify Gen 2でのCognito認証設定方法について、ナレッジベースの情報をもとに回答します。\n\n## AWS Amplify Gen 2でのCognito認証設定方法\n\n### バックエンド設定\n- `amplify/auth/resource.ts`で`defineAuth({ loginWith: { email: true } })`を定義\n- `amplify/backend.ts`でauthリソースを登録\n- `npx ampx sandbox`実行でCognitoリソースが自動デプロイされる\n\n### フロントエンド初期化\n- `amplify_outputs.json`を動的インポートして`Amplify.configure()`を実行\n- アプリ起動時に`getCurrentUser()`で既存セッションを確認\n- 認証状態はZustandストアで一元管理(`isLoading: true`を初期値に設定)\n\n### 認証フロー実装\n- 自前のログインフォームでCognitoエラーを日本語化(`err.name`で分岐)\n- 登録は2段階フロー(登録→メール確認→自動ログイン)\n- パスワードリセットも2段階(リセット要求→新パスワード設定)\n\n### 保護ルート設定\n- `ProtectedRoute`で未認証ユーザーをログインページにリダイレクト\n- React Routerのレイアウトルートで認証チェックを階層化\n- ロールベースアクセス制御で管理者専用ルートを実装\n\n**情報源**: 2026-03-01-amplify-gen2-cognito-auth-part1.md, 2026-03-01-amplify-gen2-cognito-auth-part2.md",
+      "sources": [
+        {
+          "chunk_id": "",
+          "document_id": "bd7af342-a0a6-455b-ba22-c2bb7ba8585d",
+          "document_name": "2026-03-01-amplify-gen2-cognito-auth-part1.md",
+          "section_title": "",
+          "score": 1.0,
+          "snippet": ""
+        },
+        {
+          "chunk_id": "",
+          "document_id": "db53bf5e-77b8-478f-b8de-0c73a73bfc6b",
+          "document_name": "2026-03-01-amplify-gen2-cognito-auth-part2.md",
+          "section_title": "",
+          "score": 1.0,
+          "snippet": ""
+        }
+      ],
+      "agentic_steps": [
+        {
+          "iteration": 1,
+          "max_iterations": 5,
+          "status": "thinking"
+        },
+        {
+          "iteration": 1,
+          "max_iterations": 5,
+          "status": "searching",
+          "search_query": "ドキュメント一覧を取得"
+        },
+        {
+          "iteration": 1,
+          "max_iterations": 5,
+          "status": "found",
+          "result_count": 23
+        },
+        {
+          "iteration": 2,
+          "max_iterations": 5,
+          "status": "thinking"
+        },
+        {
+          "iteration": 2,
+          "max_iterations": 5,
+          "status": "searching",
+          "search_query": "文書を読み込み中 (ID: bd7af342...)"
+        },
+        {
+          "iteration": 2,
+          "max_iterations": 5,
+          "status": "found",
+          "result_count": 1
+        },
+        {
+          "iteration": 3,
+          "max_iterations": 5,
+          "status": "thinking"
+        },
+        {
+          "iteration": 3,
+          "max_iterations": 5,
+          "status": "searching",
+          "search_query": "文書を読み込み中 (ID: db53bf5e...)"
+        },
+        {
+          "iteration": 3,
+          "max_iterations": 5,
+          "status": "found",
+          "result_count": 1
+        },
+        {
+          "iteration": 4,
+          "max_iterations": 5,
+          "status": "thinking"
+        }
+      ],
+      "message_id": "e8c8a855-a03a-4bc7-ac92-e556257d46b7",
+      "elapsed_sec": 25.82,
+      "question": "AWS Amplify Gen 2でのCognito認証の設定方法を教えてください。",
+      "search_mode": "agentic",
+      "scores": {
+        "answer_length": 768,
+        "source_count": 2,
+        "keyword_coverage": 0.571,
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.833
+      }
+    },
+    {
+      "answer": "申し訳ございませんが、ナレッジベース内のドキュメントを確認した結果、**Lambda Function URLでのJWT検証の実装方法**に関する具体的な情報は見つかりませんでした。\n\nドキュメント内には以下の認証関連情報はありますが、Lambda Function URLでのJWT検証については触れられていません：\n\n- **Cognito認証の基本実装** (Amplify Gen 2、API Gateway + Cognito Authorizer)\n- **フロントエンドでのJWT取得・管理**\n- **API GatewayでのCognito Authorizer設定**\n\nLambda Function URLでJWT検証を実装する場合は、以下の要点を考慮する必要がありますが、詳細な実装方法については別途技術資料を参照していただく必要があります：\n\n• Lambda Function内でJWTライブラリを使用した手動検証\n• CognitoのJWKS（JSON Web Key Set）エンドポイントからの公開鍵取得\n• トークンの署名・有効期限・発行者の検証\n• エラーハンドリングと適切なHTTPステータスコードの返却",
+      "sources": [
+        {
+          "chunk_id": "",
+          "document_id": "9e2478aa-3678-4792-9f85-7813c482ffdd",
+          "document_name": "2026-03-16-image-analysis-07-cognito-auth.md",
+          "section_title": "",
+          "score": 1.0,
+          "snippet": ""
+        },
+        {
+          "chunk_id": "",
+          "document_id": "854446aa-8caa-457e-8d83-2cdbf906e612",
+          "document_name": "2026-03-16-image-analysis-01-lambda-streaming.md",
+          "section_title": "",
+          "score": 1.0,
+          "snippet": ""
+        },
+        {
+          "chunk_id": "",
+          "document_id": "bd7af342-a0a6-455b-ba22-c2bb7ba8585d",
+          "document_name": "2026-03-01-amplify-gen2-cognito-auth-part1.md",
+          "section_title": "",
+          "score": 1.0,
+          "snippet": ""
+        }
+      ],
+      "agentic_steps": [
+        {
+          "iteration": 1,
+          "max_iterations": 5,
+          "status": "thinking"
+        },
+        {
+          "iteration": 1,
+          "max_iterations": 5,
+          "status": "searching",
+          "search_query": "ドキュメント一覧を取得"
+        },
+        {
+          "iteration": 1,
+          "max_iterations": 5,
+          "status": "found",
+          "result_count": 23
+        },
+        {
+          "iteration": 2,
+          "max_iterations": 5,
+          "status": "thinking"
+        },
+        {
+          "iteration": 2,
+          "max_iterations": 5,
+          "status": "searching",
+          "search_query": "文書を読み込み中 (ID: 9e2478aa...)"
+        },
+        {
+          "iteration": 2,
+          "max_iterations": 5,
+          "status": "found",
+          "result_count": 1
+        },
+        {
+          "iteration": 3,
+          "max_iterations": 5,
+          "status": "thinking"
+        },
+        {
+          "iteration": 3,
+          "max_iterations": 5,
+          "status": "searching",
+          "search_query": "文書を読み込み中 (ID: 854446aa...)"
+        },
+        {
+          "iteration": 3,
+          "max_iterations": 5,
+          "status": "found",
+          "result_count": 1
+        },
+        {
+          "iteration": 4,
+          "max_iterations": 5,
+          "status": "thinking"
+        },
+        {
+          "iteration": 4,
+          "max_iterations": 5,
+          "status": "searching",
+          "search_query": "文書を読み込み中 (ID: bd7af342...)"
+        },
+        {
+          "iteration": 4,
+          "max_iterations": 5,
+          "status": "found",
+          "result_count": 1
+        },
+        {
+          "iteration": 5,
+          "max_iterations": 5,
+          "status": "thinking"
+        }
+      ],
+      "message_id": "3765cce3-343f-4791-ba5e-e9abf918410c",
+      "elapsed_sec": 29.37,
+      "question": "Lambda Function URLでのJWT検証の実装方法を教えてください。",
+      "search_mode": "agentic",
+      "scores": {
+        "answer_length": 523,
+        "source_count": 3,
+        "keyword_coverage": 0.333,
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.333
+      }
+    },
+    {
+      "answer": "AWSサーバーレスチャットでWebSocketを選んだ理由は以下の通りです：\n\n**情報源：** `2026-03-01-aws-serverless-chat-part1.md`\n\n• **双方向通信が必須** - チャットは送信と受信が同時発生するため、SSEだと送信用に別途REST APIが必要になり複雑化する\n\n• **API Gateway WebSocket APIの存在** - 接続管理をAWSに任せてLambda関数でビジネスロジックに集中でき、サーバーレスの恩恵を受けられる\n\n• **コスト効率** - ポーリング方式では空振りリクエストが97%発生するが、WebSocketは実際のメッセージ送信時のみ課金される\n\n• **レイテンシが最小** - 接続確立済みでHTTPオーバーヘッドがなく、サーバーから任意タイミングでpush可能",
+      "sources": [
+        {
+          "chunk_id": "",
+          "document_id": "9d482e8f-f835-430e-82f3-879996ac44b5",
+          "document_name": "2026-03-01-aws-serverless-chat-part1.md",
+          "section_title": "",
+          "score": 1.0,
+          "snippet": ""
+        },
+        {
+          "chunk_id": "",
+          "document_id": "fb690646-59eb-41d7-a50f-7c961cd15b1d",
+          "document_name": "2026-03-01-aws-serverless-chat-part2.md",
+          "section_title": "",
+          "score": 1.0,
+          "snippet": ""
+        }
+      ],
+      "agentic_steps": [
+        {
+          "iteration": 1,
+          "max_iterations": 5,
+          "status": "thinking"
+        },
+        {
+          "iteration": 1,
+          "max_iterations": 5,
+          "status": "searching",
+          "search_query": "ドキュメント一覧を取得"
+        },
+        {
+          "iteration": 1,
+          "max_iterations": 5,
+          "status": "found",
+          "result_count": 23
+        },
+        {
+          "iteration": 2,
+          "max_iterations": 5,
+          "status": "thinking"
+        },
+        {
+          "iteration": 2,
+          "max_iterations": 5,
+          "status": "searching",
+          "search_query": "文書を読み込み中 (ID: 9d482e8f...)"
+        },
+        {
+          "iteration": 2,
+          "max_iterations": 5,
+          "status": "found",
+          "result_count": 1
+        },
+        {
+          "iteration": 3,
+          "max_iterations": 5,
+          "status": "thinking"
+        },
+        {
+          "iteration": 3,
+          "max_iterations": 5,
+          "status": "searching",
+          "search_query": "文書を読み込み中 (ID: fb690646...)"
+        },
+        {
+          "iteration": 3,
+          "max_iterations": 5,
+          "status": "found",
+          "result_count": 1
+        },
+        {
+          "iteration": 4,
+          "max_iterations": 5,
+          "status": "thinking"
+        }
+      ],
+      "message_id": "9120e021-3891-4f4f-9916-ff1c37403075",
+      "elapsed_sec": 27.58,
+      "question": "AWSサーバーレスチャットでリアルタイム通信にWebSocketを選んだ理由は？",
+      "search_mode": "agentic",
+      "scores": {
+        "answer_length": 380,
+        "source_count": 2,
+        "keyword_coverage": 0.312,
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.667
+      }
+    },
+    {
+      "answer": "DynamoDBのSingle Table Designについて、チャットデータの設計パターンをご説明します。\n\n## DynamoDB Single Table Design - チャットデータ設計パターン\n\n### 基本設計思想\n- **1テーブルに全エンティティを格納**（コネクション、ユーザー、ルーム、メッセージ）\n- **PK/SKの組み合わせ**でエンティティ種別とアクセスパターンを表現\n- **JOINなし**で関連データを1回のQueryで取得\n\n### 主要エンティティのPK/SK設計\n\n#### 1. WebSocket接続管理\n```\nPK: CONNECTION#{connectionId}\nSK: METADATA\n属性: userId, connectedAt, ttl(24h自動削除)\n```\n\n#### 2. ユーザー→接続の逆引き\n```\nPK: USER#{userId}  \nSK: CONNECTION#{connectionId}\n属性: connectionId, connectedAt, ttl\n```\n\n#### 3. チャット参加記録\n```\nPK: USER#{userId}\nSK: CHATROOM#{chatRoomId}\n属性: joinedAt, GSI1PK(参加日時ソート用)\n```\n\n#### 4. メッセージ（時系列ソート）\n```\nPK: CHATROOM#{chatRoomId}\nSK: MESSAGE#{timestamp}#{messageId}\n属性: senderId, content, createdAt\n```\n\n### 効率的なアクセスパターン\n- **1回のQuery**で「ユーザーの参加ルーム一覧」を取得\n- **タイムスタンプをSKに含める**ことで自動的に時系列ソート\n- **TTL機能**で古い接続データを自動削除してコスト削減\n\n*情報源: 2026-03-01-aws-serverless-chat-part2.md、2026-03-16-image-analysis-06-dynamodb-conversation.md*",
+      "sources": [
+        {
+          "chunk_id": "",
+          "document_id": "d39adbb5-aa5d-4d19-925a-190cfba5f343",
+          "document_name": "2026-03-16-image-analysis-06-dynamodb-conversation.md",
+          "section_title": "",
+          "score": 1.0,
+          "snippet": ""
+        },
+        {
+          "chunk_id": "",
+          "document_id": "fb690646-59eb-41d7-a50f-7c961cd15b1d",
+          "document_name": "2026-03-01-aws-serverless-chat-part2.md",
+          "section_title": "",
+          "score": 1.0,
+          "snippet": ""
+        }
+      ],
+      "agentic_steps": [
+        {
+          "iteration": 1,
+          "max_iterations": 5,
+          "status": "thinking"
+        },
+        {
+          "iteration": 1,
+          "max_iterations": 5,
+          "status": "searching",
+          "search_query": "ドキュメント一覧を取得"
+        },
+        {
+          "iteration": 1,
+          "max_iterations": 5,
+          "status": "found",
+          "result_count": 23
+        },
+        {
+          "iteration": 2,
+          "max_iterations": 5,
+          "status": "thinking"
+        },
+        {
+          "iteration": 2,
+          "max_iterations": 5,
+          "status": "searching",
+          "search_query": "文書を読み込み中 (ID: d39adbb5...)"
+        },
+        {
+          "iteration": 2,
+          "max_iterations": 5,
+          "status": "found",
+          "result_count": 1
+        },
+        {
+          "iteration": 3,
+          "max_iterations": 5,
+          "status": "thinking"
+        },
+        {
+          "iteration": 3,
+          "max_iterations": 5,
+          "status": "searching",
+          "search_query": "文書を読み込み中 (ID: fb690646...)"
+        },
+        {
+          "iteration": 3,
+          "max_iterations": 5,
+          "status": "found",
+          "result_count": 1
+        },
+        {
+          "iteration": 4,
+          "max_iterations": 5,
+          "status": "thinking"
+        }
+      ],
+      "message_id": "993ae987-f526-4d91-b298-444e76b96e2a",
+      "elapsed_sec": 33.54,
+      "question": "DynamoDBのSingle Table Designについて、チャットデータの設計パターンを教えてください。",
+      "search_mode": "agentic",
+      "scores": {
+        "answer_length": 926,
+        "source_count": 2,
+        "keyword_coverage": 0.625,
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.571
+      }
+    },
+    {
+      "answer": "製造AI画像解析でLambdaストリーミングを使う理由について、ドキュメント「2026-03-16-image-analysis-01-lambda-streaming.md」から情報を取得しました。\n\n**製造AI画像解析でLambdaストリーミングを使う理由：**\n\n• **29秒タイムアウト制限の回避** - API Gatewayは29秒で処理を打ち切るが、画像分析は10-60秒かかるため\n• **リアルタイム応答の実現** - 全処理完了を待たず、生成された結果から順次送信可能\n• **ユーザー体験の向上** - ChatGPTのように文字が流れる表示で「AIが考えている」感覚を提供\n• **認証機能の維持** - 従来のCognito認証を保持したまま長時間処理に対応\n• **処理時間の最適化** - 画像ダウンロード・変換・AI分析の各段階で順次結果を返せる\n\n情報源：2026-03-16-image-analysis-01-lambda-streaming.md",
+      "sources": [
+        {
+          "chunk_id": "",
+          "document_id": "854446aa-8caa-457e-8d83-2cdbf906e612",
+          "document_name": "2026-03-16-image-analysis-01-lambda-streaming.md",
+          "section_title": "",
+          "score": 1.0,
+          "snippet": ""
+        }
+      ],
+      "agentic_steps": [
+        {
+          "iteration": 1,
+          "max_iterations": 5,
+          "status": "thinking"
+        },
+        {
+          "iteration": 1,
+          "max_iterations": 5,
+          "status": "searching",
+          "search_query": "ドキュメント一覧を取得"
+        },
+        {
+          "iteration": 1,
+          "max_iterations": 5,
+          "status": "found",
+          "result_count": 23
+        },
+        {
+          "iteration": 2,
+          "max_iterations": 5,
+          "status": "thinking"
+        },
+        {
+          "iteration": 2,
+          "max_iterations": 5,
+          "status": "searching",
+          "search_query": "文書を読み込み中 (ID: 854446aa...)"
+        },
+        {
+          "iteration": 2,
+          "max_iterations": 5,
+          "status": "found",
+          "result_count": 1
+        },
+        {
+          "iteration": 3,
+          "max_iterations": 5,
+          "status": "thinking"
+        }
+      ],
+      "message_id": "60fc9b4d-1224-4792-a303-bf6e6e76bfe9",
+      "elapsed_sec": 22.94,
+      "question": "製造AI画像解析でLambdaストリーミングを使う理由は何ですか？",
+      "search_mode": "agentic",
+      "scores": {
+        "answer_length": 445,
+        "source_count": 1,
+        "keyword_coverage": 0.667,
+        "faithfulness": 1.0,
+        "answer_relevancy": 1.0
+      }
+    },
+    {
+      "answer": "このドキュメントにBedrock RuntimeとBedrock Agents APIの違いが詳しく説明されています。要点を短くまとめます。\n\n**Bedrock RuntimeとBedrock Agents APIの主な違い：**\n\n• **Runtime API**: AIモデルを直接呼び出すシンプルな方式。画像分析やQ&Aに適し、コストが低い\n• **Agents API**: AIが自分で判断して複数ステップの処理を実行。外部ツール連携やRAGが組み込み済み\n• **コスト差**: Runtime APIは月1000リクエストで約$10、Agents APIは$60-100程度\n• **用途**: シンプルな処理ならRuntime、複雑なワークフローならAgents\n• **制御性**: Runtimeは細かい制御可能、Agentsは設定ベースで予測困難",
+      "sources": [
+        {
+          "chunk_id": "",
+          "document_id": "206b8de5-e50c-46e5-aa93-671303621c21",
+          "document_name": "2026-03-16-image-analysis-03-bedrock-api-guide.md",
+          "section_title": "",
+          "score": 1.0,
+          "snippet": ""
+        }
+      ],
+      "agentic_steps": [
+        {
+          "iteration": 1,
+          "max_iterations": 5,
+          "status": "thinking"
+        },
+        {
+          "iteration": 1,
+          "max_iterations": 5,
+          "status": "searching",
+          "search_query": "ドキュメント一覧を取得"
+        },
+        {
+          "iteration": 1,
+          "max_iterations": 5,
+          "status": "found",
+          "result_count": 23
+        },
+        {
+          "iteration": 2,
+          "max_iterations": 5,
+          "status": "thinking"
+        },
+        {
+          "iteration": 2,
+          "max_iterations": 5,
+          "status": "searching",
+          "search_query": "文書を読み込み中 (ID: 206b8de5...)"
+        },
+        {
+          "iteration": 2,
+          "max_iterations": 5,
+          "status": "found",
+          "result_count": 1
+        },
+        {
+          "iteration": 3,
+          "max_iterations": 5,
+          "status": "thinking"
+        }
+      ],
+      "message_id": "980cfa52-986b-48b8-8dae-f692e47ccdcf",
+      "elapsed_sec": 23.56,
+      "question": "Bedrock RuntimeとBedrock Agents APIの違いは何ですか？",
+      "search_mode": "agentic",
+      "scores": {
+        "answer_length": 386,
+        "source_count": 1,
+        "keyword_coverage": 0.133,
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.0
+      }
+    },
+    {
+      "answer": "**AWSコスト54%削減の方法（情報源：2026-03-16-image-analysis-10-aws-cost-optimization.md）**\n\n• **S3ライフサイクル設定**: 30日で古い画像を自動削除（80%削減）\n• **DynamoDB TTL有効化**: 会話履歴を30日で自動削除（69%削減）  \n• **Bedrockトークン最適化**: 履歴を5件に制限、画像送信を必要時のみ、max_tokens削減（55%削減）\n• **静的ホスティング移行**: EC2からCloudFront+S3へ変更（93%削減）",
+      "sources": [
+        {
+          "chunk_id": "",
+          "document_id": "8f8f6a65-aa98-4fa6-8fd4-7873036a00c0",
+          "document_name": "2026-03-16-image-analysis-10-aws-cost-optimization.md",
+          "section_title": "",
+          "score": 1.0,
+          "snippet": ""
+        }
+      ],
+      "agentic_steps": [
+        {
+          "iteration": 1,
+          "max_iterations": 5,
+          "status": "thinking"
+        },
+        {
+          "iteration": 1,
+          "max_iterations": 5,
+          "status": "searching",
+          "search_query": "ドキュメント一覧を取得"
+        },
+        {
+          "iteration": 1,
+          "max_iterations": 5,
+          "status": "found",
+          "result_count": 23
+        },
+        {
+          "iteration": 2,
+          "max_iterations": 5,
+          "status": "thinking"
+        },
+        {
+          "iteration": 2,
+          "max_iterations": 5,
+          "status": "searching",
+          "search_query": "文書を読み込み中 (ID: 8f8f6a65...)"
+        },
+        {
+          "iteration": 2,
+          "max_iterations": 5,
+          "status": "found",
+          "result_count": 1
+        },
+        {
+          "iteration": 3,
+          "max_iterations": 5,
+          "status": "thinking"
+        }
+      ],
+      "message_id": "284e76c0-8c7b-4290-96a8-bc51e21da0c6",
+      "elapsed_sec": 21.43,
+      "question": "AWSコスト最適化で54%削減を達成した方法について教えてください。",
+      "search_mode": "agentic",
+      "scores": {
+        "answer_length": 273,
+        "source_count": 1,
+        "keyword_coverage": 0.235,
+        "faithfulness": 1.0,
+        "answer_relevancy": 0.833
+      }
+    }
+  ]
+}

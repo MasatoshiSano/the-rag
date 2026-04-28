@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>外部アプリ連携セットアップガイド - The RAG</title>
+  <style>
+    :root {
+      --sds-color-impression-primary: #1a73e8;
+      --color-accent: var(--sds-color-impression-primary, #1a73e8);
+      --color-bg: #ffffff;
+      --color-bg-secondary: #f6f8fa;
+      --color-bg-code: #f6f8fa;
+      --color-border: #d0d7de;
+      --color-text: #1f2328;
+      --color-text-secondary: #636c76;
+      --color-text-muted: #848d97;
+      --color-link: var(--sds-color-impression-primary, #1a73e8);
+      --color-blockquote-border: #d0d7de;
+      --color-blockquote-bg: #f6f8fa;
+      --color-table-header-bg: #f6f8fa;
+      --color-table-row-alt: #f6f8fa;
+      --color-table-border: #d0d7de;
+      --color-syntax-keyword: #cf222e;
+      --color-syntax-string: #0a3069;
+      --color-syntax-comment: #6e7781;
+      --color-syntax-number: #0550ae;
+      --color-syntax-function: #8250df;
+      --color-syntax-variable: #953800;
+      --color-syntax-property: #116329;
+      --color-syntax-punctuation: #24292f;
+      --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", Helvetica, Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+      --radius: 6px;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--color-text);
+      background: var(--color-bg);
+      padding: 0 16px 64px;
+    }
+
+    .page-wrapper {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    /* Back link */
+    .back-link-bar {
+      padding: 16px 0 8px;
+      border-bottom: 1px solid var(--color-border);
+      margin-bottom: 32px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--color-link);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 6px 12px 6px 8px;
+      border-radius: var(--radius);
+      transition: background 0.15s;
+    }
+
+    .back-link:hover {
+      background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+      text-decoration: none;
+    }
+
+    .back-link:focus-visible {
+      outline: 2px solid var(--color-accent);
+      outline-offset: 2px;
+    }
+
+    .back-link svg {
+      flex-shrink: 0;
+    }
+
+    /* Typography */
+    h1 {
+      font-size: 2em;
+      font-weight: 700;
+      line-height: 1.25;
+      padding-bottom: 0.3em;
+      border-bottom: 1px solid var(--color-border);
+      margin-bottom: 24px;
+      color: var(--color-text);
+    }
+
+    h2 {
+      font-size: 1.5em;
+      font-weight: 700;
+      line-height: 1.25;
+      padding-bottom: 0.3em;
+      border-bottom: 1px solid var(--color-border);
+      margin-top: 40px;
+      margin-bottom: 16px;
+      color: var(--color-text);
+    }
+
+    h3 {
+      font-size: 1.25em;
+      font-weight: 700;
+      line-height: 1.25;
+      margin-top: 24px;
+      margin-bottom: 12px;
+      color: var(--color-text);
+    }
+
+    h4 {
+      font-size: 1em;
+      font-weight: 700;
+      margin-top: 20px;
+      margin-bottom: 10px;
+      color: var(--color-text);
+    }
+
+    p {
+      margin-bottom: 16px;
+    }
+
+    a {
+      color: var(--color-link);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    strong {
+      font-weight: 700;
+    }
+
+    em {
+      font-style: italic;
+    }
+
+    /* Horizontal rule */
+    hr {
+      border: none;
+      border-top: 1px solid var(--color-border);
+      margin: 32px 0;
+    }
+
+    /* Inline code */
+    code {
+      font-family: var(--font-mono);
+      font-size: 0.875em;
+      padding: 0.2em 0.4em;
+      background: rgba(175, 184, 193, 0.2);
+      border-radius: 3px;
+      color: var(--color-text);
+    }
+
+    /* Code blocks */
+    pre {
+      font-family: var(--font-mono);
+      font-size: 0.875em;
+      line-height: 1.6;
+      background: var(--color-bg-code);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 16px;
+      overflow-x: auto;
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    pre code {
+      font-family: inherit;
+      font-size: inherit;
+      padding: 0;
+      background: none;
+      border-radius: 0;
+      color: var(--color-text);
+      white-space: pre;
+    }
+
+    /* Language label */
+    pre[data-lang]::before {
+      content: attr(data-lang);
+      display: block;
+      font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    /* Blockquote */
+    blockquote {
+      margin: 0 0 16px;
+      padding: 8px 16px;
+      border-left: 4px solid var(--color-blockquote-border);
+      background: var(--color-blockquote-bg);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      color: var(--color-text-secondary);
+    }
+
+    blockquote p {
+      margin-bottom: 0;
+    }
+
+    /* Lists */
+    ul, ol {
+      padding-left: 2em;
+      margin-bottom: 16px;
+    }
+
+    li {
+      margin-bottom: 4px;
+    }
+
+    li p {
+      margin-bottom: 8px;
+    }
+
+    /* Tables */
+    .table-wrapper {
+      overflow-x: auto;
+      margin-bottom: 16px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9375em;
+    }
+
+    thead {
+      background: var(--color-table-header-bg);
+    }
+
+    th {
+      font-weight: 700;
+      text-align: left;
+      padding: 8px 16px;
+      border: 1px solid var(--color-table-border);
+      color: var(--color-text);
+    }
+
+    td {
+      padding: 8px 16px;
+      border: 1px solid var(--color-table-border);
+      color: var(--color-text);
+      vertical-align: top;
+    }
+
+    tbody tr:nth-child(even) {
+      background: var(--color-table-row-alt);
+    }
+
+    /* Syntax highlighting token styles */
+    .tok-keyword   { color: var(--color-syntax-keyword); font-weight: 600; }
+    .tok-string    { color: var(--color-syntax-string); }
+    .tok-comment   { color: var(--color-syntax-comment); font-style: italic; }
+    .tok-number    { color: var(--color-syntax-number); }
+    .tok-function  { color: var(--color-syntax-function); }
+    .tok-variable  { color: var(--color-syntax-variable); }
+    .tok-property  { color: var(--color-syntax-property); }
+    .tok-operator  { color: var(--color-syntax-punctuation); }
+    .tok-punctuation { color: var(--color-syntax-punctuation); }
+    .tok-type      { color: var(--color-syntax-function); }
+    .tok-decorator { color: var(--color-syntax-variable); }
+    .tok-key       { color: var(--color-syntax-keyword); }
+    .tok-value     { color: var(--color-syntax-string); }
+    .tok-flag      { color: var(--color-syntax-variable); }
+    .tok-url       { color: var(--color-syntax-string); }
+    .tok-header-val { color: var(--color-syntax-string); }
+    .tok-option    { color: var(--color-syntax-function); }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      body { font-size: 15px; padding: 0 12px 48px; }
+      h1 { font-size: 1.6em; }
+      h2 { font-size: 1.3em; margin-top: 32px; }
+      h3 { font-size: 1.15em; }
+      pre { font-size: 0.8125em; padding: 12px; }
+      th, td { padding: 6px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+
+    <nav class="back-link-bar" aria-label="ページナビゲーション">
+      <a href="/chat" class="back-link" aria-label="アプリのチャット画面に戻る">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" focusable="false">
+          <path fill-rule="evenodd" d="M7.78 12.53a.75.75 0 0 1-1.06 0L2.47 8.28a.75.75 0 0 1 0-1.06l4.25-4.25a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L4.81 7h7.44a.75.75 0 0 1 0 1.5H4.81l2.97 2.97a.75.75 0 0 1 0 1.06z"/>
+        </svg>
+        アプリに戻る
+      </a>
+    </nav>
+
+    <main id="main-content">
+
+      <h1>The RAG - 外部アプリ連携セットアップガイド</h1>
+
+      <p>The RAG の API を外部アプリケーションから利用するための設定手順です。</p>
+
+      <hr />
+
+      <h2>前提条件</h2>
+
+      <ul>
+        <li>The RAG が Docker で起動済み（<code>docker compose up -d</code>）</li>
+        <li>外部アプリから The RAG ホストにネットワーク到達可能</li>
+      </ul>
+
+      <hr />
+
+      <h2>Step 1: API キーを設定する</h2>
+
+      <p>デフォルトの API キー（<code>the-rag-default-key</code>）を本番用に変更します。</p>
+
+      <p><strong><code>docker-compose.yml</code></strong> の <code>backend &gt; environment</code> に追加:</p>
+
+      <pre data-lang="yaml"><code><span class="tok-key">backend</span><span class="tok-punctuation">:</span>
+  <span class="tok-key">environment</span><span class="tok-punctuation">:</span>
+    <span class="tok-comment"># ... 既存の設定 ...</span>
+    <span class="tok-punctuation">-</span> <span class="tok-key">API_KEYS</span><span class="tok-punctuation">=</span><span class="tok-string">["your-secure-api-key-here"]</span></code></pre>
+
+      <blockquote>
+        <p>複数キーを発行する場合: <code>["key-for-app-a","key-for-app-b"]</code></p>
+      </blockquote>
+
+      <p>設定後、コンテナを再起動します。</p>
+
+      <pre data-lang="bash"><code><span class="tok-function">docker</span> compose restart backend</code></pre>
+
+      <hr />
+
+      <h2>Step 2: CORS を設定する</h2>
+
+      <p>外部アプリがブラウザから直接 API を呼ぶ場合（JavaScript fetch 等）、CORS の許可が必要です。</p>
+
+      <p><strong><code>docker-compose.yml</code></strong> の <code>backend &gt; environment</code> に追加:</p>
+
+      <pre data-lang="yaml"><code><span class="tok-key">backend</span><span class="tok-punctuation">:</span>
+  <span class="tok-key">environment</span><span class="tok-punctuation">:</span>
+    <span class="tok-comment"># ... 既存の設定 ...</span>
+    <span class="tok-punctuation">-</span> <span class="tok-key">ALLOWED_ORIGINS</span><span class="tok-punctuation">=</span><span class="tok-string">["http://localhost:3000","http://localhost:5173","https://your-app.example.com"]</span></code></pre>
+
+      <p>設定後、コンテナを再起動します。</p>
+
+      <pre data-lang="bash"><code><span class="tok-function">docker</span> compose restart backend</code></pre>
+
+      <blockquote>
+        <p>サーバーサイドから API を呼ぶ場合（Python requests, Node.js fetch 等）は CORS 設定不要です。</p>
+      </blockquote>
+
+      <hr />
+
+      <h2>Step 3: ネットワークアクセスを確認する</h2>
+
+      <p>外部アプリから The RAG のエンドポイントに到達できることを確認します。</p>
+
+      <pre data-lang="bash"><code><span class="tok-function">curl</span> http<span class="tok-punctuation">://</span><span class="tok-variable">&lt;The RAGホストIP&gt;</span><span class="tok-punctuation">:</span><span class="tok-number">3000</span>/health
+<span class="tok-comment"># → {"status":"ok"} が返れば OK</span></code></pre>
+
+      <p><strong>到達できない場合のチェックリスト</strong>:</p>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>確認項目</th>
+              <th>コマンド</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Docker ポート公開</td>
+              <td><code>docker compose ps</code> で <code>0.0.0.0:3000-&gt;80</code> を確認</td>
+            </tr>
+            <tr>
+              <td>Windows Firewall</td>
+              <td>受信ルールでポート 3000 が許可されているか</td>
+            </tr>
+            <tr>
+              <td>WSL2 ポート転送</td>
+              <td><code>netsh interface portproxy show v4tov4</code> で確認</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr />
+
+      <h2>Step 4: ナレッジベース ID を取得する</h2>
+
+      <p>API で使用するナレッジベース ID を確認します。</p>
+
+      <pre data-lang="bash"><code><span class="tok-function">curl</span> http<span class="tok-punctuation">://</span><span class="tok-variable">&lt;host&gt;</span><span class="tok-punctuation">:</span><span class="tok-number">3000</span>/api/knowledge-bases/ \
+  <span class="tok-flag">-H</span> <span class="tok-string">"X-User-Id: external-app-user"</span></code></pre>
+
+      <p>レスポンスの <code>id</code> フィールドが、チャット API で指定する <code>knowledge_base_id</code> です。</p>
+
+      <hr />
+
+      <h2>Step 5: 外部アプリに組み込む</h2>
+
+      <h3>Python</h3>
+
+      <pre data-lang="python"><code><span class="tok-keyword">import</span> requests
+
+THE_RAG_URL <span class="tok-operator">=</span> <span class="tok-string">"http://10.168.124.32:3000"</span>
+API_KEY <span class="tok-operator">=</span> <span class="tok-string">"your-secure-api-key-here"</span>
+KB_ID <span class="tok-operator">=</span> <span class="tok-string">"取得したナレッジベースID"</span>
+
+
+<span class="tok-keyword">def</span> <span class="tok-function">ask</span><span class="tok-punctuation">(</span>question<span class="tok-punctuation">:</span> <span class="tok-type">str</span><span class="tok-punctuation">,</span> session_id<span class="tok-punctuation">:</span> <span class="tok-type">str</span> <span class="tok-operator">|</span> <span class="tok-keyword">None</span> <span class="tok-operator">=</span> <span class="tok-keyword">None</span><span class="tok-punctuation">)</span> <span class="tok-operator">-&gt;</span> <span class="tok-type">dict</span><span class="tok-punctuation">:</span>
+    resp <span class="tok-operator">=</span> requests<span class="tok-punctuation">.</span><span class="tok-function">post</span><span class="tok-punctuation">(</span>
+        <span class="tok-string">f"<span class="tok-variable">{THE_RAG_URL}</span>/api/ext/chat/sync"</span><span class="tok-punctuation">,</span>
+        headers<span class="tok-operator">=</span><span class="tok-punctuation">{</span>
+            <span class="tok-string">"X-API-Key"</span><span class="tok-punctuation">:</span> API_KEY<span class="tok-punctuation">,</span>
+            <span class="tok-string">"Content-Type"</span><span class="tok-punctuation">:</span> <span class="tok-string">"application/json"</span><span class="tok-punctuation">,</span>
+        <span class="tok-punctuation">}</span><span class="tok-punctuation">,</span>
+        json<span class="tok-operator">=</span><span class="tok-punctuation">{</span>
+            <span class="tok-string">"question"</span><span class="tok-punctuation">:</span> question<span class="tok-punctuation">,</span>
+            <span class="tok-string">"knowledge_base_id"</span><span class="tok-punctuation">:</span> KB_ID<span class="tok-punctuation">,</span>
+            <span class="tok-string">"session_id"</span><span class="tok-punctuation">:</span> session_id<span class="tok-punctuation">,</span>
+        <span class="tok-punctuation">}</span><span class="tok-punctuation">,</span>
+        timeout<span class="tok-operator">=</span><span class="tok-number">60</span><span class="tok-punctuation">,</span>
+    <span class="tok-punctuation">)</span>
+    resp<span class="tok-punctuation">.</span><span class="tok-function">raise_for_status</span><span class="tok-punctuation">()</span>
+    <span class="tok-keyword">return</span> resp<span class="tok-punctuation">.</span><span class="tok-function">json</span><span class="tok-punctuation">()</span>
+
+
+<span class="tok-comment"># 単発の質問</span>
+result <span class="tok-operator">=</span> <span class="tok-function">ask</span><span class="tok-punctuation">(</span><span class="tok-string">"設備Aの点検手順を教えて"</span><span class="tok-punctuation">)</span>
+<span class="tok-function">print</span><span class="tok-punctuation">(</span>result<span class="tok-punctuation">[</span><span class="tok-string">"answer"</span><span class="tok-punctuation">])</span>
+
+<span class="tok-comment"># 会話の継続</span>
+follow_up <span class="tok-operator">=</span> <span class="tok-function">ask</span><span class="tok-punctuation">(</span><span class="tok-string">"もっと詳しく"</span><span class="tok-punctuation">,</span> session_id<span class="tok-operator">=</span>result<span class="tok-punctuation">[</span><span class="tok-string">"session_id"</span><span class="tok-punctuation">])</span>
+<span class="tok-function">print</span><span class="tok-punctuation">(</span>follow_up<span class="tok-punctuation">[</span><span class="tok-string">"answer"</span><span class="tok-punctuation">])</span></code></pre>
+
+      <h3>JavaScript / TypeScript</h3>
+
+      <pre data-lang="typescript"><code><span class="tok-keyword">const</span> THE_RAG_URL <span class="tok-operator">=</span> <span class="tok-string">"http://10.168.124.32:3000"</span><span class="tok-punctuation">;</span>
+<span class="tok-keyword">const</span> API_KEY <span class="tok-operator">=</span> <span class="tok-string">"your-secure-api-key-here"</span><span class="tok-punctuation">;</span>
+<span class="tok-keyword">const</span> KB_ID <span class="tok-operator">=</span> <span class="tok-string">"取得したナレッジベースID"</span><span class="tok-punctuation">;</span>
+
+<span class="tok-keyword">async function</span> <span class="tok-function">ask</span><span class="tok-punctuation">(</span>question<span class="tok-punctuation">:</span> <span class="tok-type">string</span><span class="tok-punctuation">,</span> sessionId<span class="tok-punctuation">?:</span> <span class="tok-type">string</span><span class="tok-punctuation">)</span> <span class="tok-punctuation">{</span>
+  <span class="tok-keyword">const</span> resp <span class="tok-operator">=</span> <span class="tok-keyword">await</span> <span class="tok-function">fetch</span><span class="tok-punctuation">(</span><span class="tok-string">`<span class="tok-variable">${THE_RAG_URL}</span>/api/ext/chat/sync`</span><span class="tok-punctuation">,</span> <span class="tok-punctuation">{</span>
+    method<span class="tok-punctuation">:</span> <span class="tok-string">"POST"</span><span class="tok-punctuation">,</span>
+    headers<span class="tok-punctuation">:</span> <span class="tok-punctuation">{</span>
+      <span class="tok-string">"X-API-Key"</span><span class="tok-punctuation">:</span> API_KEY<span class="tok-punctuation">,</span>
+      <span class="tok-string">"Content-Type"</span><span class="tok-punctuation">:</span> <span class="tok-string">"application/json"</span><span class="tok-punctuation">,</span>
+    <span class="tok-punctuation">}</span><span class="tok-punctuation">,</span>
+    body<span class="tok-punctuation">:</span> <span class="tok-type">JSON</span><span class="tok-punctuation">.</span><span class="tok-function">stringify</span><span class="tok-punctuation">(</span><span class="tok-punctuation">{</span>
+      question<span class="tok-punctuation">,</span>
+      knowledge_base_id<span class="tok-punctuation">:</span> KB_ID<span class="tok-punctuation">,</span>
+      session_id<span class="tok-punctuation">:</span> sessionId <span class="tok-operator">??</span> <span class="tok-keyword">null</span><span class="tok-punctuation">,</span>
+    <span class="tok-punctuation">})</span><span class="tok-punctuation">,</span>
+  <span class="tok-punctuation">})</span><span class="tok-punctuation">;</span>
+  <span class="tok-keyword">if</span> <span class="tok-punctuation">(</span><span class="tok-operator">!</span>resp<span class="tok-punctuation">.</span>ok<span class="tok-punctuation">)</span> <span class="tok-keyword">throw new</span> <span class="tok-function">Error</span><span class="tok-punctuation">(</span><span class="tok-string">`API error: <span class="tok-variable">${resp.status}</span>`</span><span class="tok-punctuation">);</span>
+  <span class="tok-keyword">return</span> resp<span class="tok-punctuation">.</span><span class="tok-function">json</span><span class="tok-punctuation">()</span><span class="tok-punctuation">;</span>
+<span class="tok-punctuation">}</span>
+
+<span class="tok-comment">// 使用例</span>
+<span class="tok-keyword">const</span> result <span class="tok-operator">=</span> <span class="tok-keyword">await</span> <span class="tok-function">ask</span><span class="tok-punctuation">(</span><span class="tok-string">"設備Aの点検手順を教えて"</span><span class="tok-punctuation">);</span>
+<span class="tok-type">console</span><span class="tok-punctuation">.</span><span class="tok-function">log</span><span class="tok-punctuation">(</span>result<span class="tok-punctuation">.</span>answer<span class="tok-punctuation">);</span>
+<span class="tok-type">console</span><span class="tok-punctuation">.</span><span class="tok-function">log</span><span class="tok-punctuation">(</span>result<span class="tok-punctuation">.</span>sources<span class="tok-punctuation">);</span></code></pre>
+
+      <h3>cURL</h3>
+
+      <pre data-lang="bash"><code><span class="tok-function">curl</span> <span class="tok-flag">-X</span> POST http<span class="tok-punctuation">://</span><span class="tok-number">10.168.124.32</span><span class="tok-punctuation">:</span><span class="tok-number">3000</span>/api/ext/chat/sync \
+  <span class="tok-flag">-H</span> <span class="tok-string">"Content-Type: application/json"</span> \
+  <span class="tok-flag">-H</span> <span class="tok-string">"X-API-Key: your-secure-api-key-here"</span> \
+  <span class="tok-flag">-d</span> <span class="tok-string">'{"question":"設備Aの点検手順を教えて","knowledge_base_id":"KB_ID"}'</span></code></pre>
+
+      <hr />
+
+      <h2>レスポンス例</h2>
+
+      <pre data-lang="json"><code><span class="tok-punctuation">{</span>
+  <span class="tok-key">"answer"</span><span class="tok-punctuation">:</span> <span class="tok-string">"設備Aの点検手順は以下の通りです。\n1. 電源を切る\n2. ..."</span><span class="tok-punctuation">,</span>
+  <span class="tok-key">"sources"</span><span class="tok-punctuation">:</span> <span class="tok-punctuation">[</span>
+    <span class="tok-punctuation">{</span>
+      <span class="tok-key">"document_id"</span><span class="tok-punctuation">:</span> <span class="tok-string">"doc-uuid"</span><span class="tok-punctuation">,</span>
+      <span class="tok-key">"document_name"</span><span class="tok-punctuation">:</span> <span class="tok-string">"設備A_点検マニュアル.pdf"</span><span class="tok-punctuation">,</span>
+      <span class="tok-key">"section_title"</span><span class="tok-punctuation">:</span> <span class="tok-string">"第3章 定期点検"</span><span class="tok-punctuation">,</span>
+      <span class="tok-key">"score"</span><span class="tok-punctuation">:</span> <span class="tok-number">0.892</span><span class="tok-punctuation">,</span>
+      <span class="tok-key">"snippet"</span><span class="tok-punctuation">:</span> <span class="tok-string">"点検手順として、まず電源を切り..."</span>
+    <span class="tok-punctuation">}</span>
+  <span class="tok-punctuation">]</span><span class="tok-punctuation">,</span>
+  <span class="tok-key">"session_id"</span><span class="tok-punctuation">:</span> <span class="tok-string">"session-uuid"</span><span class="tok-punctuation">,</span>
+  <span class="tok-key">"message_id"</span><span class="tok-punctuation">:</span> <span class="tok-string">"msg-uuid"</span>
+<span class="tok-punctuation">}</span></code></pre>
+
+      <hr />
+
+      <h2>エラー時の対応</h2>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>ステータス</th>
+              <th>原因</th>
+              <th>対処</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>401</code></td>
+              <td><code>X-API-Key</code> ヘッダーがない</td>
+              <td>ヘッダーを追加する</td>
+            </tr>
+            <tr>
+              <td><code>403</code></td>
+              <td>API キーが間違っている</td>
+              <td><code>docker-compose.yml</code> の <code>API_KEYS</code> と一致させる</td>
+            </tr>
+            <tr>
+              <td><code>404</code></td>
+              <td><code>session_id</code> が存在しない</td>
+              <td><code>session_id</code> を <code>null</code> にして新規セッションで再送</td>
+            </tr>
+            <tr>
+              <td><code>422</code></td>
+              <td>リクエスト形式が不正</td>
+              <td><code>question</code> と <code>knowledge_base_id</code> が必須</td>
+            </tr>
+            <tr>
+              <td><code>502</code></td>
+              <td>LLM（AWS Bedrock）が応答しない</td>
+              <td>バックエンドのログを確認する</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <hr />
+
+      <h2>補足: ドキュメントを外部アプリから管理する場合</h2>
+
+      <p>ドキュメントのアップロード・削除も API 経由で可能です。詳細は API ドキュメント（/docs）を参照してください。</p>
+
+      <pre data-lang="bash"><code><span class="tok-comment"># アップロード</span>
+<span class="tok-function">curl</span> <span class="tok-flag">-X</span> POST <span class="tok-string">"http://&lt;host&gt;:3000/api/documents/upload?knowledge_base_id=KB_ID"</span> \
+  <span class="tok-flag">-H</span> <span class="tok-string">"X-User-Id: external-app-user"</span> \
+  <span class="tok-flag">-F</span> <span class="tok-string">"files=@manual.pdf"</span>
+
+<span class="tok-comment"># 一覧確認</span>
+<span class="tok-function">curl</span> <span class="tok-string">"http://&lt;host&gt;:3000/api/documents/?knowledge_base_id=KB_ID"</span> \
+  <span class="tok-flag">-H</span> <span class="tok-string">"X-User-Id: external-app-user"</span>
+
+<span class="tok-comment"># 削除</span>
+<span class="tok-function">curl</span> <span class="tok-flag">-X</span> DELETE <span class="tok-string">"http://&lt;host&gt;:3000/api/documents/DOC_ID"</span> \
+  <span class="tok-flag">-H</span> <span class="tok-string">"X-User-Id: external-app-user"</span></code></pre>
+
+    </main>
+  </div>
+</body>
+</html>

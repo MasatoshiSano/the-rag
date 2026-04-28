@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="100%" stop-color="#3b3d8e"/>
+    </linearGradient>
+  </defs>
+  <!-- Phantom body -->
+  <path d="M32 4C18 4 10 16 10 28v24c0 0 3-4 6-4s3 4 6 4 3-4 6-4 3 4 6 4 3-4 6-4 3 4 6 4 3-4 6-4 6 4 6 4V28C58 16 50 4 36 4z"
+        fill="url(#g)" opacity="0.9"/>
+  <!-- Left eye -->
+  <ellipse cx="24" cy="26" rx="5" ry="6" fill="#fff"/>
+  <ellipse cx="25" cy="27" rx="2.5" ry="3" fill="#1e1b4b"/>
+  <!-- Right eye -->
+  <ellipse cx="40" cy="26" rx="5" ry="6" fill="#fff"/>
+  <ellipse cx="41" cy="27" rx="2.5" ry="3" fill="#1e1b4b"/>
+  <!-- Document icon (knowledge) -->
+  <rect x="26" y="36" width="12" height="14" rx="1.5" fill="#fff" opacity="0.85"/>
+  <line x1="29" y1="40" x2="35" y2="40" stroke="#6366f1" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="29" y1="43" x2="35" y2="43" stroke="#6366f1" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="29" y1="46" x2="33" y2="46" stroke="#6366f1" stroke-width="1.5" stroke-linecap="round"/>
+</svg>

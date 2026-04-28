@@ -1,0 +1,1 @@
+[      17ms] [ERROR] Failed to load module script: Expected a JavaScript-or-Wasm module script but the server responded with a MIME type of "text/html". Strict MIME type checking is enforced for module scripts per HTML spec. @ http://10.168.124.32/rag-phantom/assets/index-9Ovm-8Zv.js:0

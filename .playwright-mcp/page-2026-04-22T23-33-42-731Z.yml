@@ -1,0 +1,169 @@
+- generic [ref=e3]:
+  - link "メインコンテンツへスキップ" [ref=e4] [cursor=pointer]:
+    - /url: "#main-content"
+  - banner [ref=e5]:
+    - button "サイドバーを閉じる" [expanded] [ref=e6] [cursor=pointer]:
+      - generic [ref=e7]: ✕
+    - generic [ref=e8]: THE RAG
+    - search "セッション検索" [ref=e10]:
+      - combobox "セッションを検索" [ref=e11]
+  - generic [ref=e12]:
+    - navigation "サイドバーナビゲーション" [ref=e13]:
+      - list [ref=e15]:
+        - listitem [ref=e16]:
+          - link "チャット" [ref=e17] [cursor=pointer]:
+            - /url: /the-rag/chat
+        - listitem [ref=e18]:
+          - link "ナレッジベース" [ref=e19] [cursor=pointer]:
+            - /url: /the-rag/knowledge-bases
+        - listitem [ref=e20]:
+          - link "アップロード" [ref=e21] [cursor=pointer]:
+            - /url: /the-rag/upload
+        - listitem [ref=e22]:
+          - link "ドキュメント" [ref=e23] [cursor=pointer]:
+            - /url: /the-rag/documents
+        - listitem [ref=e24]:
+          - link "設定" [ref=e25] [cursor=pointer]:
+            - /url: /the-rag/settings
+      - separator [ref=e26]
+      - generic [ref=e27]:
+        - paragraph [ref=e28]: お気に入りKB
+        - paragraph [ref=e29]: なし
+      - separator [ref=e30]
+      - generic [ref=e31]:
+        - paragraph [ref=e32]: 最近のセッション
+        - list [ref=e49]:
+          - listitem [ref=e50]:
+            - 'button "セッション: ワニス硬化炉の温度プロファイルについて教えてください" [ref=e51] [cursor=pointer]': ワニス硬化炉の温度プロファイルについて教えてください
+      - separator [ref=e34]
+      - generic [ref=e35]:
+        - paragraph [ref=e36]: 開発者向け
+        - list [ref=e37]:
+          - listitem [ref=e38]:
+            - link "API仕様・動作確認 ↗" [ref=e39] [cursor=pointer]:
+              - /url: /the-rag/docs
+          - listitem [ref=e40]:
+            - link "外部連携ガイド ↗" [ref=e41] [cursor=pointer]:
+              - /url: /the-rag/guide.html
+    - main [ref=e42]:
+      - region "ナレッジベース管理" [ref=e43]:
+        - generic [ref=e44]:
+          - heading "ナレッジベース" [level=1] [ref=e45]
+          - button "新しいナレッジベースを作成" [ref=e46] [cursor=pointer]:
+            - generic [ref=e47]: ＋
+            - text: 新規作成
+        - region "ナレッジベース一覧" [ref=e52]:
+          - generic [ref=e53]:
+            - 'button "ナレッジベース: データ" [ref=e54] [cursor=pointer]':
+              - generic [ref=e55]:
+                - heading "データ" [level=3] [ref=e58]
+                - button "データをお気に入りに追加" [ref=e59]: ☆
+              - generic [ref=e60]:
+                - generic [ref=e61]: 📄
+                - generic [ref=e62]: 0 ドキュメント
+              - generic [ref=e63]:
+                - button "データを編集" [ref=e64]: 編集
+                - button "データを削除" [ref=e65]: 削除
+            - 'button "ナレッジベース: 要領書とか" [ref=e66] [cursor=pointer]':
+              - generic [ref=e67]:
+                - heading "要領書とか" [level=3] [ref=e70]
+                - button "要領書とかをお気に入りに追加" [ref=e71]: ☆
+              - generic [ref=e72]:
+                - generic [ref=e73]: 📄
+                - generic [ref=e74]: 0 ドキュメント
+              - generic [ref=e75]:
+                - button "要領書とかを編集" [ref=e76]: 編集
+                - button "要領書とかを削除" [ref=e77]: 削除
+            - 'button "ナレッジベース: フォルダテスト" [ref=e78] [cursor=pointer]':
+              - generic [ref=e79]:
+                - heading "フォルダテスト" [level=3] [ref=e82]
+                - button "フォルダテストをお気に入りに追加" [ref=e83]: ☆
+              - generic [ref=e84]:
+                - generic [ref=e85]: 📄
+                - generic [ref=e86]: 0 ドキュメント
+              - generic [ref=e87]:
+                - button "フォルダテストを編集" [ref=e88]: 編集
+                - button "フォルダテストを削除" [ref=e89]: 削除
+            - 'button "ナレッジベース: 技術" [ref=e90] [cursor=pointer]':
+              - generic [ref=e91]:
+                - heading "技術" [level=3] [ref=e94]
+                - button "技術をお気に入りに追加" [ref=e95]: ☆
+              - generic [ref=e96]:
+                - generic [ref=e97]: 📄
+                - generic [ref=e98]: 25 ドキュメント
+              - generic [ref=e99]:
+                - button "技術を編集" [ref=e100]: 編集
+                - button "技術を削除" [ref=e101]: 削除
+            - 'button "ナレッジベース: ステーション" [ref=e102] [cursor=pointer]':
+              - generic [ref=e103]:
+                - heading "ステーション" [level=3] [ref=e106]
+                - button "ステーションをお気に入りに追加" [ref=e107]: ☆
+              - generic [ref=e108]:
+                - generic [ref=e109]: 📄
+                - generic [ref=e110]: 1 ドキュメント
+              - generic [ref=e111]:
+                - button "ステーションを編集" [ref=e112]: 編集
+                - button "ステーションを削除" [ref=e113]: 削除
+            - 'button "ナレッジベース: 安全衛生ガイドライン" [ref=e114] [cursor=pointer]':
+              - generic [ref=e115]:
+                - heading "安全衛生ガイドライン" [level=3] [ref=e118]
+                - button "安全衛生ガイドラインをお気に入りに追加" [ref=e119]: ☆
+              - paragraph [ref=e120]: 労働安全衛生法に基づく安全作業手順・危険予知・緊急時対応マニュアル
+              - generic [ref=e121]:
+                - generic [ref=e122]: 📄
+                - generic [ref=e123]: 2 ドキュメント
+              - generic [ref=e124]:
+                - button "安全衛生ガイドラインを編集" [ref=e125]: 編集
+                - button "安全衛生ガイドラインを削除" [ref=e126]: 削除
+            - 'button "ナレッジベース: 製造マニュアル" [ref=e127] [cursor=pointer]':
+              - generic [ref=e128]:
+                - heading "製造マニュアル" [level=3] [ref=e131]
+                - button "製造マニュアルをお気に入りに追加" [ref=e132]: ☆
+              - paragraph [ref=e133]: 工場の製造プロセスに関するドキュメント
+              - generic [ref=e134]:
+                - generic [ref=e135]: 📄
+                - generic [ref=e136]: 1 ドキュメント
+              - generic [ref=e137]:
+                - button "製造マニュアルを編集" [ref=e138]: 編集
+                - button "製造マニュアルを削除" [ref=e139]: 削除
+      - dialog "ナレッジベースを作成" [ref=e141]:
+        - heading "ナレッジベースを作成" [level=2] [ref=e142]
+        - generic [ref=e143]:
+          - generic [ref=e144]:
+            - generic [ref=e145]: 名前 *（必須）
+            - textbox "名前 （必須）" [active] [ref=e146]:
+              - /placeholder: "例: 社内規程ドキュメント"
+          - generic [ref=e147]:
+            - generic [ref=e148]: 説明
+            - textbox "説明" [ref=e149]:
+              - /placeholder: このナレッジベースの説明を入力...
+          - generic [ref=e150]:
+            - paragraph [ref=e151]: カラー
+            - radiogroup "ナレッジベースのカラーを選択" [ref=e152]:
+              - 'generic "カラー #4F81BD" [ref=e153] [cursor=pointer]':
+                - 'radio "カラー #4F81BD" [checked] [ref=e154]'
+              - 'generic "カラー #2E75B6" [ref=e156] [cursor=pointer]':
+                - 'radio "カラー #2E75B6" [ref=e157]'
+              - 'generic "カラー #70AD47" [ref=e159] [cursor=pointer]':
+                - 'radio "カラー #70AD47" [ref=e160]'
+              - 'generic "カラー #ED7D31" [ref=e162] [cursor=pointer]':
+                - 'radio "カラー #ED7D31" [ref=e163]'
+              - 'generic "カラー #A9D18E" [ref=e165] [cursor=pointer]':
+                - 'radio "カラー #A9D18E" [ref=e166]'
+              - 'generic "カラー #FF0000" [ref=e168] [cursor=pointer]':
+                - 'radio "カラー #FF0000" [ref=e169]'
+              - 'generic "カラー #7030A0" [ref=e171] [cursor=pointer]':
+                - 'radio "カラー #7030A0" [ref=e172]'
+              - 'generic "カラー #00B0F0" [ref=e174] [cursor=pointer]':
+                - 'radio "カラー #00B0F0" [ref=e175]'
+              - 'generic "カラー #FF00FF" [ref=e177] [cursor=pointer]':
+                - 'radio "カラー #FF00FF" [ref=e178]'
+              - 'generic "カラー #FFC000" [ref=e180] [cursor=pointer]':
+                - 'radio "カラー #FFC000" [ref=e181]'
+              - 'generic "カラー #333333" [ref=e183] [cursor=pointer]':
+                - 'radio "カラー #333333" [ref=e184]'
+              - 'generic "カラー #808080" [ref=e186] [cursor=pointer]':
+                - 'radio "カラー #808080" [ref=e187]'
+          - generic [ref=e189]:
+            - button "キャンセル" [ref=e190] [cursor=pointer]
+            - button "作成" [ref=e191] [cursor=pointer]
