@@ -4,6 +4,15 @@ LLM が生成した SQL を検証・実行し、安全に結果を返す。
 
 接続プールはアプリケーション起動時に init_oracle_pool() で初期化し、
 終了時に close_oracle_pool() で解放する。
+
+セキュリティ運用ガイド:
+  - 本番環境の Oracle 接続ユーザーは GRANT SELECT ANY TABLE と CREATE SESSION
+    のみを保有する読み取り専用ロールに限定すること。
+  - DML/DDL/PL-SQL 実行権限 (CREATE/ALTER/DROP/INSERT/UPDATE/DELETE/EXECUTE
+    ANY PROCEDURE 等) は付与しない。
+  - DBMS_*/UTL_* 等の特権パッケージへの EXECUTE 権限を付与しない。
+  - 万一 LLM が悪意ある SQL を生成した場合でも、本モジュールの validate_sql()
+    で構文チェック、かつ DB 側の権限制限で多層防御を実現する。
 """
 
 from __future__ import annotations
@@ -271,11 +280,67 @@ async def generate_sql(
 # 許可するステートメントタイプ
 _ALLOWED_STMT_TYPES = frozenset({"SELECT", "UNKNOWN"})
 
-# 明示的に拒否するキーワードパターン（大文字・小文字不問）
+# 明示的に拒否するキーワード集合 (Oracle/PL-SQL 拡張対応)
+_FORBIDDEN_KEYWORDS = {
+    "UPDATE", "DELETE", "DROP", "INSERT", "ALTER", "CREATE",
+    "TRUNCATE", "MERGE", "EXEC", "EXECUTE", "CALL",
+    "BEGIN", "DECLARE", "GRANT", "REVOKE",
+    "COMMIT", "ROLLBACK", "SAVEPOINT",
+    "LOCK", "COMMENT", "ANALYZE", "FLASHBACK",
+    "PRAGMA", "ATTACH", "DETACH",
+}
+
+# 禁止キーワードを単語境界で検出する正規表現
 _FORBIDDEN_KEYWORDS_RE = re.compile(
-    r"\b(UPDATE|DELETE|DROP|INSERT|ALTER|CREATE|TRUNCATE|MERGE|EXEC|EXECUTE|CALL)\b",
+    r"\b(" + "|".join(sorted(_FORBIDDEN_KEYWORDS, key=len, reverse=True)) + r")\b",
     re.IGNORECASE,
 )
+
+# Oracle 特権パッケージ呼び出しを拒否するパターン
+_ORACLE_PRIVILEGED_PATTERNS = [
+    (re.compile(r"\bDBMS_\w+", re.IGNORECASE), "DBMS_*"),
+    (re.compile(r"\bUTL_\w+", re.IGNORECASE), "UTL_*"),
+    (re.compile(r"\bSYS\.\w+", re.IGNORECASE), "SYS.*"),
+]
+
+
+def _strip_comments(sql: str) -> str:
+    """
+    sqlparse を使って SQL からコメントを除去する。
+
+    Args:
+        sql: 元 SQL。
+
+    Returns:
+        コメント除去済み SQL (失敗時は元 SQL)。
+    """
+    try:
+        return sqlparse.format(sql, strip_comments=True)
+    except Exception:  # noqa: BLE001
+        return sql
+
+
+# シングルクォート文字列リテラルを検出する正規表現。
+# Oracle のエスケープされたクォート '' (例: 'O''Brien') にも対応。
+# Oracle の識別子クォートは "..." (ダブルクォート) なので本パターンの影響外。
+_STRING_LITERAL_RE = re.compile(r"'(?:[^']|'')*'")
+
+
+def _strip_string_literals(sql: str) -> str:
+    """
+    シングルクォート文字列リテラルを空文字列リテラル ('') に置換する。
+
+    禁止キーワードや特権パッケージ名を文字列リテラル内で誤検知することを防ぐ
+    （例: ``WHERE col = 'BEGIN_DATE'`` の 'BEGIN' が BEGIN ブロックとして
+    誤検知されるのを回避）。
+
+    Args:
+        sql: 元 SQL（コメント除去済み推奨）。
+
+    Returns:
+        文字列リテラルを '' に潰した SQL。
+    """
+    return _STRING_LITERAL_RE.sub("''", sql)
 
 
 def validate_sql(sql: str) -> tuple[bool, str]:
@@ -283,7 +348,18 @@ def validate_sql(sql: str) -> tuple[bool, str]:
     生成された SQL の安全性を検証する。
 
     SELECT および WITH（CTE）ステートメントのみを許可する。
-    UPDATE、DELETE、DROP、INSERT、ALTER、CREATE、TRUNCATE、MERGE は拒否する。
+    UPDATE、DELETE、DROP、INSERT、ALTER、CREATE、TRUNCATE、MERGE、
+    BEGIN/DECLARE (PL/SQL ブロック)、GRANT/REVOKE、COMMIT/ROLLBACK、
+    LOCK/COMMENT/ANALYZE/FLASHBACK、DBMS_*/UTL_*/SYS.* 等は拒否する。
+
+    実装方針:
+      1. コメントを剥がす (コメント内に BEGIN を仕込む難読化対策)
+      2. sqlparse でステートメント分解、複数文を厳格拒否
+      3. 先頭トークンが SELECT または WITH のみ allowlist
+      4. 文字列リテラル除去後の SQL に対して禁止キーワード正規表現検査
+         (例: ``WHERE col = 'BEGIN_DATE'`` の誤検知を回避)
+      5. 文字列リテラル除去後の SQL に対して Oracle 特権パッケージ
+         (DBMS_*/UTL_*/SYS.*) を正規表現検査
 
     Args:
         sql: 検証対象の SQL 文字列。
@@ -293,55 +369,110 @@ def validate_sql(sql: str) -> tuple[bool, str]:
         is_valid が True の場合 error_message は空文字列。
     """
     if not sql or not sql.strip():
+        logger.warning("SQL validation failed: empty SQL")
         return False, "SQL が空です。"
 
-    # 危険なキーワードをパターンマッチで事前チェックする
-    forbidden_match = _FORBIDDEN_KEYWORDS_RE.search(sql)
-    if forbidden_match:
-        keyword = forbidden_match.group(0).upper()
-        return False, f"禁止されたキーワードが含まれています: {keyword}"
+    # Step 1: コメントを剥がす (BEGIN/DBMS_ 等のコメント埋込み難読化対策)
+    stripped_sql = _strip_comments(sql).strip()
+    if not stripped_sql:
+        logger.warning("SQL validation failed: empty after strip_comments")
+        return False, "SQL が空です。"
 
-    # sqlparse でパースしてステートメントタイプを確認する
+    # Step 2: sqlparse でパースしてステートメント分解
     try:
-        statements = sqlparse.parse(sql)
+        statements = sqlparse.parse(stripped_sql)
     except Exception as exc:  # noqa: BLE001
+        logger.warning("SQL validation failed: parse error: %s | sql=%r", exc, sql[:200])
         return False, f"SQL のパースに失敗しました: {exc}"
 
     if not statements:
+        logger.warning("SQL validation failed: no statements | sql=%r", sql[:200])
         return False, "有効な SQL ステートメントが見つかりません。"
 
-    # 複数ステートメントを拒否する（セミコロン区切りなど）
-    if len(statements) > 1:
-        non_empty = [s for s in statements if str(s).strip()]
-        if len(non_empty) > 1:
-            return False, "複数の SQL ステートメントは許可されていません。"
+    # 複数ステートメントを厳格拒否 (空白のみの末尾要素はスキップ)
+    non_empty_statements = [s for s in statements if str(s).strip()]
+    if len(non_empty_statements) > 1:
+        logger.warning(
+            "SQL validation failed: multiple statements (%d) | sql=%r",
+            len(non_empty_statements),
+            sql[:200],
+        )
+        return False, "複数の SQL ステートメントは許可されていません。"
 
-    stmt = statements[0]
-    stmt_type = stmt.get_type()
+    stmt = non_empty_statements[0]
 
-    # WITH (CTE) は sqlparse が 'SELECT' として識別するが、念のため確認する
-    # None が返る場合は WITH CTE の可能性があるため、先頭トークンで判定する
-    if stmt_type is None:
-        sql_upper = sql.strip().upper()
-        if not sql_upper.startswith("WITH") and not sql_upper.startswith("SELECT"):
-            return (
-                False,
-                f"SELECT または WITH（CTE）文のみ許可されています（取得型: {stmt_type}）。",
+    # Step 3: 先頭の意味ありトークンが SELECT/WITH であることを allowlist で確認
+    first_keyword = None
+    for token in stmt.tokens:
+        if token.is_whitespace:
+            continue
+        ttype_str = str(token.ttype) if token.ttype else ""
+        # コメントは strip 済みだが念のためスキップ
+        if "Comment" in ttype_str:
+            continue
+        # 先頭の単語を取得
+        first_keyword = token.normalized.upper().strip()
+        break
+
+    if first_keyword not in {"SELECT", "WITH"}:
+        logger.warning(
+            "SQL validation failed: first keyword=%r not SELECT/WITH | sql=%r",
+            first_keyword,
+            sql[:200],
+        )
+        return (
+            False,
+            f"SELECT または WITH（CTE）文のみ許可されています (先頭: {first_keyword})。",
+        )
+
+    # 文字列リテラルを除去した版を検査用に用意する。
+    # 'BEGIN_DATE' のような正常な文字列リテラル内の単語が禁止キーワードとして
+    # 誤検知されるのを防ぐ。識別子は "..." (ダブルクォート) を使うため影響なし。
+    literals_stripped_sql = _strip_string_literals(stripped_sql)
+
+    # Step 4: 禁止キーワードを正規表現で検査 (文字列リテラル除去後の SQL)
+    forbidden_match = _FORBIDDEN_KEYWORDS_RE.search(literals_stripped_sql)
+    if forbidden_match:
+        keyword = forbidden_match.group(0).upper()
+        logger.warning(
+            "SQL validation failed: forbidden keyword=%s | sql=%r",
+            keyword,
+            sql[:200],
+        )
+        return False, f"禁止されたキーワードが含まれています: {keyword}"
+
+    # Step 5: Oracle 特権パッケージ検出 (文字列リテラル除去後の SQL)
+    for pattern, label in _ORACLE_PRIVILEGED_PATTERNS:
+        if pattern.search(literals_stripped_sql):
+            logger.warning(
+                "SQL validation failed: privileged package %s | sql=%r",
+                label,
+                sql[:200],
             )
-    elif stmt_type not in _ALLOWED_STMT_TYPES:
+            return False, f"Oracle 特権パッケージは使用できません: {label}"
+
+    # 追加: sqlparse の get_type が SELECT 以外を返す場合も拒否
+    stmt_type = stmt.get_type()
+    if stmt_type is not None and stmt_type not in _ALLOWED_STMT_TYPES:
+        logger.warning(
+            "SQL validation failed: stmt_type=%s | sql=%r", stmt_type, sql[:200]
+        )
         return (
             False,
             f"SELECT または WITH（CTE）文のみ許可されています（取得型: {stmt_type}）。",
         )
 
-    # パース後に再度禁止キーワードをトークンレベルで検査する
-    # （コメント内への埋め込み等の迂回を防ぐ）
+    # 最終: トークンレベルで DML/DDL を確認 (sqlparse のトークン分類)
     flat_tokens = list(stmt.flatten())
     for token in flat_tokens:
         ttype_str = str(token.ttype)
-        # DML・DDL トークンタイプが SELECT 以外であれば拒否する
         if "DML" in ttype_str or "DDL" in ttype_str:
             if token.normalized.upper() not in {"SELECT", "WITH"}:
+                logger.warning(
+                    "SQL validation failed: token DML/DDL=%s | sql=%r",
+                    token.normalized.upper(),
+                    sql[:200],
+                )
                 return (
                     False,
                     f"禁止された操作が含まれています: {token.normalized.upper()}",
@@ -386,7 +517,7 @@ async def init_oracle_pool() -> None:
             max=config.ORACLE_POOL_MAX,
             increment=1,
         )
-        logger.info(
+        logger.debug(
             "Oracle 接続プールを初期化しました (min=%d, max=%d)。",
             config.ORACLE_POOL_MIN,
             config.ORACLE_POOL_MAX,
@@ -537,7 +668,7 @@ async def execute_query(
         raise
 
     if result.truncated:
-        logger.info(
+        logger.debug(
             "クエリ結果が %d 行に切り詰められました。",
             row_limit,
         )
@@ -588,11 +719,14 @@ async def process_oracle_query(
 
     # Step 1: クエリを正規化する
     normalized_query = normalize_query(query)
-    logger.info("Oracle クエリ処理開始: normalized_query=%r", normalized_query)
+    # 個人情報・機密情報がクエリに含まれる可能性があるため debug レベル
+    logger.debug("Oracle クエリ処理開始: normalized_query=%r", normalized_query)
+    logger.info("Oracle クエリ処理開始 (length=%d)", len(normalized_query))
 
     # Step 2: SQL を生成する
     sql = await generate_sql(natural_language_query=normalized_query, db=db)
-    logger.info("生成された SQL: %r", sql[:500])
+    # 生 SQL ログは debug レベルへ (本番 INFO では出さない)
+    logger.debug("生成された SQL: %r", sql[:500])
 
     # Step 3: SQL を検証する
     is_valid, error_message = validate_sql(sql)

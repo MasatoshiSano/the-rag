@@ -47,6 +47,7 @@ def _install_stubs() -> None:
         "qdrant_client.http.models",
         "boto3",
         "botocore",
+        "botocore.config",
         "botocore.exceptions",
     ]:
         if mod_name not in sys.modules:
@@ -77,6 +78,12 @@ def _install_stubs() -> None:
     qdrant_stub.__package__ = "app.infrastructure"  # type: ignore[attr-defined]
     qdrant_stub.delete_by_document_id = MagicMock()  # type: ignore[attr-defined]
     qdrant_stub.delete_by_knowledge_base_id = MagicMock()  # type: ignore[attr-defined]
+    qdrant_stub.get_qdrant_client = MagicMock()  # type: ignore[attr-defined]
+    qdrant_stub.init_collections = MagicMock()  # type: ignore[attr-defined]
+    qdrant_stub.upsert_vectors = MagicMock()  # type: ignore[attr-defined]
+    qdrant_stub.search_vectors = MagicMock(return_value=[])  # type: ignore[attr-defined]
+    qdrant_stub.delete_vectors = MagicMock()  # type: ignore[attr-defined]
+    qdrant_stub.build_search_filter = MagicMock()  # type: ignore[attr-defined]
     sys.modules["app.infrastructure.qdrant_client"] = qdrant_stub
 
     # app.infrastructure.bedrock_client のスタブ
@@ -227,6 +234,10 @@ async def client(db_session: AsyncSession) -> AsyncGenerator[AsyncClient, None]:
 
     get_db 依存性をインメモリ DB セッションで差し替える。
     lifespan（init_db / load_master_cache）はスキップする。
+
+    本番と同等のミドルウェア構成 (CORS + CSRF) を登録し、
+    全リクエストに ``Origin: http://testserver`` を自動注入することで、
+    CSRF まわりのリグレッションを CI で検知できるようにする。
     """
     from app.infrastructure.db import get_db
 
@@ -242,15 +253,27 @@ async def client(db_session: AsyncSession) -> AsyncGenerator[AsyncClient, None]:
     from fastapi import FastAPI
     from fastapi.middleware.cors import CORSMiddleware
     from app.infrastructure.config import config
+    from app.middleware.csrf import CSRFOriginMiddleware
     from app.routers import chat, documents, knowledge_bases, master, users
+
+    # CSRF 検証で http://testserver Origin を許可するため、
+    # ALLOWED_ORIGINS に含まれていなければテスト用に拡張する。
+    allowed_origins = list(config.ALLOWED_ORIGINS)
+    if "http://testserver" not in allowed_origins:
+        allowed_origins.append("http://testserver")
 
     test_app = FastAPI(title="RAG Phantom Test", lifespan=_noop_lifespan)
     test_app.add_middleware(
         CORSMiddleware,
-        allow_origins=config.ALLOWED_ORIGINS,
+        allow_origins=allowed_origins,
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
+    )
+    # 本番と同じく CORS の後に CSRF を登録する。
+    test_app.add_middleware(
+        CSRFOriginMiddleware,
+        allowed_origins=allowed_origins,
     )
     test_app.include_router(chat.router, prefix="/api")
     test_app.include_router(documents.router, prefix="/api")
@@ -271,5 +294,6 @@ async def client(db_session: AsyncSession) -> AsyncGenerator[AsyncClient, None]:
     async with AsyncClient(
         transport=ASGITransport(app=test_app),
         base_url="http://testserver",
+        headers={"Origin": "http://testserver"},
     ) as ac:
         yield ac

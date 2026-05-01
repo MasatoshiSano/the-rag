@@ -39,6 +39,8 @@ from app.models.database import (
     GitHubSource,
     KnowledgeBase,
 )
+from app.utils.path_security import safe_remove_within
+from app.utils.zip_security import ZipSecurityError, iter_safe_entries
 
 logger = logging.getLogger(__name__)
 
@@ -378,60 +380,77 @@ async def upload_documents(
         ext = filename.rsplit(".", 1)[-1].lower() if "." in filename else ""
 
         # ZIP 自動展開
+        # NOTE: PPTX/XLSX/DOCX 等の Office 形式は内部的に zip 構造を持つが、
+        # ここでは ext == "zip" のみを対象とする。Office 形式の二重展開リスクは
+        # 入力サイズ制限 (MAX_UPLOAD_SIZE) で間接的にカバーする。
         if ext == "zip":
             content = await upload_file.read()
             zip_dir = os.path.join(config.UPLOAD_DIR, str(uuid4()))
             os.makedirs(zip_dir, exist_ok=True)
 
-            with zipfile.ZipFile(io.BytesIO(content)) as zf:
-                for zip_info in zf.infolist():
-                    if zip_info.is_dir():
-                        continue
-                    inner_name = os.path.basename(zip_info.filename)
-                    inner_ext = (
-                        inner_name.rsplit(".", 1)[-1].lower()
-                        if "." in inner_name
-                        else ""
-                    )
-                    if inner_ext not in config.ALLOWED_EXTENSIONS:
-                        continue
-
-                    doc_id = str(uuid4())
-                    extracted_path = os.path.join(zip_dir, f"{doc_id}_{inner_name}")
-                    with zf.open(zip_info) as src:
-                        with open(extracted_path, "wb") as dst:
-                            dst.write(src.read())
-
-                    # バージョン管理: 同一ファイル名の既存ドキュメントを検索
-                    existing = await db.execute(
-                        select(Document)
-                        .where(
-                            Document.knowledge_base_id == knowledge_base_id,
-                            Document.filename == inner_name,
-                            Document.deleted_at.is_(None),
+            try:
+                with zipfile.ZipFile(io.BytesIO(content)) as zf:
+                    # iter_safe_entries でストリーミング展開し、
+                    # zip bomb / 各ファイルサイズ超過を防ぐ。
+                    for zip_info, inner_content in iter_safe_entries(
+                        zf,
+                        max_total=config.MAX_BATCH_UPLOAD_SIZE,
+                        max_per_file=config.MAX_UPLOAD_SIZE,
+                    ):
+                        # zip slip 緩和: basename のみを採用しパストラバーサルを防ぐ
+                        inner_name = os.path.basename(zip_info.filename)
+                        if not inner_name:
+                            continue
+                        inner_ext = (
+                            inner_name.rsplit(".", 1)[-1].lower()
+                            if "." in inner_name
+                            else ""
                         )
-                        .order_by(Document.version.desc())
-                    )
-                    prev_doc = existing.scalars().first()
-                    parent_id = prev_doc.id if prev_doc else None
-                    new_version = (prev_doc.version + 1) if prev_doc else 1
+                        if inner_ext not in config.ALLOWED_EXTENSIONS:
+                            continue
 
-                    doc = Document(
-                        id=doc_id,
-                        knowledge_base_id=knowledge_base_id,
-                        filename=inner_name,
-                        file_type=inner_ext,
-                        original_path=extracted_path,
-                        status="processing",
-                        version=new_version,
-                        parent_document_id=parent_id,
-                        uploaded_by=user_id,
-                        uploaded_at=_now_iso(),
-                        retry_count=0,
-                    )
-                    db.add(doc)
-                    files_to_process.append((doc_id, extracted_path, inner_name))
-                    uploaded_docs.append(_doc_to_response(doc))
+                        doc_id = str(uuid4())
+                        extracted_path = os.path.join(
+                            zip_dir, f"{doc_id}_{inner_name}"
+                        )
+                        with open(extracted_path, "wb") as dst:
+                            dst.write(inner_content)
+
+                        # バージョン管理: 同一ファイル名の既存ドキュメントを検索
+                        existing = await db.execute(
+                            select(Document)
+                            .where(
+                                Document.knowledge_base_id == knowledge_base_id,
+                                Document.filename == inner_name,
+                                Document.deleted_at.is_(None),
+                            )
+                            .order_by(Document.version.desc())
+                        )
+                        prev_doc = existing.scalars().first()
+                        parent_id = prev_doc.id if prev_doc else None
+                        new_version = (prev_doc.version + 1) if prev_doc else 1
+
+                        doc = Document(
+                            id=doc_id,
+                            knowledge_base_id=knowledge_base_id,
+                            filename=inner_name,
+                            file_type=inner_ext,
+                            original_path=extracted_path,
+                            status="processing",
+                            version=new_version,
+                            parent_document_id=parent_id,
+                            uploaded_by=user_id,
+                            uploaded_at=_now_iso(),
+                            retry_count=0,
+                        )
+                        db.add(doc)
+                        files_to_process.append((doc_id, extracted_path, inner_name))
+                        uploaded_docs.append(_doc_to_response(doc))
+            except ZipSecurityError as exc:
+                logger.warning("ZIP rejected: %s", exc)
+                raise HTTPException(
+                    status_code=400, detail=f"ZIP file rejected: {exc}"
+                ) from exc
             continue
 
         # 拡張子チェック
@@ -547,6 +566,77 @@ async def delete_github_source(
     await db.delete(source)
     await db.flush()
     return Response(status_code=204)
+
+
+# ---------------------------------------------------------------------------
+# GitHub / Gitea 同期 (内部 UI 用 - X-User-Id 認証ベース)
+# ---------------------------------------------------------------------------
+# フロントエンドからは /api/ext/* を直接呼ばず、これらの内部エンドポイントを経由する。
+# 外部 API キー (config.API_KEYS) を Web ビルドに含めないようにするための間接化。
+
+
+class GitHubSyncRequestBody(BaseModel):
+    repository_url: str = Field(..., description="GitHub リポジトリ URL")
+    path: str = Field(default="", description="同期対象ディレクトリパス")
+    branch: str = Field(default="main", description="ブランチ名")
+    knowledge_base_id: str = Field(..., description="同期先ナレッジベース ID")
+
+
+class GiteaSyncRequestBody(BaseModel):
+    repository_url: str = Field(..., description="Gitea リポジトリ URL")
+    path: str = Field(default="", description="同期対象ディレクトリパス")
+    branch: str = Field(default="main", description="ブランチ名")
+    knowledge_base_id: str = Field(..., description="同期先ナレッジベース ID")
+
+
+@router.post("/github-sync", status_code=200)
+async def github_sync_internal(
+    body: GitHubSyncRequestBody,
+    background_tasks: BackgroundTasks,
+    user_id: str = Depends(get_user_id),
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """
+    GitHub 同期の内部用エンドポイント（X-User-Id ベース）。
+    外部システム連携用の /api/ext/github/sync 実装に委譲し、API キーを
+    フロントへ露出させずに同等機能を提供する。
+    """
+    from app.routers.external import GitHubSyncRequest, sync_github
+
+    request = GitHubSyncRequest(
+        repository_url=body.repository_url,
+        path=body.path,
+        branch=body.branch,
+        knowledge_base_id=body.knowledge_base_id,
+        user_id=user_id,
+    )
+    response = await sync_github(body=request, background_tasks=background_tasks, db=db)
+    return response.model_dump()
+
+
+@router.post("/gitea-sync", status_code=200)
+async def gitea_sync_internal(
+    body: GiteaSyncRequestBody,
+    background_tasks: BackgroundTasks,
+    user_id: str = Depends(get_user_id),
+    db: AsyncSession = Depends(get_db),
+) -> dict:
+    """
+    Gitea 同期の内部用エンドポイント（X-User-Id ベース）。
+    外部システム連携用の /api/ext/gitea/sync 実装に委譲し、API キーを
+    フロントへ露出させずに同等機能を提供する。
+    """
+    from app.routers.external import GiteaSyncRequest, sync_gitea
+
+    request = GiteaSyncRequest(
+        repository_url=body.repository_url,
+        path=body.path,
+        branch=body.branch,
+        knowledge_base_id=body.knowledge_base_id,
+        user_id=user_id,
+    )
+    response = await sync_gitea(body=request, background_tasks=background_tasks, db=db)
+    return response.model_dump()
 
 
 # ---------------------------------------------------------------------------
@@ -991,10 +1081,40 @@ async def batch_update_tags(
     return {"confirmed": confirmed_ids}
 
 
+async def _collect_previous_version_ids(
+    document_id: str, db: AsyncSession
+) -> list[str]:
+    """対象ドキュメントの祖先（旧バージョン）ドキュメント ID 一覧を返す。
+
+    Document.parent_document_id を辿って同一バージョン階層に属する祖先を全て収集する。
+    （新規アップロードで親が無い場合は空リストを返す。）
+    """
+    ancestors: list[str] = []
+    current_result = await db.execute(
+        select(Document.parent_document_id).where(Document.id == document_id)
+    )
+    current_parent = current_result.scalar_one_or_none()
+    visited: set[str] = {document_id}
+
+    while current_parent is not None and current_parent not in visited:
+        ancestors.append(current_parent)
+        visited.add(current_parent)
+        next_result = await db.execute(
+            select(Document.parent_document_id).where(Document.id == current_parent)
+        )
+        current_parent = next_result.scalar_one_or_none()
+
+    return ancestors
+
+
 async def _run_post_tag_pipeline(document_id: str) -> None:
     """タグ確定後のチャンク+インデックス処理パイプライン。"""
     from app.services.chunker import chunk_document
-    from app.services.embedder import embed_chunks, upsert_embedded_chunks
+    from app.services.embedder import (
+        embed_chunks,
+        mark_previous_versions_not_latest,
+        upsert_embedded_chunks,
+    )
 
     async with AsyncSessionLocal() as db:
         try:
@@ -1028,7 +1148,26 @@ async def _run_post_tag_pipeline(document_id: str) -> None:
             for t in doc_tags:
                 tag_dict.setdefault(t.tag_key, []).append(t.tag_value)
 
-            await upsert_embedded_chunks(
+            # 旧バージョン（parent_document_id でリンクされた祖先群）の Qdrant ベクトルを
+            # is_latest=False に切り替え、検索対象から除外する。
+            # 物理削除はせず、バージョン履歴閲覧は引き続き可能とする。
+            previous_ids = await _collect_previous_version_ids(document_id, db)
+            if previous_ids:
+                logger.info(
+                    "旧バージョンの is_latest 切替: document_id=%s, previous_ids=%s",
+                    document_id,
+                    previous_ids,
+                )
+                try:
+                    mark_previous_versions_not_latest(previous_ids)
+                except Exception:
+                    # Qdrant 側エラーがあっても新バージョンの indexing 自体は続行する。
+                    logger.exception(
+                        "旧バージョン無効化に失敗しました (document_id=%s)",
+                        document_id,
+                    )
+
+            upsert_embedded_chunks(
                 embedded_chunks=embedded,
                 document_id=document_id,
                 knowledge_base_id=doc.knowledge_base_id,
@@ -1185,12 +1324,11 @@ async def permanent_delete_document(
     except Exception:
         logger.exception("Failed to delete Qdrant vectors for document_id=%s", id)
 
-    # ファイル削除
-    if doc.original_path and os.path.exists(doc.original_path):
-        try:
-            os.remove(doc.original_path)
-        except OSError:
-            logger.exception("Failed to delete file %s", doc.original_path)
+    # ファイル削除 (UPLOAD_DIR 配下に realpath が留まっていることを確認する)
+    # safe_remove_within が is_within_root チェック・存在確認・削除失敗時の
+    # 例外ログを内部で実施する。
+    if doc.original_path:
+        safe_remove_within(doc.original_path, config.UPLOAD_DIR)
 
     await db.delete(doc)
     logger.info("Permanently deleted document id=%s", id)

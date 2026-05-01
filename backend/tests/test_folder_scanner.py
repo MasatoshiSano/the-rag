@@ -78,6 +78,21 @@ class TestWindowsPathToContainerPath:
 
 
 class TestScanFolder:
+    """scan_folder のテスト。
+
+    folder_scanner モジュールは `/host_drives/` 配下のパスのみ受け入れる
+    パストラバーサル防御を持つため、tempfile.mkdtemp() で生成される /tmp パスは
+    通常拒否される。本テストクラスでは `_HOST_DRIVES_ROOT` を `/tmp` に
+    一時的に書き換えることで、root 検査を実環境同等に保ったまま検証する。
+    """
+
+    @pytest.fixture(autouse=True)
+    def _override_host_drives_root(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """`_HOST_DRIVES_ROOT` を `/tmp` に上書きしてテストを通過させる。"""
+        from app.services import folder_scanner as fs_mod
+
+        monkeypatch.setattr(fs_mod, "_HOST_DRIVES_ROOT", "/tmp")
+
     def test_scan_supported_files(self, tmp_path: str) -> None:
         """対応拡張子のファイルのみがスキャンされる。"""
         base = tempfile.mkdtemp()

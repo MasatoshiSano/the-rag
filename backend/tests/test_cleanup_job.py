@@ -114,10 +114,13 @@ class TestPurgeExpiredDocuments:
             call_count += 1
             yield db_session
 
+        # original_path="/tmp/test.pdf" は UPLOAD_DIR (/app/uploads) 外のため、
+        # safe_remove_within は自然に False を返してファイル削除をスキップする。
+        # cleanup_job からは `import os` を撤去済 (Task E) のため os.path をパッチしない。
         with (
             patch("app.services.cleanup_job.AsyncSessionLocal", side_effect=_mock_session_factory),
             patch("app.services.cleanup_job.qdrant") as mock_qdrant,
-            patch("app.services.cleanup_job.os.path.exists", return_value=False),
+            patch("app.services.cleanup_job.safe_remove_within", return_value=False),
         ):
             mock_qdrant.delete_by_document_id = MagicMock()
 

@@ -32,8 +32,10 @@ class TestGetMe:
         assert data["id"] == TEST_USER_ID
         assert data["nickname"] is None
         assert data["rerank_enabled"] is False
-        assert data["hybrid_search_enabled"] is False
-        assert data["response_mode"] == "simple"
+        # ORM デフォルトは hybrid_search_enabled=1 (True), response_mode="detailed"。
+        # 設計書 v1 ではいずれも OFF/simple だったが、実装は ORM 値を Single Source とする。
+        assert data["hybrid_search_enabled"] is True
+        assert data["response_mode"] == "detailed"
         assert "created_at" in data
         assert "updated_at" in data
 

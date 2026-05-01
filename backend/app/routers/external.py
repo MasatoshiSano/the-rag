@@ -9,6 +9,7 @@ import json
 import logging
 import os
 from typing import Optional
+from urllib.parse import urlparse
 from uuid import uuid4
 
 import httpx
@@ -22,6 +23,7 @@ from app.infrastructure.db import get_db
 from app.middleware.api_key import verify_api_key
 from app.models.database import Document, GiteaSource, GitHubSource, KnowledgeBase, Session
 from app.services.rag import run_rag_pipeline
+from app.utils.url_security import validate_and_resolve, validate_external_url
 
 logger = logging.getLogger(__name__)
 
@@ -229,6 +231,9 @@ def _parse_github_url(url: str) -> tuple[str, str]:
     """
     GitHub URL から owner と repo を抽出する。
 
+    URL のホスト名は github.com に厳密一致 (equality) でなければならない。
+    部分一致 (例: github.com.attacker.com) は拒否する (SSRF 対策)。
+
     Args:
         url: GitHub リポジトリ URL。
 
@@ -236,19 +241,24 @@ def _parse_github_url(url: str) -> tuple[str, str]:
         (owner, repo) のタプル。
 
     Raises:
-        ValueError: URL が不正な形式の場合。
+        HTTPException(400): URL が不正な形式またはホスト名が不一致の場合。
     """
-    # https://github.com/owner/repo or https://github.com/owner/repo.git
-    url = url.rstrip("/")
-    if url.endswith(".git"):
-        url = url[:-4]
+    cleaned = url.rstrip("/")
+    if cleaned.endswith(".git"):
+        cleaned = cleaned[:-4]
 
-    parts = url.split("/")
-    # "https:", "", "github.com", "owner", "repo"
-    if len(parts) < 5 or "github.com" not in parts[2]:
-        raise ValueError(f"Invalid GitHub URL: {url}")
+    # ホスト名厳密一致チェック (HTTPException を送出する)
+    validate_external_url(cleaned, allowed_hosts={"github.com"})
 
-    return parts[3], parts[4]
+    parsed = urlparse(cleaned)
+    # path は "/owner/repo" の形を期待する
+    path_parts = [p for p in (parsed.path or "").split("/") if p]
+    if len(path_parts) < 2:
+        raise HTTPException(
+            status_code=400, detail=f"Invalid GitHub URL (owner/repo not found): {url}"
+        )
+
+    return path_parts[0], path_parts[1]
 
 
 @router.post("/github/sync", response_model=GitHubSyncResponse)
@@ -263,9 +273,11 @@ async def sync_github(
     """
     from app.routers.documents import _run_indexing_pipeline
 
-    # GitHub URL をパース
+    # GitHub URL をパース (HTTPException は呼び出し側に伝播する)
     try:
         owner, repo = _parse_github_url(body.repository_url)
+    except HTTPException:
+        raise
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e)) from e
 
@@ -276,10 +288,23 @@ async def sync_github(
     if kb_result.scalar_one_or_none() is None:
         raise HTTPException(status_code=404, detail="Knowledge base not found")
 
+    # GitHub API のホスト名 (api.github.com) と raw コンテンツ (raw.githubusercontent.com)
+    # の DNS 解決後 IP を検証 (SSRF / DNS リバインディング対策)
+    # NOTE: DNS リバインディング対策の限界 (事前検証と httpx リクエストの間で
+    # DNS が再解決される TOCTOU 問題) については
+    # app/utils/url_security.py の docstring を参照。
+    validate_and_resolve(
+        "https://api.github.com", allowed_hosts={"api.github.com"}
+    )
+    validate_and_resolve(
+        "https://raw.githubusercontent.com",
+        allowed_hosts={"raw.githubusercontent.com"},
+    )
+
     # GitHub API でファイルツリーを取得
     tree_url = f"https://api.github.com/repos/{owner}/{repo}/git/trees/{body.branch}?recursive=1"
 
-    async with httpx.AsyncClient(timeout=30.0) as client:
+    async with httpx.AsyncClient(timeout=30.0, trust_env=False) as client:
         tree_resp = await client.get(
             tree_url, headers={"Accept": "application/vnd.github.v3+json"}
         )
@@ -326,7 +351,7 @@ async def sync_github(
     # 各ファイルをダウンロードしてドキュメント登録
     synced: list[GitHubSyncFileResult] = []
 
-    async with httpx.AsyncClient(timeout=30.0) as client:
+    async with httpx.AsyncClient(timeout=30.0, trust_env=False) as client:
         for file_path in md_files:
             raw_url = f"https://raw.githubusercontent.com/{owner}/{repo}/{body.branch}/{file_path}"
             resp = await client.get(raw_url)
@@ -471,6 +496,9 @@ def _parse_gitea_url(url: str, base_url: str) -> tuple[str, str, str, Optional[s
       - {base_url}/owner/repo.git
       - {base_url}/owner/repo/src/branch/{branch}/{path}
 
+    URL のホスト名は base_url のホスト名と equality で完全一致しなければ
+    ならない (例: gitea.example.com.attacker.com は拒否)。
+
     Args:
         url: Gitea リポジトリ URL。
         base_url: 設定された Gitea ベース URL（末尾スラッシュなし）。
@@ -479,23 +507,40 @@ def _parse_gitea_url(url: str, base_url: str) -> tuple[str, str, str, Optional[s
         (owner, repo, path, branch) のタプル。branch が URL に含まれない場合は None。
 
     Raises:
-        ValueError: URL が不正な形式または設定されたベース URL に属さない場合。
+        HTTPException(400): URL が不正な形式または設定されたベース URL に属さない場合。
     """
-    url = url.rstrip("/")
+    cleaned_url = url.rstrip("/")
     base = base_url.rstrip("/")
 
-    if not url.startswith(base + "/"):
-        raise ValueError(
-            f"URL はGitea ベース URL ({base}) 配下である必要があります: {url}"
+    base_parsed = urlparse(base)
+    if not base_parsed.hostname:
+        raise HTTPException(
+            status_code=400,
+            detail=f"GITEA_BASE_URL が不正です: {base_url}",
         )
 
-    remainder = url[len(base) + 1 :]
+    # URL のホスト名を base のホスト名と equality 一致でチェック
+    validate_external_url(
+        cleaned_url, allowed_hosts={base_parsed.hostname.lower()}
+    )
+
+    # base のパスプレフィックス (例: https://host/gitea) も維持されているかチェック
+    if not cleaned_url.startswith(base + "/") and cleaned_url != base:
+        raise HTTPException(
+            status_code=400,
+            detail=f"URL はGitea ベース URL ({base}) 配下である必要があります: {url}",
+        )
+
+    remainder = cleaned_url[len(base) + 1 :] if cleaned_url != base else ""
     if remainder.endswith(".git"):
         remainder = remainder[:-4]
 
-    parts = remainder.split("/")
+    parts = remainder.split("/") if remainder else []
     if len(parts) < 2:
-        raise ValueError(f"owner/repo 形式が見つかりません: {url}")
+        raise HTTPException(
+            status_code=400,
+            detail=f"owner/repo 形式が見つかりません: {url}",
+        )
 
     owner, repo = parts[0], parts[1]
     path = ""
@@ -535,11 +580,13 @@ async def sync_gitea(
             detail="Gitea 連携が設定されていません（GITEA_BASE_URL 未設定）。",
         )
 
-    # Gitea URL をパース
+    # Gitea URL をパース (HTTPException は呼び出し側に伝播する)
     try:
         owner, repo, url_path, url_branch = _parse_gitea_url(
             body.repository_url, config.GITEA_BASE_URL
         )
+    except HTTPException:
+        raise
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e)) from e
 
@@ -557,8 +604,23 @@ async def sync_gitea(
     base = config.GITEA_BASE_URL.rstrip("/")
     headers = _gitea_headers()
 
+    # base_url の DNS 解決後 IP を検証 (SSRF / DNS リバインディング対策)
+    # 注: Gitea がプライベートネットワーク上にある場合、本検証は環境に応じて
+    # 緩める必要がある。現状は public Gitea を想定して厳格にする。
+    # NOTE: DNS リバインディング対策の限界 (事前検証と httpx リクエストの間で
+    # DNS が再解決される TOCTOU 問題) については
+    # app/utils/url_security.py の docstring を参照。
+    base_parsed = urlparse(base)
+    if base_parsed.hostname:
+        try:
+            validate_and_resolve(base, allowed_hosts={base_parsed.hostname.lower()})
+        except HTTPException:
+            # プライベート Gitea を許容するケース向けの抜け道は当面なし。
+            # 本番運用で内部 Gitea を使う場合は専用 allowlist 設定が必要。
+            raise
+
     # デフォルトブランチを解決（branch が空の場合のみ）
-    async with httpx.AsyncClient(timeout=30.0) as client:
+    async with httpx.AsyncClient(timeout=30.0, trust_env=False) as client:
         if not branch:
             repo_resp = await client.get(
                 f"{base}/api/v1/repos/{owner}/{repo}", headers=headers
@@ -619,7 +681,7 @@ async def sync_gitea(
     # 各ファイルをダウンロードしてドキュメント登録
     synced: list[GiteaSyncFileResult] = []
 
-    async with httpx.AsyncClient(timeout=30.0) as client:
+    async with httpx.AsyncClient(timeout=30.0, trust_env=False) as client:
         for file_path in md_files:
             raw_url = (
                 f"{base}/api/v1/repos/{owner}/{repo}/raw/{file_path}?ref={branch}"
