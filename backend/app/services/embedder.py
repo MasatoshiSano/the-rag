@@ -15,6 +15,7 @@ from dataclasses import dataclass
 from qdrant_client.http.models import (
     FieldCondition,
     Filter,
+    MatchAny,
     MatchValue,
     PointStruct,
     SparseVector,
@@ -272,29 +273,39 @@ def upsert_embedded_chunks(
     )
 
 
-def mark_previous_version_not_latest(document_id: str) -> None:
-    """指定ドキュメントの旧バージョンのベクトルを is_latest=False に更新する。
+def mark_previous_versions_not_latest(previous_document_ids: list[str]) -> None:
+    """指定したドキュメント ID 群の旧バージョンベクトルを is_latest=False に更新する。
 
-    再インデックス前に呼び出すことで、古いバージョンのベクトルを
-    検索対象から除外する（ソフトデプリケーション）。
+    新しいバージョンを upsert する直前に呼び出すことで、同一バージョン階層に属する
+    古いドキュメント ID のチャンクを検索対象から除外する（ソフトデプリケーション）。
+    バージョンチェーンは Document.parent_document_id によって表現されるため、
+    呼び出し側でルートを辿った祖先 ID 一覧を渡すこと。
+
+    Qdrant フィルタは `must` 句で `is_latest=True` AND
+    `document_id` が `previous_document_ids` のいずれかに一致するチャンクを対象とする。
+    （`MatchAny` を使うことで、`should` 句による OR 表現を避けて意図を明示する。）
 
     Args:
-        document_id: 旧バージョンを無効化する対象のドキュメント ID。
+        previous_document_ids: 旧バージョンとして無効化したいドキュメント ID のリスト。
+            空リストの場合は何もしない。
     """
+    if not previous_document_ids:
+        return
+
     client = qdrant_infra.get_qdrant_client()
 
-    # document_id に一致し、かつ is_latest=True のベクトルのみを対象とする
+    # is_latest=True かつ document_id が previous_document_ids のいずれかに一致するベクトルが対象
     target_filter = Filter(
         must=[
-            FieldCondition(
-                key="document_id",
-                match=MatchValue(value=document_id),
-            ),
             FieldCondition(
                 key="is_latest",
                 match=MatchValue(value=True),
             ),
-        ]
+            FieldCondition(
+                key="document_id",
+                match=MatchAny(any=previous_document_ids),
+            ),
+        ],
     )
 
     client.set_payload(
@@ -303,6 +314,17 @@ def mark_previous_version_not_latest(document_id: str) -> None:
         points=target_filter,
     )
     logger.info(
-        "document_id=%s の旧バージョンベクトルを is_latest=False に更新しました",
-        document_id,
+        "%d 件の旧バージョンドキュメント (ids=%s) のベクトルを is_latest=False に更新しました",
+        len(previous_document_ids),
+        previous_document_ids,
     )
+
+
+# 後方互換: 単一 ID 指定の旧 API も残す（内部の reindex などでベクトル直接無効化用）。
+def mark_previous_version_not_latest(document_id: str) -> None:
+    """単一ドキュメント ID の is_latest=True ベクトルを is_latest=False に更新する。
+
+    Args:
+        document_id: 無効化対象のドキュメント ID。
+    """
+    mark_previous_versions_not_latest([document_id])

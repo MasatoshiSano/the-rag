@@ -113,7 +113,7 @@ class ChatRequest(BaseModel):
     )
     knowledge_base_id: str = Field(..., description="検索対象ナレッジベース ID")
     input_type: str = Field(default="text", description="入力タイプ（text | voice）")
-    search_mode: str = Field(default="normal", description="検索モード（normal | agentic）")
+    search_mode: str = Field(default="agentic", description="検索モード（normal | agentic）")
 
 
 class SearchMatch(BaseModel):
@@ -702,6 +702,21 @@ async def get_message_output(
     }
 
 
+def _escape_csv_cell(value: Any) -> str:
+    """
+    CSV インジェクション対策: 先頭が =/+/-/@/タブ/CR のセルに ' を前置する。
+
+    Excel 等の表計算ソフトで CSV を開いた際に式として評価される攻撃を防ぐ。
+    None は空文字列に正規化する。
+    """
+    if value is None:
+        return ""
+    text_value = value if isinstance(value, str) else str(value)
+    if text_value and text_value[0] in ("=", "+", "-", "@", "\t", "\r"):
+        return "'" + text_value
+    return text_value
+
+
 @router.get("/chat/output/{message_id}/csv")
 async def get_message_output_csv(
     message_id: str = Path(..., description="メッセージ ID"),
@@ -755,14 +770,14 @@ async def get_message_output_csv(
     output = io.StringIO()
     writer = csv.writer(output)
 
-    # ヘッダー行（label を使用する）
-    header = [col.get("label", col.get("key", "")) for col in columns]
+    # ヘッダー行（label を使用する。CSV インジェクション対策のためエスケープする）
+    header = [_escape_csv_cell(col.get("label", col.get("key", ""))) for col in columns]
     writer.writerow(header)
 
-    # データ行（カラム key 順に値を取得する）
+    # データ行（カラム key 順に値を取得する。CSV インジェクション対策のためエスケープする）
     col_keys = [col.get("key", "") for col in columns]
     for row in rows:
-        writer.writerow([row.get(key, "") for key in col_keys])
+        writer.writerow([_escape_csv_cell(row.get(key, "")) for key in col_keys])
 
     # BOM (U+FEFF) を先頭に付加して Excel での文字化けを防ぐ
     csv_content = "\ufeff" + output.getvalue()

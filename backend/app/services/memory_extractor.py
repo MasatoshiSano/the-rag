@@ -109,7 +109,7 @@ async def extract_and_save_memories(
         db.add(memory)
 
     await db.commit()
-    logger.info("自動メモリ: %d 件を保存しました (user_id=%s)", len(new_items), user_id)
+    logger.debug("自動メモリ: %d 件を保存しました (user_id=%s)", len(new_items), user_id)
 
 
 def _parse_extraction_response(response: str) -> list[str]:

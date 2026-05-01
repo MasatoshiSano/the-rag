@@ -8,7 +8,6 @@ from __future__ import annotations
 
 import asyncio
 import logging
-import os
 from datetime import UTC, datetime, timedelta
 
 from sqlalchemy import select
@@ -17,6 +16,7 @@ from app.infrastructure.config import config
 from app.infrastructure.db import AsyncSessionLocal
 from app.infrastructure import qdrant_client as qdrant
 from app.models.database import Document, DocumentTag
+from app.utils.path_security import safe_remove_within
 
 logger = logging.getLogger(__name__)
 
@@ -108,17 +108,14 @@ async def purge_expired_documents() -> int:
                 )
 
             # ---- Step 4: ディスクファイル削除 ----
-            if original_path and os.path.exists(original_path):
-                try:
-                    os.remove(original_path)
+            # original_path が UPLOAD_DIR 配下にあることを realpath ベースで検証する。
+            # DB が改ざんされて任意ファイルパスが入っていた場合のフェイルセーフ。
+            # safe_remove_within が is_within_root チェック・存在確認・
+            # 削除失敗時の例外ログを内部で実施する。
+            if original_path:
+                if safe_remove_within(original_path, config.UPLOAD_DIR):
                     logger.info(
                         "purge: deleted file %s for document_id=%s",
-                        original_path,
-                        doc_id,
-                    )
-                except OSError:
-                    logger.exception(
-                        "purge: failed to delete file %s for document_id=%s (continuing)",
                         original_path,
                         doc_id,
                     )

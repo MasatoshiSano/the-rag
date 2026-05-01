@@ -6,8 +6,10 @@ RAG パイプラインを提供する。
 
 from __future__ import annotations
 
+import asyncio
 import json
 import logging
+import time
 import uuid
 from collections.abc import AsyncGenerator
 from dataclasses import dataclass, field
@@ -830,8 +832,15 @@ async def _save_messages(
 
     try:
         await db.commit()
-    except Exception as exc:
-        logger.error("メッセージの DB 保存に失敗しました: %s", exc)
+    except Exception:
+        # commit 失敗時はトランザクションが無効状態のまま残るため必ず rollback する。
+        # メッセージ保存失敗はチャット応答そのものを失敗扱いにせず、
+        # logger.exception でスタックトレースを残してアラート対象とする。
+        logger.exception("メッセージの DB 保存に失敗しました")
+        try:
+            await db.rollback()
+        except Exception:
+            logger.exception("rollback にも失敗しました")
 
     return assistant_message_id
 
@@ -876,7 +885,7 @@ async def run_rag_pipeline(
     user = user_result.scalar_one_or_none()
 
     if user is None:
-        # ユーザーが存在しない場合はデフォルト設定で続行する
+        # ユーザーが存在しない場合は ORM デフォルト設定で続行する
         logger.warning("ユーザーが見つかりません: user_id=%s", user_id)
         user = User(
             id=user_id,
@@ -884,7 +893,8 @@ async def run_rag_pipeline(
             hybrid_search_enabled=1,
             retrieval_count=20,
             response_mode="detailed",
-            search_mode="normal",
+            search_mode="agentic",
+            agentic_max_iterations=5,
             created_at=_now_iso(),
             updated_at=_now_iso(),
         )
@@ -1547,6 +1557,8 @@ async def run_agentic_search_pipeline(
 
     if user is None:
         logger.warning("ユーザーが見つかりません: user_id=%s", user_id)
+        # 値は ORM デフォルト (models/database.py の User) と
+        # users API の新規作成パス (routers/users.py) と揃える。
         user = User(
             id=user_id,
             rerank_enabled=0,
@@ -1554,7 +1566,7 @@ async def run_agentic_search_pipeline(
             retrieval_count=20,
             response_mode="detailed",
             search_mode="agentic",
-            agentic_max_iterations=config.AGENTIC_MAX_ITERATIONS,
+            agentic_max_iterations=5,
             created_at=_now_iso(),
             updated_at=_now_iso(),
         )
@@ -1641,8 +1653,28 @@ async def run_agentic_search_pipeline(
         folder_cache: dict[str, str] = {}  # {virtual_doc_id: text_content}
         final_text = ""
 
+        # エージェンティック検索全体のタイムアウト管理
+        # config.AGENTIC_LOOP_TIMEOUT (秒) を超過した場合は SSE error イベントを返す。
+        loop_start = time.monotonic()
+        loop_timeout = float(config.AGENTIC_LOOP_TIMEOUT)
+        timed_out = False
+
         # エージェンティックループ
         for iteration in range(1, max_iterations + 1):
+            # ループ全体の経過時間をチェックし、超過していれば中断する
+            elapsed = time.monotonic() - loop_start
+            if elapsed >= loop_timeout:
+                logger.warning(
+                    "Agentic search timeout: user=%s, iteration=%d, elapsed=%.2fs",
+                    user_id,
+                    iteration,
+                    elapsed,
+                )
+                timed_out = True
+                break
+
+            remaining = max(loop_timeout - elapsed, 1.0)
+
             # thinking ステップ
             yield _sse(
                 "agentic_step",
@@ -1653,14 +1685,28 @@ async def run_agentic_search_pipeline(
                 },
             )
 
-            # LLM 呼び出し（ツール付き）
-            response = await bedrock_client.generate_with_tools(
-                messages=messages,
-                system_prompt=system_prompt,
-                tools=agentic_tools,
-                max_tokens=4096,
-                temperature=0.3,
-            )
+            # LLM 呼び出し（ツール付き）。残り時間を超えたら TimeoutError を発生させる。
+            try:
+                response = await asyncio.wait_for(
+                    bedrock_client.generate_with_tools(
+                        messages=messages,
+                        system_prompt=system_prompt,
+                        tools=agentic_tools,
+                        max_tokens=4096,
+                        temperature=0.3,
+                    ),
+                    timeout=remaining,
+                )
+            except asyncio.TimeoutError:
+                elapsed = time.monotonic() - loop_start
+                logger.warning(
+                    "Agentic search timeout (Bedrock 呼び出し中): user=%s, iteration=%d, elapsed=%.2fs",
+                    user_id,
+                    iteration,
+                    elapsed,
+                )
+                timed_out = True
+                break
 
             # end_turn → ループ終了
             if response.stop_reason == "end_turn":
@@ -2021,6 +2067,72 @@ async def run_agentic_search_pipeline(
                     ],
                 }
             )
+
+        # タイムアウトが発生した場合: SSE error を返し、途中までの回答を保存する
+        if timed_out:
+            elapsed = time.monotonic() - loop_start
+            timeout_message = (
+                "エージェンティック検索がタイムアウトしました。"
+                f"({elapsed:.1f} 秒経過 / 上限 {loop_timeout:.0f} 秒)"
+            )
+            yield _sse(
+                "error",
+                {
+                    "error": "agentic_search_timeout",
+                    "message": timeout_message,
+                    "elapsed_seconds": elapsed,
+                    "timeout_seconds": loop_timeout,
+                },
+            )
+
+            # 途中までの answer (final_text) があれば保存し、なければプレースホルダ
+            partial_answer = final_text or timeout_message
+            sources_items = [
+                {
+                    "chunk_id": "",
+                    "document_id": doc_id,
+                    "document_name": filename,
+                    "section_title": "",
+                    "score": 1.0,
+                    "snippet": snippet,
+                }
+                for doc_id, (filename, snippet) in read_documents.items()
+            ]
+            sources_json = json.dumps(sources_items, ensure_ascii=False)
+            try:
+                assistant_message_id = await _save_messages(
+                    query=query,
+                    answer=partial_answer,
+                    search_results=[],
+                    session_id=session_id,
+                    user=user,
+                    db=db,
+                    sources_json=sources_json,
+                )
+                # タイムアウトはキャンセル相当として扱う
+                msg_result = await db.execute(
+                    select(Message).where(Message.id == assistant_message_id)
+                )
+                assistant_msg = msg_result.scalar_one_or_none()
+                if assistant_msg is not None:
+                    assistant_msg.is_cancelled = 1
+                    try:
+                        await db.commit()
+                    except Exception:
+                        logger.exception(
+                            "is_cancelled=1 の DB 反映に失敗しました"
+                        )
+                        try:
+                            await db.rollback()
+                        except Exception:
+                            logger.exception("rollback にも失敗しました")
+            except Exception as save_exc:
+                logger.exception(
+                    "タイムアウト時のメッセージ保存に失敗: %s", save_exc
+                )
+
+            yield _sse("done", {})
+            return
 
         # 最終回答のストリーミング
         yield _sse(

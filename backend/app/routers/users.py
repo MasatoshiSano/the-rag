@@ -154,6 +154,7 @@ async def _get_or_create_user(user_id: str, db: AsyncSession) -> User:
 
     if user is None:
         now = _now_iso()
+        # デフォルト値は ORM (models/database.py User クラス) と統一する。
         user = User(
             id=user_id,
             nickname=None,
@@ -161,8 +162,8 @@ async def _get_or_create_user(user_id: str, db: AsyncSession) -> User:
             hybrid_search_enabled=1,
             retrieval_count=20,
             response_mode="detailed",
-            search_mode="normal",
-            agentic_max_iterations=10,
+            search_mode="agentic",
+            agentic_max_iterations=5,
             created_at=now,
             updated_at=now,
         )
