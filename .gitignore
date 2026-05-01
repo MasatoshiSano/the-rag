@@ -38,3 +38,11 @@ nul
 htmlcov/
 test-results/
 playwright-report/
+
+# Cursor agent workspace
+.omc/
+backend/.omc/
+frontend/.omc/
+
+# Temporary work files
+.tmp/
