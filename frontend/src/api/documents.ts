@@ -172,27 +172,12 @@ export interface GitHubSyncResponse {
 export async function syncGitHub(
   params: GitHubSyncRequest
 ): Promise<GitHubSyncResponse> {
-  // /ext/* endpoints require X-API-Key header
-  const userId = localStorage.getItem("the-rag-user-id") ?? "";
-  const response = await fetch("/the-rag/api/ext/github/sync", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-User-Id": userId,
-      "X-API-Key": "the-rag-default-key",
-    },
-    body: JSON.stringify({ ...params, user_id: userId }),
-  });
-  if (!response.ok) {
-    const raw = await response.text().catch(() => response.statusText);
-    let message = raw;
-    try {
-      const parsed = JSON.parse(raw);
-      message = parsed.detail ?? raw;
-    } catch { /* use raw */ }
-    throw new Error(message);
-  }
-  return response.json() as Promise<GitHubSyncResponse>;
+  // 内部用の /api/documents/github-sync エンドポイントを使用する
+  // (X-User-Id 認証ベース。外部 API キーはフロントへ露出させない。)
+  return apiClient.post<GitHubSyncResponse>(
+    `/documents/github-sync`,
+    params as unknown as Record<string, unknown>
+  );
 }
 
 // Gitea sources (sync history) API
@@ -242,27 +227,12 @@ export interface GiteaSyncResponse {
 export async function syncGitea(
   params: GiteaSyncRequest
 ): Promise<GiteaSyncResponse> {
-  // /ext/* endpoints require X-API-Key header
-  const userId = localStorage.getItem("the-rag-user-id") ?? "";
-  const response = await fetch("/the-rag/api/ext/gitea/sync", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-User-Id": userId,
-      "X-API-Key": "the-rag-default-key",
-    },
-    body: JSON.stringify({ ...params, user_id: userId }),
-  });
-  if (!response.ok) {
-    const raw = await response.text().catch(() => response.statusText);
-    let message = raw;
-    try {
-      const parsed = JSON.parse(raw);
-      message = parsed.detail ?? raw;
-    } catch { /* use raw */ }
-    throw new Error(message);
-  }
-  return response.json() as Promise<GiteaSyncResponse>;
+  // 内部用の /api/documents/gitea-sync エンドポイントを使用する
+  // (X-User-Id 認証ベース。外部 API キーはフロントへ露出させない。)
+  return apiClient.post<GiteaSyncResponse>(
+    `/documents/gitea-sync`,
+    params as unknown as Record<string, unknown>
+  );
 }
 
 // ---------------------------------------------------------------------------
