@@ -1,5 +1,4 @@
-// Chat API: send messages and manage RAG responses
-// TODO: Implement chat endpoints
+// Chat API: メッセージ送信・履歴取得・評価
 
 import { apiClient } from "./client";
 import type { Message } from "../types/message";
@@ -16,32 +15,22 @@ export interface SendMessageResponse {
   sessionId: string;
 }
 
-/**
- * TODO: Send a user message and get the assistant response.
- * For streaming, use the SSE client instead.
- */
+/** ユーザーメッセージを送信し、生成された assistant メッセージの ID を返す（ストリーミング応答が必要な場合は SSE クライアントを利用する） */
 export async function sendMessage(
-  _request: SendMessageRequest
+  request: SendMessageRequest
 ): Promise<SendMessageResponse> {
-  // TODO: implement
-  return apiClient.post<SendMessageResponse>("/chat/messages", _request as unknown as Record<string, string>);
+  return apiClient.post<SendMessageResponse>("/chat/messages", { ...request });
 }
 
-/**
- * TODO: Get all messages for a session.
- */
-export async function getMessages(_sessionId: string): Promise<Message[]> {
-  // TODO: implement
-  return apiClient.get<Message[]>(`/chat/sessions/${_sessionId}/messages`);
+/** 指定セッションに紐づくメッセージ履歴を時系列で取得する */
+export async function getMessages(sessionId: string): Promise<Message[]> {
+  return apiClient.get<Message[]>(`/chat/sessions/${sessionId}/messages`);
 }
 
-/**
- * TODO: Rate a message (thumbs up/down).
- */
+/** メッセージに評価値（thumbs up/down）を付与する */
 export async function rateMessage(
-  _messageId: string,
-  _rating: number
+  messageId: string,
+  rating: number
 ): Promise<void> {
-  // TODO: implement
-  return apiClient.put<void>(`/messages/${_messageId}/rating`, { rating: _rating });
+  return apiClient.put<void>(`/messages/${messageId}/rating`, { rating });
 }
