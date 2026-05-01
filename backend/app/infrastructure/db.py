@@ -132,10 +132,13 @@ async def init_db() -> None:
         await conn.run_sync(Base.metadata.create_all)
         await create_fts5_tables(conn)
 
-        # マイグレーション: search_mode / agentic_max_iterations カラム追加
+        # マイグレーション: search_mode / agentic_max_iterations カラム追加。
+        # デフォルト値は ORM (models/database.py User クラス) を Single Source of Truth とし、
+        # 新規ユーザーには search_mode='agentic'、agentic_max_iterations=5 を割り当てる。
+        # 既存ユーザーが既に明示的に設定した値はマイグレーションで上書きしない。
         for stmt in [
-            "ALTER TABLE users ADD COLUMN search_mode TEXT NOT NULL DEFAULT 'normal'",
-            "ALTER TABLE users ADD COLUMN agentic_max_iterations INTEGER NOT NULL DEFAULT 10",
+            "ALTER TABLE users ADD COLUMN search_mode TEXT NOT NULL DEFAULT 'agentic'",
+            "ALTER TABLE users ADD COLUMN agentic_max_iterations INTEGER NOT NULL DEFAULT 5",
             "ALTER TABLE folder_sources ADD COLUMN source_type TEXT NOT NULL DEFAULT 'document'",
         ]:
             try:

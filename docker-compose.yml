@@ -12,16 +12,30 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    # user 1000:1000 で実行（Dockerfile の appuser に合わせる）。
+    # ホスト側の ./backend/data, ./uploads は事前に
+    # `sudo chown -R 1000:1000 ./backend/data ./uploads` で
+    # 所有権を合わせること（詳細は docs/setup.md 参照）。
+    user: "1000:1000"
     ports:
       - "8010:8000"
     volumes:
       - ./backend/data:/app/data
       - ./uploads:/app/uploads
       - /mnt:/host_drives:ro
+    # .env から AWS_SESSION_TOKEN / ENVIRONMENT / API_KEYS 等を読み込む。
+    # 以下の environment: 列は明示変数とデフォルト値の上書き用途。
+    env_file:
+      - .env
     environment:
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID:-}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY:-}
+      - AWS_SESSION_TOKEN=${AWS_SESSION_TOKEN:-}
       - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-ap-northeast-1}
+      - ENVIRONMENT=${ENVIRONMENT:-development}
+      - API_KEYS=${API_KEYS:-}
+      - BEDROCK_EMBED_MODEL_ID=${BEDROCK_EMBED_MODEL_ID:-cohere.embed-multilingual-v3}
+      - BEDROCK_RERANK_MODEL_ID=${BEDROCK_RERANK_MODEL_ID:-cohere.rerank-v3-5:0}
       - NO_PROXY=localhost,127.0.0.1,::1,qdrant,backend,frontend
       - no_proxy=localhost,127.0.0.1,::1,qdrant,backend,frontend
       - BEDROCK_REGION=${BEDROCK_REGION:-ap-northeast-1}

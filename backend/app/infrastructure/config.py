@@ -64,21 +64,29 @@ class Config(BaseSettings):
 
     # セキュリティ
     SECRET_KEY: str = "dev-secret-key-change-in-production"
+    # 実行環境名 ("development" | "staging" | "production")。
+    # production の場合、SECRET_KEY がデフォルト値だと起動を中止する。
+    ENVIRONMENT: str = "development"
+    # CORS 許可 Origin。本番では HTTPS のみに限定する。
+    # localhost は開発時のみ。本番では必ず HTTPS のみに変更すること。
     ALLOWED_ORIGINS: list[str] = [
-        "http://localhost:3000",
-        "http://localhost:5173",
-        "http://10.168.124.32:3000",
+        "http://localhost:3000",  # 開発時のみ。本番では HTTPS のみに変更
+        "http://localhost:5173",  # 開発時のみ。本番では HTTPS のみに変更
         "https://10.168.124.32:3443",
     ]
 
     # 外部 API キー
-    API_KEYS: list[str] = ["the-rag-default-key"]
+    # 環境変数 API_KEYS にカンマ区切りで設定する（例: "key1,key2"）。
+    # 空の場合、外部 API ルーター（/api/ext/*）はすべての要求を 403 で拒否する。
+    API_KEYS: list[str] = []
 
     # エラーリトライ
     MAX_RETRY_COUNT: int = 3
 
     # エージェンティック検索
-    AGENTIC_MAX_ITERATIONS: int = 10
+    # NOTE: ORM デフォルト (User.agentic_max_iterations=5) と users API の新規作成値 (5) と統一する。
+    # ユーザー設定の上限は users.py の Pydantic バリデータ (le=15) で別途管理。
+    AGENTIC_MAX_ITERATIONS: int = 5
     AGENTIC_LOOP_TIMEOUT: int = 120  # 秒
 
     # Gitea 連携（GitHub API レート制限回避用のセカンダリソース）

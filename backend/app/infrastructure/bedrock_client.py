@@ -11,6 +11,7 @@ from collections.abc import AsyncGenerator
 from dataclasses import dataclass
 
 import boto3
+from botocore.config import Config as BotoConfig
 from tenacity import (
     retry,
     retry_if_exception_type,
@@ -26,6 +27,26 @@ logger = logging.getLogger(__name__)
 _bedrock_runtime: "boto3.client | None" = None
 
 
+def _build_boto_config() -> BotoConfig:
+    """boto3 Bedrock クライアント用の Config を生成する。
+
+    NOTE: read_timeout は AGENTIC_LOOP_TIMEOUT と連動。
+    asyncio.wait_for でキャンセルしても boto3 同期スレッドは完走するため、
+    boto3 側の read_timeout で確実にスレッドを解放する。
+
+    設計判断: 埋め込み (`embed_texts` / `embed_query`) や rerank は通常 30 秒以内に
+    完了するため AGENTIC_LOOP_TIMEOUT (120 秒) は長めだが、シンプルさを優先して
+    全 Bedrock 呼び出しで同一クライアント＋同一タイムアウトに揃える。
+    リトライは tenacity 側 (@retry, MAX_RETRY_COUNT) に一本化し、boto3 内蔵リトライは
+    無効化 (max_attempts=1) して二重リトライを避ける。
+    """
+    return BotoConfig(
+        read_timeout=config.AGENTIC_LOOP_TIMEOUT,
+        connect_timeout=10,
+        retries={"max_attempts": 1, "mode": "standard"},
+    )
+
+
 def get_bedrock_runtime() -> "boto3.client":
     """
     AWS Bedrock Runtime クライアントを返す。
@@ -39,6 +60,7 @@ def get_bedrock_runtime() -> "boto3.client":
         _bedrock_runtime = boto3.client(
             "bedrock-runtime",
             region_name=config.BEDROCK_REGION,
+            config=_build_boto_config(),
         )
     return _bedrock_runtime
 
