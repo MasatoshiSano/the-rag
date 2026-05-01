@@ -1,0 +1,34 @@
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+addopts = [
+    "--strict-markers",
+    "-ra",
+]
+markers = [
+    "slow: 実時間がかかるテスト（CI で skip 可）",
+    "integration: 外部サービス（Qdrant / Bedrock / Oracle）に依存するテスト",
+]
+
+[tool.coverage.run]
+source = ["app"]
+branch = true
+omit = [
+    "app/main.py",
+    "*/__pycache__/*",
+    "*/tests/*",
+    "*/migrations/*",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+precision = 1
+exclude_lines = [
+    "pragma: no cover",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]
+# 当面の最低ライン。現状把握後に段階的に引き上げる。
+fail_under = 40
