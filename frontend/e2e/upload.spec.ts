@@ -97,8 +97,10 @@ test.describe('ドロップゾーン', () => {
 
   test('ドロップゾーンに対応ファイル形式のテキストが表示される', async ({ page }) => {
     await page.getByRole('tab', { name: 'ファイル' }).click();
-    await expect(page.getByText(/対応形式:/)).toBeVisible();
-    await expect(page.getByText(/pdf/)).toBeVisible();
+    // DropZone 内の span に絞って確認
+    const dropZone = page.getByRole('button', { name: 'ファイルをドラッグ＆ドロップまたはクリックして選択' });
+    await expect(dropZone.getByText(/対応形式:/)).toBeVisible();
+    await expect(dropZone.getByText(/pdf/)).toBeVisible();
   });
 
   test('ドロップゾーンにファイル数の上限が表示される', async ({ page }) => {

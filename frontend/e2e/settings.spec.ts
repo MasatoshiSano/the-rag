@@ -29,6 +29,8 @@ test.describe('設定ページの表示', () => {
   });
 
   test('全セクションが同一ページに存在する', async ({ page }) => {
+    // API 応答待ちで h2 が遅れて描画される場合があるため明示的に待機
+    await expect(page.getByRole('heading', { name: '検索設定', level: 2 })).toBeVisible({ timeout: 20000 });
     const headings = page.getByRole('heading', { level: 2 });
     const texts = await headings.allTextContents();
     expect(texts).toContain('検索設定');
