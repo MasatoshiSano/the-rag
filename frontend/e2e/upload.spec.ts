@@ -25,7 +25,8 @@ test.describe('アップロードページの表示', () => {
   });
 
   test('「ファイルを選択」セクションが表示される', async ({ page }) => {
-    await expect(page.getByRole('heading', { name: 'ファイルを選択', level: 2 })).toBeVisible();
+    // アップロード方法タブの「ファイル」トリガーが存在することを確認
+    await expect(page.getByRole('tab', { name: 'ファイル' })).toBeVisible();
   });
 
   test('KB未選択時に注意メッセージが表示される', async ({ page }) => {
@@ -84,6 +85,9 @@ test.describe('ドロップゾーン', () => {
   });
 
   test('KB未選択時はドロップゾーンが aria-disabled="true" の状態', async ({ page }) => {
+    // 「ファイル」タブをクリックしてDropZoneを表示
+    await page.getByRole('tab', { name: 'ファイル' }).click();
+
     const select = page.getByRole('combobox', { name: 'ナレッジベース' });
     await select.selectOption('');
 
@@ -92,11 +96,13 @@ test.describe('ドロップゾーン', () => {
   });
 
   test('ドロップゾーンに対応ファイル形式のテキストが表示される', async ({ page }) => {
+    await page.getByRole('tab', { name: 'ファイル' }).click();
     await expect(page.getByText(/対応形式:/)).toBeVisible();
     await expect(page.getByText(/pdf/)).toBeVisible();
   });
 
   test('ドロップゾーンにファイル数の上限が表示される', async ({ page }) => {
+    await page.getByRole('tab', { name: 'ファイル' }).click();
     await expect(page.getByText(/最大 20 ファイル/)).toBeVisible();
   });
 });
