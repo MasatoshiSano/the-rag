@@ -11,9 +11,12 @@ export async function blockExternalFonts(page: Page): Promise<void> {
 
 /**
  * ページ遷移ヘルパー。
+ * アプリは Vite base "/the-rag/" でビルドされているため、
+ * path の先頭に "/the-rag" を自動的に付与する。
  * domcontentloaded で遷移し、networkidle でSPAレンダリング完了を待つ。
  */
 export async function gotoPage(page: Page, path: string): Promise<void> {
-  await page.goto(path, { waitUntil: 'domcontentloaded' });
+  const normalizedPath = path === '/' ? '/the-rag/' : `/the-rag${path}`;
+  await page.goto(normalizedPath, { waitUntil: 'domcontentloaded' });
   await page.waitForLoadState('networkidle');
 }
