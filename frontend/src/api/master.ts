@@ -1,29 +1,40 @@
-// Master data API: sites, lines, processes
-// TODO: Implement master data endpoints
+// Master データ API: サイト・ライン・工程の参照
 
 import { apiClient } from "./client";
 import type { SiteMaster, LineMaster, ProcessMaster } from "../types/master";
 
-/**
- * TODO: Get all site master records.
- */
+interface SitesResponse {
+  sites: SiteMaster[];
+}
+
+interface LinesResponse {
+  lines: LineMaster[];
+}
+
+interface ProcessesResponse {
+  processes: ProcessMaster[];
+}
+
+/** サイトマスタの一覧をマスターキャッシュから取得する */
 export async function getSites(): Promise<SiteMaster[]> {
-  // TODO: implement
-  return apiClient.get<SiteMaster[]>("/master/sites");
+  const response = await apiClient.get<SitesResponse>("/master/sites");
+  return response.sites;
 }
 
-/**
- * TODO: Get lines for a given site.
- */
-export async function getLines(_siteCode: string): Promise<LineMaster[]> {
-  // TODO: implement
-  return apiClient.get<LineMaster[]>(`/master/lines?siteCode=${_siteCode}`);
+/** 指定サイトに属するライン一覧を取得する */
+export async function getLines(siteCode: string): Promise<LineMaster[]> {
+  const query = new URLSearchParams({ site_code: siteCode });
+  const response = await apiClient.get<LinesResponse>(
+    `/master/lines?${query.toString()}`
+  );
+  return response.lines;
 }
 
-/**
- * TODO: Get processes for a given line.
- */
-export async function getProcesses(_lineCode: string): Promise<ProcessMaster[]> {
-  // TODO: implement
-  return apiClient.get<ProcessMaster[]>(`/master/processes?lineCode=${_lineCode}`);
+/** 指定ラインに属する工程一覧を取得する */
+export async function getProcesses(lineCode: string): Promise<ProcessMaster[]> {
+  const query = new URLSearchParams({ line_code: lineCode });
+  const response = await apiClient.get<ProcessesResponse>(
+    `/master/processes?${query.toString()}`
+  );
+  return response.processes;
 }

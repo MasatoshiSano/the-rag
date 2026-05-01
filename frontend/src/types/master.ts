@@ -7,11 +7,12 @@ export interface SiteMaster {
 export interface LineMaster {
   code: string;
   name: string;
-  siteCode: string;
+  site_code: string;
+  aliases: string[];
 }
 
 export interface ProcessMaster {
   code: string;
   name: string;
-  lineCode: string;
+  line_code: string;
 }
