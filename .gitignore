@@ -17,8 +17,9 @@ dist/
 *accessKeys*
 *.credentials
 
-# Data
-backend/data/
+# Data (runtime DB / WAL etc.) — but keep the master data file in the repo
+backend/data/*
+!backend/data/master-flat-with-place-aliases.md
 uploads/
 qdrant_data/
 

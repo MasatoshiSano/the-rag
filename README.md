@@ -41,9 +41,16 @@ cp .env.example .env
 
 > AWS 認証は `.env` に書く代わりに、ホストの `~/.aws/credentials` を使う方法でも構いません（その場合は `docker-compose.yml` の backend に `volumes: - ~/.aws:/root/.aws:ro` を追加し、`AWS_PROFILE` を環境変数で渡す）。
 
-### 3. マスタデータの確認
+### 3. マウント先ディレクトリの権限（Linux/WSL）
 
-製造拠点・ライン・工程のマスタは `backend/data/master/master-flat-with-place-aliases.md` に置く（リポジトリに同梱）。これが無いと起動時に警告が出ますが、マスタ依存機能が縮退するだけで API 自体は起動します。
+バックエンドコンテナは UID 1000（`appuser`）で動くため、初回起動前にマウント先を作っておくか所有権を合わせる（詳細は `docs/setup.md`）:
+
+```bash
+mkdir -p ./backend/data ./uploads
+# すでに root 所有で作成済みなら: sudo chown -R 1000:1000 ./backend/data ./uploads
+```
+
+製造拠点・ライン・工程のマスタは `backend/data/master-flat-with-place-aliases.md`（リポジトリに同梱、`MASTER_MD_PATH` が参照）。これが無いと起動時に警告が出ますが、マスタ依存機能が縮退するだけで API 自体は起動します。
 
 ### 4. 起動
 
