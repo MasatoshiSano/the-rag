@@ -1,47 +1,14 @@
-// Chat API: send messages and manage RAG responses
-// TODO: Implement chat endpoints
+// Chat API: メッセージ評価。
+// チャット送受信は SSE クライアント（api/sse.ts）、履歴取得は api/sessions.ts を使う。
 
 import { apiClient } from "./client";
-import type { Message } from "../types/message";
 
-export interface SendMessageRequest {
-  sessionId: string;
-  content: string;
-  knowledgeBaseId: string;
-  inputType: "text" | "voice";
+interface RatingResponse {
+  message_id: string;
+  rating: number;
 }
 
-export interface SendMessageResponse {
-  messageId: string;
-  sessionId: string;
-}
-
-/**
- * TODO: Send a user message and get the assistant response.
- * For streaming, use the SSE client instead.
- */
-export async function sendMessage(
-  _request: SendMessageRequest
-): Promise<SendMessageResponse> {
-  // TODO: implement
-  return apiClient.post<SendMessageResponse>("/chat/messages", _request as unknown as Record<string, string>);
-}
-
-/**
- * TODO: Get all messages for a session.
- */
-export async function getMessages(_sessionId: string): Promise<Message[]> {
-  // TODO: implement
-  return apiClient.get<Message[]>(`/chat/sessions/${_sessionId}/messages`);
-}
-
-/**
- * TODO: Rate a message (thumbs up/down).
- */
-export async function rateMessage(
-  _messageId: string,
-  _rating: number
-): Promise<void> {
-  // TODO: implement
-  return apiClient.put<void>(`/messages/${_messageId}/rating`, { rating: _rating });
+/** メッセージに 1〜5 の評価を付ける（PUT /api/messages/{id}/rating）。 */
+export async function rateMessage(messageId: string, rating: number): Promise<void> {
+  await apiClient.put<RatingResponse>(`/messages/${messageId}/rating`, { rating });
 }

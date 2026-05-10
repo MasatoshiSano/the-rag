@@ -254,7 +254,9 @@ class ModelResponse:
 
     stop_reason: str  # "tool_use" | "end_turn" | "max_tokens"
     content: list[ToolUseBlock | TextBlock]
-    content_raw: list[dict[str, object]]  # Bedrock API 形式そのまま（messages 再構築用）
+    content_raw: list[
+        dict[str, object]
+    ]  # Bedrock API 形式そのまま（messages 再構築用）
 
 
 @retry(
@@ -379,12 +381,16 @@ async def generate_text_stream_with_messages(
     retry=retry_if_exception_type(Exception),
     reraise=True,
 )
-async def embed_texts(texts: list[str]) -> list[list[float]]:
+async def embed_texts(
+    texts: list[str], input_type: str = "search_document"
+) -> list[list[float]]:
     """
     Cohere Embed でテキストをベクトル化（バッチ処理対応、最大96テキスト/コール）。
 
     Args:
         texts: 埋め込み対象のテキストリスト。
+        input_type: Cohere の input_type。ドキュメント側は "search_document"、
+            検索クエリ側は "search_query" を指定する（既定はドキュメント側）。
 
     Returns:
         各テキストに対応する埋め込みベクトルのリスト。
@@ -398,7 +404,7 @@ async def embed_texts(texts: list[str]) -> list[list[float]]:
         batch = texts[i : i + batch_size]
         body: dict = {
             "texts": batch,
-            "input_type": "search_document",
+            "input_type": input_type,
             "truncate": "END",
         }
 

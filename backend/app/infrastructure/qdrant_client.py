@@ -19,6 +19,7 @@ from qdrant_client.http.models import (
     PayloadSchemaType,
     SearchParams,
     NamedVector,
+    NamedSparseVector,
     SparseVector,
 )
 
@@ -121,15 +122,35 @@ def search_vectors(
     query_vector: list[float],
     limit: int = 10,
     filters: Filter | None = None,
-    sparse_vector: SparseVector | None = None,
     score_threshold: float | None = None,
 ) -> list[SearchResult]:
-    """Search vectors with optional filters and hybrid search."""
+    """密ベクトルで検索する。
+
+    documents コレクションは named vector "dense"、master_data コレクションは
+    unnamed vector を使用する。スパース検索は search_sparse_vectors を使う。
+
+    Args:
+        collection: 検索対象コレクション名。
+        query_vector: 密クエリベクトル（1024 次元）。
+        limit: 取得件数の上限。
+        filters: 適用する Qdrant フィルタ。
+        score_threshold: コサイン類似度の下限（None なら制限なし）。
+
+    Returns:
+        SearchResult のリスト（スコア降順）。
+    """
     client = get_qdrant_client()
 
-    if sparse_vector is not None:
-        # Hybrid search using both dense and sparse vectors
-        # Use Qdrant's query with prefetch for RRF fusion
+    if collection == config.QDRANT_MASTER_COLLECTION:
+        # master_data uses unnamed vector
+        results = client.search(
+            collection_name=collection,
+            query_vector=query_vector,
+            query_filter=filters,
+            limit=limit,
+            score_threshold=score_threshold,
+        )
+    else:
         results = client.search(
             collection_name=collection,
             query_vector=NamedVector(name="dense", vector=query_vector),
@@ -138,26 +159,53 @@ def search_vectors(
             score_threshold=score_threshold,
             search_params=SearchParams(exact=False, hnsw_ef=128),
         )
-    else:
-        # Dense-only search
-        if collection == config.QDRANT_MASTER_COLLECTION:
-            # master_data uses unnamed vector
-            results = client.search(
-                collection_name=collection,
-                query_vector=query_vector,
-                query_filter=filters,
-                limit=limit,
-                score_threshold=score_threshold,
-            )
-        else:
-            results = client.search(
-                collection_name=collection,
-                query_vector=NamedVector(name="dense", vector=query_vector),
-                query_filter=filters,
-                limit=limit,
-                score_threshold=score_threshold,
-                search_params=SearchParams(exact=False, hnsw_ef=128),
-            )
+
+    return [
+        SearchResult(
+            id=str(r.id),
+            score=r.score,
+            payload=r.payload or {},
+        )
+        for r in results
+    ]
+
+
+def search_sparse_vectors(
+    collection: str,
+    sparse_indices: list[int],
+    sparse_values: list[float],
+    limit: int = 10,
+    filters: Filter | None = None,
+) -> list[SearchResult]:
+    """疎ベクトル（named sparse vector "sparse"）で検索する。
+
+    documents コレクションの "sparse" インデックスに対して term-frequency ベースの
+    キーワード一致検索を行う。密検索（search_vectors）と組み合わせて
+    呼び出し側で RRF 融合することでハイブリッド検索を実現する。
+
+    Args:
+        collection: 検索対象コレクション名（documents を想定）。
+        sparse_indices: 疎クエリベクトルのインデックスリスト。
+        sparse_values: 疎クエリベクトルの値リスト（indices と同長）。
+        limit: 取得件数の上限。
+        filters: 適用する Qdrant フィルタ。
+
+    Returns:
+        SearchResult のリスト（スコア降順）。indices が空の場合は空リスト。
+    """
+    if not sparse_indices:
+        return []
+
+    client = get_qdrant_client()
+    results = client.search(
+        collection_name=collection,
+        query_vector=NamedSparseVector(
+            name="sparse",
+            vector=SparseVector(indices=sparse_indices, values=sparse_values),
+        ),
+        query_filter=filters,
+        limit=limit,
+    )
 
     return [
         SearchResult(

@@ -107,8 +107,6 @@ def _sse(event: str, data: dict) -> str:
     return f"data: {payload}\n\n"
 
 
-
-
 # ---------------------------------------------------------------------------
 # クエリ分析
 # ---------------------------------------------------------------------------
@@ -217,9 +215,11 @@ async def search_documents(
 
     expanded_queries = query_analysis.expanded_queries
 
-    # 全クエリ（プライマリ + 拡張）を並列ベクトル化する
+    # 全クエリ（プライマリ + 拡張）を並列ベクトル化する（検索クエリ側の input_type）
     all_queries = [search_query] + expanded_queries
-    query_vectors = await bedrock_client.embed_texts(all_queries)
+    query_vectors = await bedrock_client.embed_texts(
+        all_queries, input_type="search_query"
+    )
 
     # Qdrant フィルタを構築する
     qdrant_filter = qdrant_client.build_search_filter(
@@ -240,7 +240,6 @@ async def search_documents(
             query_vector=qv,
             limit=retrieval_limit,
             filters=qdrant_filter,
-            sparse_vector=None,
         )
         for qv in query_vectors
     ]
@@ -258,16 +257,34 @@ async def search_documents(
         raw_results = all_dense_results[0]
 
     # ハイブリッド検索（スパースベクトル）— プライマリクエリのみ
+    did_hybrid_fuse = False
     if user.hybrid_search_enabled:
-        sparse_results = await asyncio.to_thread(
-            qdrant_client.search_vectors,
-            collection=config.QDRANT_COLLECTION,
-            query_vector=query_vectors[0],
-            limit=retrieval_limit,
-            filters=qdrant_filter,
-        )
-        # RRF (Reciprocal Rank Fusion) でマージする
-        raw_results = _fuse_results_rrf(raw_results, sparse_results, k=60)
+        from app.services.embedder import generate_sparse_vector
+
+        sparse_indices, sparse_values = generate_sparse_vector(search_query)
+        if sparse_indices:
+            dense_count = len(raw_results)
+            sparse_results = await asyncio.to_thread(
+                qdrant_client.search_sparse_vectors,
+                collection=config.QDRANT_COLLECTION,
+                sparse_indices=sparse_indices,
+                sparse_values=sparse_values,
+                limit=retrieval_limit,
+                filters=qdrant_filter,
+            )
+            # RRF (Reciprocal Rank Fusion) で密・疎の結果をマージする
+            raw_results = _fuse_results_rrf(raw_results, sparse_results, k=60)
+            did_hybrid_fuse = True
+            logger.info(
+                "ハイブリッド検索: 密 %d 件 + 疎 %d 件 → RRF統合後 %d 件",
+                dense_count,
+                len(sparse_results),
+                len(raw_results),
+            )
+        else:
+            logger.info(
+                "ハイブリッド検索: クエリから疎ベクトルを生成できず密検索のみ使用"
+            )
 
     # リランク処理（有効な場合）
     if user.rerank_enabled and raw_results:
@@ -290,14 +307,17 @@ async def search_documents(
             )
         raw_results = reranked_results
 
-    # RELEVANCE_THRESHOLD でフィルタリングする
-    # RRF fusion 後のスコアは 1/(k+rank) スケールのため、元のコサイン類似度閾値を適用しない
-    if user.hybrid_search_enabled and raw_results:
-        # ハイブリッド検索の場合は RRF スコアでソート済みなので閾値フィルタをスキップする
-        filtered = raw_results
+    # スコアフィルタリング
+    # マルチクエリ RRF やハイブリッド RRF を通った結果のスコアは 1/(k+rank) スケールで
+    # コサイン類似度の閾値（RELEVANCE_THRESHOLD）と比較できないため、上位 N 件で打ち切る。
+    # 単一クエリ・dense のみの場合のみコサイン閾値フィルタを適用する。
+    used_rrf = len(all_dense_results) > 1 or did_hybrid_fuse
+    if used_rrf:
+        filtered = raw_results[:retrieval_limit]
         logger.info(
-            "ベクトル検索 (ハイブリッド RRF): %d 件ヒット（閾値フィルタなし）",
+            "ベクトル検索 (RRF統合): %d 件ヒット → 上位 %d 件を採用（コサイン閾値は適用せず）",
             len(raw_results),
+            len(filtered),
         )
     else:
         threshold = config.RELEVANCE_THRESHOLD
@@ -1195,7 +1215,10 @@ async def _get_folder_doc_content(
     """
     if document_id in cache:
         source_id, rel_path = _parse_folder_doc_id(document_id)
-        return (rel_path.rsplit("/", 1)[-1] if "/" in rel_path else rel_path, cache[document_id])
+        return (
+            rel_path.rsplit("/", 1)[-1] if "/" in rel_path else rel_path,
+            cache[document_id],
+        )
 
     source_id, rel_path = _parse_folder_doc_id(document_id)
     if not source_id or not rel_path:
@@ -1203,9 +1226,7 @@ async def _get_folder_doc_content(
 
     from app.models.database import FolderSource
 
-    result = await db.execute(
-        select(FolderSource).where(FolderSource.id == source_id)
-    )
+    result = await db.execute(select(FolderSource).where(FolderSource.id == source_id))
     source = result.scalar_one_or_none()
     if source is None:
         return ("", "")
@@ -1270,9 +1291,7 @@ async def _list_kb_documents(
 
     # フォルダソースからの仮想ドキュメントを追加
     fs_result = await db.execute(
-        select(FolderSource).where(
-            FolderSource.knowledge_base_id == knowledge_base_id
-        )
+        select(FolderSource).where(FolderSource.knowledge_base_id == knowledge_base_id)
     )
     folder_sources = fs_result.scalars().all()
     for source in folder_sources:
@@ -1584,6 +1603,11 @@ async def run_agentic_search_pipeline(
         getattr(user, "agentic_max_iterations", None) or config.AGENTIC_MAX_ITERATIONS
     )
 
+    # セッション内で DuckDB 接続を再利用するためのキャッシュ。
+    # finally でクリーンアップするため、try より前に初期化しておく
+    # （try 内の早期例外で UnboundLocalError になるのを防ぐ）。
+    csv_sessions: dict[str, "CsvDataSession"] = {}
+
     try:
         # セッションイベント
         yield _sse(
@@ -1618,8 +1642,6 @@ async def run_agentic_search_pipeline(
         has_data_sources = fs_check.scalars().first() is not None
         # データソース ID→container_path マッピング（ツールハンドラ用）
         data_source_paths: dict[str, str] = {}
-        # セッション内で DuckDB 接続を再利用するためのキャッシュ
-        csv_sessions: dict[str, "CsvDataSession"] = {}
         if has_data_sources:
             fs_all = await db.execute(
                 select(FSModel).where(
@@ -1649,7 +1671,9 @@ async def run_agentic_search_pipeline(
         ]
 
         # 読み込んだドキュメントを追跡
-        read_documents: dict[str, tuple[str, str]] = {}  # {document_id: (filename, snippet)}
+        read_documents: dict[
+            str, tuple[str, str]
+        ] = {}  # {document_id: (filename, snippet)}
         folder_cache: dict[str, str] = {}  # {virtual_doc_id: text_content}
         final_text = ""
 
@@ -1717,9 +1741,7 @@ async def run_agentic_search_pipeline(
 
             # tool_use → ツール実行
             if response.stop_reason == "tool_use":
-                messages.append(
-                    {"role": "assistant", "content": response.content_raw}
-                )
+                messages.append({"role": "assistant", "content": response.content_raw})
 
                 tool_results: list[dict[str, object]] = []
                 for block in response.content:
@@ -1759,15 +1781,15 @@ async def run_agentic_search_pipeline(
                                     for d in doc_list
                                 )
                             else:
-                                result_text = "ナレッジベースにドキュメントがありません。"
+                                result_text = (
+                                    "ナレッジベースにドキュメントがありません。"
+                                )
 
                             tool_results.append(
                                 {
                                     "type": "tool_result",
                                     "tool_use_id": block.id,
-                                    "content": [
-                                        {"type": "text", "text": result_text}
-                                    ],
+                                    "content": [{"type": "text", "text": result_text}],
                                 }
                             )
 
@@ -1788,7 +1810,10 @@ async def run_agentic_search_pipeline(
 
                             try:
                                 filename, matches = await _search_in_document(
-                                    doc_id, search_query, db, max_results=max_res,
+                                    doc_id,
+                                    search_query,
+                                    db,
+                                    max_results=max_res,
                                     folder_cache=folder_cache,
                                 )
                             except Exception as exc:
@@ -1796,11 +1821,15 @@ async def run_agentic_search_pipeline(
                                 filename, matches = "", []
 
                             if filename and doc_id not in read_documents:
-                                first_snippet = matches[0]["content"][:300] if matches else ""
+                                first_snippet = (
+                                    matches[0]["content"][:300] if matches else ""
+                                )
                                 read_documents[doc_id] = (filename, first_snippet)
 
                             if matches:
-                                result_parts = [f"「{search_query}」の検索結果 ({len(matches)}件):"]
+                                result_parts = [
+                                    f"「{search_query}」の検索結果 ({len(matches)}件):"
+                                ]
                                 for m in matches:
                                     result_parts.append(
                                         f"\n--- 行 {m['line_number']} (offset: {m['char_offset']}) ---\n{m['content']}"
@@ -1823,9 +1852,7 @@ async def run_agentic_search_pipeline(
                                 {
                                     "type": "tool_result",
                                     "tool_use_id": block.id,
-                                    "content": [
-                                        {"type": "text", "text": result_text}
-                                    ],
+                                    "content": [{"type": "text", "text": result_text}],
                                 }
                             )
 
@@ -1845,15 +1872,26 @@ async def run_agentic_search_pipeline(
                             )
 
                             try:
-                                filename, content, total_chars, has_more = (
-                                    await _read_document_section(
-                                        doc_id, db, offset=sec_offset, length=sec_length,
-                                        folder_cache=folder_cache,
-                                    )
+                                (
+                                    filename,
+                                    content,
+                                    total_chars,
+                                    has_more,
+                                ) = await _read_document_section(
+                                    doc_id,
+                                    db,
+                                    offset=sec_offset,
+                                    length=sec_length,
+                                    folder_cache=folder_cache,
                                 )
                             except Exception as exc:
                                 logger.error("ドキュメント読み込みでエラー: %s", exc)
-                                filename, content, total_chars, has_more = "", "", 0, False
+                                filename, content, total_chars, has_more = (
+                                    "",
+                                    "",
+                                    0,
+                                    False,
+                                )
 
                             if content:
                                 if doc_id not in read_documents:
@@ -1880,9 +1918,7 @@ async def run_agentic_search_pipeline(
                                 {
                                     "type": "tool_result",
                                     "tool_use_id": block.id,
-                                    "content": [
-                                        {"type": "text", "text": result_text}
-                                    ],
+                                    "content": [{"type": "text", "text": result_text}],
                                 }
                             )
 
@@ -1912,17 +1948,24 @@ async def run_agentic_search_pipeline(
                                 result_text = f"データソース (ID: {source_id}) が見つかりません。list_documents で正しい ID を確認してください。"
                             else:
                                 import asyncio
-                                from app.services.duckdb_query import CsvDataSession, validate_sql
+                                from app.services.duckdb_query import (
+                                    CsvDataSession,
+                                    validate_sql,
+                                )
 
                                 # セッション内で DuckDB 接続を再利用
                                 if clean_id not in csv_sessions:
-                                    csv_sessions[clean_id] = CsvDataSession(container_path, source_id=clean_id)
+                                    csv_sessions[clean_id] = CsvDataSession(
+                                        container_path, source_id=clean_id
+                                    )
                                 session = csv_sessions[clean_id]
 
                                 if mode == "describe":
                                     try:
                                         await asyncio.to_thread(session.prepare)
-                                        tables = await asyncio.to_thread(session.describe)
+                                        tables = await asyncio.to_thread(
+                                            session.describe
+                                        )
                                     except Exception as exc:
                                         logger.error("CSV describe 失敗: %s", exc)
                                         tables = []
@@ -1932,10 +1975,14 @@ async def run_agentic_search_pipeline(
                                         parts: list[str] = []
 
                                         # Parquet 統合テーブルモード（テーブル名 "data"）
-                                        if len(tables) == 1 and tables[0].table_name == "data":
+                                        if (
+                                            len(tables) == 1
+                                            and tables[0].table_name == "data"
+                                        ):
                                             t = tables[0]
                                             cols_str = ", ".join(
-                                                f"{c.name} ({c.dtype})" for c in t.columns
+                                                f"{c.name} ({c.dtype})"
+                                                for c in t.columns
                                             )
                                             parts.append(
                                                 f"統合テーブル: data（{total_csv_count} CSV ファイルを統合）\n"
@@ -1948,16 +1995,22 @@ async def run_agentic_search_pipeline(
                                                 parts.append("サンプル:")
                                                 for sr in t.sample_rows:
                                                     parts.append(
-                                                        "  " + " | ".join(
-                                                            f"{k}={v}" for k, v in sr.items()
+                                                        "  "
+                                                        + " | ".join(
+                                                            f"{k}={v}"
+                                                            for k, v in sr.items()
                                                         )
                                                     )
                                         else:
                                             # 従来の個別テーブルモード（フォールバック）
-                                            parts.append(f"全 {total_csv_count} テーブル中、先頭 {len(tables)} 件の詳細:\n")
+                                            parts.append(
+                                                f"全 {total_csv_count} テーブル中、先頭 {len(tables)} 件の詳細:\n"
+                                            )
                                             seen_schema: set[str] = set()
                                             for t in tables:
-                                                schema_key = ",".join(c.name for c in t.columns)
+                                                schema_key = ",".join(
+                                                    c.name for c in t.columns
+                                                )
                                                 if schema_key in seen_schema:
                                                     parts.append(
                                                         f"- {t.table_name}: {t.row_count}行 (同構造)\n"
@@ -1965,7 +2018,8 @@ async def run_agentic_search_pipeline(
                                                     continue
                                                 seen_schema.add(schema_key)
                                                 cols_str = ", ".join(
-                                                    f"{c.name} ({c.dtype})" for c in t.columns
+                                                    f"{c.name} ({c.dtype})"
+                                                    for c in t.columns
                                                 )
                                                 parts.append(
                                                     f"## テーブル: {t.table_name}\n"
@@ -1976,15 +2030,20 @@ async def run_agentic_search_pipeline(
                                                     parts.append("サンプル:")
                                                     for sr in t.sample_rows:
                                                         parts.append(
-                                                            "  " + " | ".join(
-                                                                f"{k}={v}" for k, v in sr.items()
+                                                            "  "
+                                                            + " | ".join(
+                                                                f"{k}={v}"
+                                                                for k, v in sr.items()
                                                             )
                                                         )
                                                 parts.append("")
                                             if total_csv_count > len(tables):
                                                 all_csv = session.csv_files
                                                 remaining_names = ", ".join(
-                                                    name for _, name in all_csv[len(tables):len(tables)+10]
+                                                    name
+                                                    for _, name in all_csv[
+                                                        len(tables) : len(tables) + 10
+                                                    ]
                                                 )
                                                 parts.append(
                                                     f"\n残り {total_csv_count - len(tables)} テーブル: {remaining_names}..."
@@ -1993,14 +2052,18 @@ async def run_agentic_search_pipeline(
 
                                         result_text = "\n".join(parts)
                                     else:
-                                        result_text = "CSV/TSV ファイルが見つかりませんでした。"
+                                        result_text = (
+                                            "CSV/TSV ファイルが見つかりませんでした。"
+                                        )
                                 elif mode == "query":
                                     validation_error = validate_sql(sql_query)
                                     if validation_error:
                                         result_text = f"SQL エラー: {validation_error}"
                                     else:
                                         try:
-                                            qr = await asyncio.to_thread(session.execute, sql_query)
+                                            qr = await asyncio.to_thread(
+                                                session.execute, sql_query
+                                            )
                                         except Exception as exc:
                                             logger.error("SQL 実行失敗: %s", exc)
                                             result_text = f"SQL 実行エラー: {exc}"
@@ -2010,21 +2073,23 @@ async def run_agentic_search_pipeline(
                                             if not qr.rows:
                                                 result_text = "クエリ結果: 0 行"
                                             else:
-                                                header = "| " + " | ".join(qr.columns) + " |"
-                                                separator = "| " + " | ".join(
-                                                    "---" for _ in qr.columns
-                                                ) + " |"
+                                                header = (
+                                                    "| " + " | ".join(qr.columns) + " |"
+                                                )
+                                                separator = (
+                                                    "| "
+                                                    + " | ".join(
+                                                        "---" for _ in qr.columns
+                                                    )
+                                                    + " |"
+                                                )
                                                 data_rows = "\n".join(
                                                     "| " + " | ".join(row) + " |"
                                                     for row in qr.rows
                                                 )
-                                                result_text = (
-                                                    f"{header}\n{separator}\n{data_rows}"
-                                                )
+                                                result_text = f"{header}\n{separator}\n{data_rows}"
                                                 if qr.truncated:
-                                                    result_text += (
-                                                        f"\n\n(結果は {qr.row_count} 行に切り詰められました)"
-                                                    )
+                                                    result_text += f"\n\n(結果は {qr.row_count} 行に切り詰められました)"
                                 else:
                                     result_text = "mode は 'describe' または 'query' を指定してください。"
 
@@ -2042,9 +2107,7 @@ async def run_agentic_search_pipeline(
                                 {
                                     "type": "tool_result",
                                     "tool_use_id": block.id,
-                                    "content": [
-                                        {"type": "text", "text": result_text}
-                                    ],
+                                    "content": [{"type": "text", "text": result_text}],
                                 }
                             )
 
@@ -2119,17 +2182,13 @@ async def run_agentic_search_pipeline(
                     try:
                         await db.commit()
                     except Exception:
-                        logger.exception(
-                            "is_cancelled=1 の DB 反映に失敗しました"
-                        )
+                        logger.exception("is_cancelled=1 の DB 反映に失敗しました")
                         try:
                             await db.rollback()
                         except Exception:
                             logger.exception("rollback にも失敗しました")
             except Exception as save_exc:
-                logger.exception(
-                    "タイムアウト時のメッセージ保存に失敗: %s", save_exc
-                )
+                logger.exception("タイムアウト時のメッセージ保存に失敗: %s", save_exc)
 
             yield _sse("done", {})
             return

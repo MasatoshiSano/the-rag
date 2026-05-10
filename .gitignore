@@ -38,11 +38,15 @@ nul
 htmlcov/
 test-results/
 playwright-report/
+*.tsbuildinfo
 
-# Cursor agent workspace
+# Cursor / Claude agent workspace
 .omc/
 backend/.omc/
 frontend/.omc/
+.claude/
+.playwright-mcp/
+/hooks
 
 # Temporary work files
 .tmp/

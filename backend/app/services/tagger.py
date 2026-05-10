@@ -8,6 +8,7 @@ Claude LLM とマスターデータマッチングを組み合わせてドキュ
   3. Qdrant セマンティック検索（ベクトル類似度フォールバック）
 """
 
+import asyncio
 import json
 import logging
 import re
@@ -460,7 +461,9 @@ async def _qdrant_semantic_match(query: str) -> list[TagSuggestion]:
         return []
 
     try:
-        search_results = search_vectors(
+        # Qdrant クライアントは同期 gRPC のため別スレッドで実行しイベントループをブロックしない
+        search_results = await asyncio.to_thread(
+            search_vectors,
             collection=config.QDRANT_MASTER_COLLECTION,
             query_vector=query_vector,
             limit=_SEMANTIC_LIMIT,
