@@ -38,3 +38,11 @@ nul
 htmlcov/
 test-results/
 playwright-report/
+*.tsbuildinfo
+
+# Local tooling / scratch (machine-specific, not part of the project)
+.tmp/
+.claude/
+.omc/
+.playwright-mcp/
+/hooks
