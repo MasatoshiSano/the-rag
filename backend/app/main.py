@@ -18,6 +18,40 @@ from app.services.cleanup_job import cancel_scheduler_task, create_scheduler_tas
 
 logger = logging.getLogger(__name__)
 
+# 起動時バリデーションで拒否する既知の弱い（公知の）デフォルト値
+_WEAK_SECRET_KEY = "dev-secret-key-change-in-production"  # noqa: S105
+_WEAK_API_KEY = "the-rag-default-key"  # noqa: S105
+
+
+def validate_security_settings() -> None:
+    """
+    起動時にセキュリティ関連の設定を検証する。
+
+    SECRET_KEY が未設定または既知の弱い値の場合、および API_KEYS に
+    既知の弱いデフォルトキーが含まれる場合は RuntimeError を送出して起動を中止する。
+    API_KEYS が空の場合は外部 API エンドポイントを無効化する旨を警告ログに出力する。
+
+    Raises:
+        RuntimeError: セキュリティ設定が安全でない場合。
+    """
+    if not config.SECRET_KEY or config.SECRET_KEY == _WEAK_SECRET_KEY:
+        raise RuntimeError(
+            "SECRET_KEY が未設定または既知の弱い値です。環境変数 SECRET_KEY に"
+            "ランダムな値を設定してください（.env.example を参照）。"
+        )
+
+    if _WEAK_API_KEY in config.API_KEYS:
+        raise RuntimeError(
+            f"API_KEYS に既知の弱いデフォルトキー {_WEAK_API_KEY!r} が含まれています。"
+            "環境変数 API_KEYS をランダムな値に変更してください。"
+        )
+
+    if not config.API_KEYS:
+        logger.warning(
+            "API_KEYS が未設定のため、外部 API エンドポイント (/api/external/*) は"
+            "全リクエストを拒否します。利用する場合は環境変数 API_KEYS を設定してください。"
+        )
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
@@ -27,6 +61,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     終了時にデータベース接続を閉じる。
     """
     # 起動処理
+    validate_security_settings()
     await init_db()
     try:
         await load_master_cache()

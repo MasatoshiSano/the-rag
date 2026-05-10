@@ -32,8 +32,8 @@ class TestGetMe:
         assert data["id"] == TEST_USER_ID
         assert data["nickname"] is None
         assert data["rerank_enabled"] is False
-        assert data["hybrid_search_enabled"] is False
-        assert data["response_mode"] == "simple"
+        assert data["hybrid_search_enabled"] is True
+        assert data["response_mode"] == "detailed"
         assert "created_at" in data
         assert "updated_at" in data
 
@@ -112,7 +112,9 @@ class TestUpdateSettings:
         assert data["rerank_enabled"] is False  # デフォルト値が保持される
 
     @pytest.mark.asyncio
-    async def test_update_settings_invalid_response_mode(self, client: AsyncClient) -> None:
+    async def test_update_settings_invalid_response_mode(
+        self, client: AsyncClient
+    ) -> None:
         """不正な response_mode は 422 バリデーションエラーになる。"""
         await client.get("/api/users/me", headers=HEADERS)
 

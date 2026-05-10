@@ -21,6 +21,7 @@ import threading
 from dataclasses import dataclass, field
 
 import duckdb
+import sqlparse
 
 logger = logging.getLogger(__name__)
 
@@ -69,7 +70,16 @@ _SAMPLE_ROWS = 3
 
 _FORBIDDEN_KEYWORDS = re.compile(
     r"\b(INSERT|UPDATE|DELETE|DROP|CREATE|ALTER|TRUNCATE|REPLACE|MERGE|"
-    r"GRANT|REVOKE|EXEC|EXECUTE|CALL|COPY|EXPORT|IMPORT|ATTACH|DETACH|LOAD|INSTALL)\b",
+    r"GRANT|REVOKE|EXEC|EXECUTE|PREPARE|DEALLOCATE|CALL|COPY|EXPORT|IMPORT|"
+    r"ATTACH|DETACH|LOAD|INSTALL|PRAGMA|SET|RESET|USE|CHECKPOINT|VACUUM)\b",
+    re.IGNORECASE,
+)
+
+# DuckDB のファイル読み出し系テーブル関数（任意ファイル読み取りの防止）
+_FORBIDDEN_TABLE_FUNCS = re.compile(
+    r"\b(read_csv|read_csv_auto|sniff_csv|read_parquet|parquet_scan|read_json|"
+    r"read_json_auto|read_json_objects|read_ndjson|read_ndjson_auto|read_text|"
+    r"read_blob|read_xlsx|st_read|glob|iceberg_scan|delta_scan)\s*\(",
     re.IGNORECASE,
 )
 
@@ -247,7 +257,9 @@ def ensure_parquet_cache(source_id: str, container_path: str) -> ParquetCacheRes
     # 現在の CSV ファイル一覧
     csv_files = _find_csv_files(container_path)
     current_filenames = {os.path.basename(abs_path) for abs_path, _ in csv_files}
-    filename_to_path = {os.path.basename(abs_path): abs_path for abs_path, _ in csv_files}
+    filename_to_path = {
+        os.path.basename(abs_path): abs_path for abs_path, _ in csv_files
+    }
 
     # マニフェスト読み込み
     manifest = _read_manifest(cache_dir)
@@ -304,7 +316,8 @@ def ensure_parquet_cache(source_id: str, container_path: str) -> ParquetCacheRes
         parquet_path = os.path.join(cache_dir, parquet_filename)
 
         batch_csv_files = [
-            (filename_to_path[fname], fname) for fname in batch_chunk
+            (filename_to_path[fname], fname)
+            for fname in batch_chunk
             if fname in filename_to_path
         ]
 
@@ -340,8 +353,7 @@ def ensure_parquet_cache(source_id: str, container_path: str) -> ParquetCacheRes
     else:
         manifest_columns = manifest.get("columns", [])
         all_columns = [
-            CsvColumnInfo(name=c["name"], dtype=c["dtype"])
-            for c in manifest_columns
+            CsvColumnInfo(name=c["name"], dtype=c["dtype"]) for c in manifest_columns
         ]
 
     total_rows = manifest.get("total_rows", 0) + added_rows
@@ -351,10 +363,16 @@ def ensure_parquet_cache(source_id: str, container_path: str) -> ParquetCacheRes
         "version": _MANIFEST_VERSION,
         "source_id": source_id,
         "container_path": container_path,
-        "columns": manifest_columns if all_columns else [{"name": c.name, "dtype": c.dtype} for c in all_columns],
+        "columns": manifest_columns
+        if all_columns
+        else [{"name": c.name, "dtype": c.dtype} for c in all_columns],
         "total_rows": total_rows,
         "batches": [
-            {"parquet_file": b.parquet_file, "csv_files": b.csv_files, "row_count": b.row_count}
+            {
+                "parquet_file": b.parquet_file,
+                "csv_files": b.csv_files,
+                "row_count": b.row_count,
+            }
             if isinstance(b, ParquetBatchInfo)
             else b
             for b in batches
@@ -364,7 +382,9 @@ def ensure_parquet_cache(source_id: str, container_path: str) -> ParquetCacheRes
     _write_manifest(cache_dir, manifest)
 
     parquet_files = [
-        os.path.join(cache_dir, b["parquet_file"] if isinstance(b, dict) else b.parquet_file)
+        os.path.join(
+            cache_dir, b["parquet_file"] if isinstance(b, dict) else b.parquet_file
+        )
         for b in batches
     ]
 
@@ -391,7 +411,10 @@ def invalidate_parquet_cache(source_id: str) -> None:
 
 
 def validate_sql(sql: str) -> str | None:
-    """SQL が SELECT/WITH のみか検証する。
+    """SQL が単一の SELECT/WITH クエリのみか検証する。
+
+    SELECT/WITH 以外で始まるクエリ、データ変更・設定変更・ファイル読み出し系の
+    キーワード/関数を含むクエリ、複数ステートメントを拒否する。
 
     Returns:
         None: 安全
@@ -405,7 +428,20 @@ def validate_sql(sql: str) -> str | None:
         return "SELECT または WITH で始まるクエリのみ実行できます。"
 
     if _FORBIDDEN_KEYWORDS.search(stripped):
-        return "禁止されたキーワードが含まれています。SELECT クエリのみ使用してください。"
+        return (
+            "禁止されたキーワードが含まれています。SELECT クエリのみ使用してください。"
+        )
+
+    if _FORBIDDEN_TABLE_FUNCS.search(stripped):
+        return "ファイル読み出し系の関数（read_csv 等）は使用できません。"
+
+    # 複数ステートメントを拒否する（; 区切りで 2 つ以上のクエリを送れないようにする）
+    try:
+        statements = [s for s in sqlparse.parse(stripped) if str(s).strip()]
+    except Exception:
+        return "SQL の解析に失敗しました。"
+    if len(statements) > 1:
+        return "複数の SQL ステートメントは実行できません。"
 
     return None
 
@@ -457,7 +493,10 @@ def _ensure_utf8(file_path: str, encoding: str) -> str:
 
     suffix = os.path.splitext(file_path)[1]
     tmp = tempfile.NamedTemporaryFile(
-        mode="w", suffix=suffix, encoding="utf-8", delete=False,
+        mode="w",
+        suffix=suffix,
+        encoding="utf-8",
+        delete=False,
     )
     try:
         with open(file_path, encoding=encoding) as src:
@@ -597,9 +636,7 @@ def _describe_single_csv(
     row_count = con.execute(f'SELECT COUNT(*) FROM "{table_name}"').fetchone()[0]
 
     # サンプル行
-    sample_result = con.execute(
-        f'SELECT * FROM "{table_name}" LIMIT {_SAMPLE_ROWS}'
-    )
+    sample_result = con.execute(f'SELECT * FROM "{table_name}" LIMIT {_SAMPLE_ROWS}')
     col_names = [desc[0] for desc in sample_result.description]
     sample_rows = [
         {col_names[i]: str(val) for i, val in enumerate(row)}
@@ -772,23 +809,29 @@ class CsvDataSession:
             ]
 
             # columns はキャッシュ結果から取得。ただし実際の DuckDB 型と合わせる
-            columns = [
-                CsvColumnInfo(name=name, dtype=str(desc[1]))
-                for name, desc in zip(col_names, sample_result.description)
-            ] if sample_result.description else cache.columns
+            columns = (
+                [
+                    CsvColumnInfo(name=name, dtype=str(desc[1]))
+                    for name, desc in zip(col_names, sample_result.description)
+                ]
+                if sample_result.description
+                else cache.columns
+            )
 
         except Exception as exc:
             logger.warning("Parquet describe 失敗: %s", exc)
             columns = cache.columns
             sample_rows = []
 
-        return [CsvTableInfo(
-            table_name="data",
-            file_path=cache.cache_dir,
-            columns=columns,
-            row_count=cache.total_rows,
-            sample_rows=sample_rows,
-        )]
+        return [
+            CsvTableInfo(
+                table_name="data",
+                file_path=cache.cache_dir,
+                columns=columns,
+                row_count=cache.total_rows,
+                sample_rows=sample_rows,
+            )
+        ]
 
     def _describe_csv_views(self, max_tables: int) -> list[CsvTableInfo]:
         """従来の CSV VIEW 方式のテーブル情報。"""
@@ -799,7 +842,9 @@ class CsvDataSession:
                     f"SELECT column_name, data_type FROM information_schema.columns "
                     f"WHERE table_name = '{table_name}'"
                 ).fetchall()
-                columns = [CsvColumnInfo(name=row[0], dtype=row[1]) for row in cols_result]
+                columns = [
+                    CsvColumnInfo(name=row[0], dtype=row[1]) for row in cols_result
+                ]
 
                 row_count = self._con.execute(
                     f'SELECT COUNT(*) FROM "{table_name}"'
@@ -814,13 +859,15 @@ class CsvDataSession:
                     for row in sample_result.fetchall()
                 ]
 
-                tables.append(CsvTableInfo(
-                    table_name=table_name,
-                    file_path=abs_path,
-                    columns=columns,
-                    row_count=row_count,
-                    sample_rows=sample_rows,
-                ))
+                tables.append(
+                    CsvTableInfo(
+                        table_name=table_name,
+                        file_path=abs_path,
+                        columns=columns,
+                        row_count=row_count,
+                        sample_rows=sample_rows,
+                    )
+                )
             except Exception as exc:
                 logger.warning("CSV describe 失敗 (%s): %s", abs_path, exc)
         return tables

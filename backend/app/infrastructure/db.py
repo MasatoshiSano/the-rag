@@ -3,6 +3,7 @@ SQLAlchemy 非同期データベース接続モジュール。
 SQLite + aiosqlite を使用し、WAL モードを有効化する。
 """
 
+import logging
 from collections.abc import AsyncGenerator
 
 from sqlalchemy import event, text
@@ -16,6 +17,8 @@ from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.pool import StaticPool
 
 from app.infrastructure.config import config
+
+logger = logging.getLogger(__name__)
 
 # 非同期エンジンの作成（SQLite + aiosqlite）
 # StaticPool: 接続を1つに固定して並行 WRITE 競合を排除する
@@ -132,7 +135,9 @@ async def init_db() -> None:
         await conn.run_sync(Base.metadata.create_all)
         await create_fts5_tables(conn)
 
-        # マイグレーション: search_mode / agentic_max_iterations カラム追加
+        # 簡易マイグレーション: 既存 DB に不足カラムを追加する。
+        # カラムが既に存在する場合は SQLite が "duplicate column" エラーを返すため握りつぶす
+        # （その他のエラーも起動を止めないが、原因調査用に debug ログへ記録する）。
         for stmt in [
             "ALTER TABLE users ADD COLUMN search_mode TEXT NOT NULL DEFAULT 'normal'",
             "ALTER TABLE users ADD COLUMN agentic_max_iterations INTEGER NOT NULL DEFAULT 10",
@@ -140,8 +145,8 @@ async def init_db() -> None:
         ]:
             try:
                 await conn.execute(text(stmt))
-            except Exception:
-                pass  # カラムが既に存在する場合は無視
+            except Exception as exc:
+                logger.debug("ALTER TABLE をスキップしました: %s (%s)", stmt, exc)
 
 
 async def close_db() -> None:

@@ -592,7 +592,8 @@ async def process_oracle_query(
 
     # Step 2: SQL を生成する
     sql = await generate_sql(natural_language_query=normalized_query, db=db)
-    logger.info("生成された SQL: %r", sql[:500])
+    # 生成 SQL にはテーブル名・スキーマ情報が含まれるため DEBUG レベルに留める
+    logger.debug("生成された SQL: %r", sql[:500])
 
     # Step 3: SQL を検証する
     is_valid, error_message = validate_sql(sql)

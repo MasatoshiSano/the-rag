@@ -33,9 +33,10 @@ services:
       - QDRANT_HOST=qdrant
       - QDRANT_PORT=6333
       - SQLITE_DB_PATH=/app/data/ragphantom.db
-      - SECRET_KEY=${SECRET_KEY:-dev-secret-key-change-in-production}
+      - SECRET_KEY=${SECRET_KEY:?SECRET_KEY must be set (copy .env.example and use a random value)}
+      - API_KEYS=${API_KEYS:-[]}
       - UPLOAD_DIR=/app/uploads
-      - MASTER_MD_PATH=/app/data/master-flat-with-place-aliases.md
+      - MASTER_MD_PATH=/app/data/master/master-flat-with-place-aliases.md
       - GITEA_BASE_URL=${GITEA_BASE_URL:-}
       - GITEA_TOKEN=${GITEA_TOKEN:-}
     depends_on:

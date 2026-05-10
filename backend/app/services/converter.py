@@ -16,6 +16,30 @@ from app.services.text_normalizer import normalize_text
 
 logger = logging.getLogger(__name__)
 
+# テキストファイル読み込み時に順に試すエンコーディング（日本語環境では CP932/Shift-JIS が多い）
+_TEXT_ENCODINGS = ("utf-8-sig", "utf-8", "cp932", "shift_jis", "euc_jp")
+
+
+def _read_text_any_encoding(file_path: str) -> str:
+    """テキストファイルを複数のエンコーディングで順に試して読み込む。
+
+    いずれのエンコーディングでもデコードできない場合は UTF-8 + errors="replace"
+    でフォールバックする（変換処理全体が UnicodeDecodeError で止まらないようにする）。
+
+    Args:
+        file_path: 読み込むファイルのパス。
+
+    Returns:
+        デコード済みのテキスト。
+    """
+    raw = Path(file_path).read_bytes()
+    for enc in _TEXT_ENCODINGS:
+        try:
+            return raw.decode(enc)
+        except (UnicodeDecodeError, LookupError):
+            continue
+    return raw.decode("utf-8", errors="replace")
+
 
 class FileType(str, Enum):
     MD = "md"
@@ -93,19 +117,19 @@ async def convert_file(file_path: str, filename: str) -> ConversionResult:
 
 def _convert_markdown(file_path: str, filename: str) -> ConversionResult:
     """MD ファイル: パススルー"""
-    text = Path(file_path).read_text(encoding="utf-8")
+    text = _read_text_any_encoding(file_path)
     return ConversionResult(markdown=text, metadata_hints={"title": filename})
 
 
 def _convert_text(file_path: str, filename: str) -> ConversionResult:
     """TXT ファイル: パススルー"""
-    text = Path(file_path).read_text(encoding="utf-8")
+    text = _read_text_any_encoding(file_path)
     return ConversionResult(markdown=text, metadata_hints={"title": filename})
 
 
 def _convert_csv(file_path: str, filename: str) -> ConversionResult:
     """CSV ファイル: Markdown テーブルに変換"""
-    text = Path(file_path).read_text(encoding="utf-8")
+    text = _read_text_any_encoding(file_path)
     reader = csv.reader(io.StringIO(text))
     rows = list(reader)
 
@@ -135,7 +159,7 @@ def _convert_csv(file_path: str, filename: str) -> ConversionResult:
 
 def _convert_json(file_path: str, filename: str) -> ConversionResult:
     """JSON ファイル: 構造解析して Markdown に変換"""
-    text = Path(file_path).read_text(encoding="utf-8")
+    text = _read_text_any_encoding(file_path)
     data = json.loads(text)
 
     if isinstance(data, list) and data and isinstance(data[0], dict):
@@ -327,7 +351,7 @@ def _convert_html(file_path: str, filename: str) -> ConversionResult:
         from bs4 import BeautifulSoup
         from markdownify import markdownify as md_convert
 
-        html = Path(file_path).read_text(encoding="utf-8")
+        html = _read_text_any_encoding(file_path)
         soup = BeautifulSoup(html, "html.parser")
 
         # Extract title

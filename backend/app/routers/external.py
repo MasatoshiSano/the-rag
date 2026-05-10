@@ -8,6 +8,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+import re
 from typing import Optional
 from uuid import uuid4
 
@@ -20,7 +21,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.infrastructure.config import config
 from app.infrastructure.db import get_db
 from app.middleware.api_key import verify_api_key
-from app.models.database import Document, GiteaSource, GitHubSource, KnowledgeBase, Session
+from app.models.database import (
+    Document,
+    GiteaSource,
+    GitHubSource,
+    KnowledgeBase,
+    Session,
+)
 from app.services.rag import run_rag_pipeline
 
 logger = logging.getLogger(__name__)
@@ -221,34 +228,105 @@ async def sync_chat(
 
 
 # ---------------------------------------------------------------------------
+# GitHub / Gitea 同期 API — URL 検証ヘルパ
+# ---------------------------------------------------------------------------
+
+# GitHub/Gitea の owner / repo 名に許可する文字（英数字始まり、以降は英数字 . _ -）
+_REPO_SEGMENT_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
+
+
+def _validate_repo_segment(value: str, field_name: str) -> str:
+    """owner / repo セグメントを検証する（パストラバーサル・パス注入の防止）。
+
+    Args:
+        value: 検証対象の文字列。
+        field_name: エラーメッセージ用のフィールド名。
+
+    Returns:
+        検証済みの value。
+
+    Raises:
+        ValueError: 不正な文字を含む、または "." / ".." の場合。
+    """
+    if value in (".", "..") or not _REPO_SEGMENT_RE.match(value):
+        raise ValueError(f"不正な {field_name}: {value!r}")
+    return value
+
+
+def _validate_branch(branch: str) -> str:
+    """ブランチ名を検証する（パストラバーサル・クエリ注入の防止）。
+
+    git のブランチ名はスラッシュを含み得るため許可するが、".."、クエリ/フラグメント
+    文字、空白、バックスラッシュ、先頭/末尾スラッシュは拒否する。
+
+    Args:
+        branch: 検証対象のブランチ名。
+
+    Returns:
+        検証済みの branch。
+
+    Raises:
+        ValueError: ブランチ名が不正な場合。
+    """
+    if (
+        not branch
+        or ".." in branch
+        or branch.startswith("/")
+        or branch.endswith("/")
+        or any(c in branch for c in " \t\r\n?#\\")
+    ):
+        raise ValueError(f"不正なブランチ名: {branch!r}")
+    return branch
+
+
+def _validate_path(path: str) -> str:
+    """同期対象ディレクトリパスを検証する（パストラバーサルの防止）。
+
+    Args:
+        path: 検証対象のパス（空文字可）。
+
+    Returns:
+        検証済みの path。
+
+    Raises:
+        ValueError: ".." セグメントを含む、または絶対パス（先頭スラッシュ）の場合。
+    """
+    if path.startswith("/") or ".." in path.split("/"):
+        raise ValueError(f"不正なパス: {path!r}")
+    return path
+
+
+# ---------------------------------------------------------------------------
 # GitHub 同期 API
 # ---------------------------------------------------------------------------
 
 
 def _parse_github_url(url: str) -> tuple[str, str]:
     """
-    GitHub URL から owner と repo を抽出する。
+    GitHub URL から owner と repo を抽出する（厳格検証つき）。
 
     Args:
-        url: GitHub リポジトリ URL。
+        url: GitHub リポジトリ URL（https://github.com/owner/repo[.git]）。
 
     Returns:
         (owner, repo) のタプル。
 
     Raises:
-        ValueError: URL が不正な形式の場合。
+        ValueError: ホストが github.com でない、または owner / repo が不正な場合。
     """
-    # https://github.com/owner/repo or https://github.com/owner/repo.git
-    url = url.rstrip("/")
+    # クエリ・フラグメントを除去してから正規化
+    url = url.split("?", 1)[0].split("#", 1)[0].rstrip("/")
     if url.endswith(".git"):
         url = url[:-4]
 
     parts = url.split("/")
-    # "https:", "", "github.com", "owner", "repo"
-    if len(parts) < 5 or "github.com" not in parts[2]:
-        raise ValueError(f"Invalid GitHub URL: {url}")
+    # ["https:", "", "github.com", "owner", "repo", ...]
+    if len(parts) < 5 or parts[2].lower() != "github.com":
+        raise ValueError(f"GitHub の URL ではありません: {url}")
 
-    return parts[3], parts[4]
+    owner = _validate_repo_segment(parts[3], "owner")
+    repo = _validate_repo_segment(parts[4], "repo")
+    return owner, repo
 
 
 @router.post("/github/sync", response_model=GitHubSyncResponse)
@@ -263,9 +341,12 @@ async def sync_github(
     """
     from app.routers.documents import _run_indexing_pipeline
 
-    # GitHub URL をパース
+    # GitHub URL・ブランチ・パスをパース／検証
     try:
         owner, repo = _parse_github_url(body.repository_url)
+        if body.branch:
+            _validate_branch(body.branch)
+        _validate_path(body.path)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e)) from e
 
@@ -490,6 +571,8 @@ def _parse_gitea_url(url: str, base_url: str) -> tuple[str, str, str, Optional[s
         )
 
     remainder = url[len(base) + 1 :]
+    # クエリ・フラグメントを除去
+    remainder = remainder.split("?", 1)[0].split("#", 1)[0]
     if remainder.endswith(".git"):
         remainder = remainder[:-4]
 
@@ -497,14 +580,15 @@ def _parse_gitea_url(url: str, base_url: str) -> tuple[str, str, str, Optional[s
     if len(parts) < 2:
         raise ValueError(f"owner/repo 形式が見つかりません: {url}")
 
-    owner, repo = parts[0], parts[1]
+    owner = _validate_repo_segment(parts[0], "owner")
+    repo = _validate_repo_segment(parts[1], "repo")
     path = ""
     branch: Optional[str] = None
 
     # .../owner/repo/src/branch/{branch}/{path...}
     if len(parts) >= 5 and parts[2] == "src" and parts[3] == "branch":
-        branch = parts[4]
-        path = "/".join(parts[5:])
+        branch = _validate_branch(parts[4])
+        path = _validate_path("/".join(parts[5:]))
 
     return owner, repo, path, branch
 
@@ -535,11 +619,14 @@ async def sync_gitea(
             detail="Gitea 連携が設定されていません（GITEA_BASE_URL 未設定）。",
         )
 
-    # Gitea URL をパース
+    # Gitea URL・ブランチ・パスをパース／検証
     try:
         owner, repo, url_path, url_branch = _parse_gitea_url(
             body.repository_url, config.GITEA_BASE_URL
         )
+        if body.branch:
+            _validate_branch(body.branch)
+        _validate_path(body.path)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e)) from e
 
@@ -566,7 +653,9 @@ async def sync_gitea(
             if repo_resp.status_code != 200:
                 status = repo_resp.status_code
                 if status == 401:
-                    detail = "Gitea 認証に失敗しました。GITEA_TOKEN を確認してください。"
+                    detail = (
+                        "Gitea 認証に失敗しました。GITEA_TOKEN を確認してください。"
+                    )
                 elif status == 404:
                     detail = f"リポジトリが見つかりません: {owner}/{repo}"
                 else:
@@ -584,9 +673,7 @@ async def sync_gitea(
         if status == 401:
             detail = "Gitea 認証に失敗しました。GITEA_TOKEN を確認してください。"
         elif status == 404:
-            detail = (
-                f"リポジトリ/ブランチが見つかりません: {owner}/{repo} (ブランチ: {branch})"
-            )
+            detail = f"リポジトリ/ブランチが見つかりません: {owner}/{repo} (ブランチ: {branch})"
         else:
             detail = f"Gitea API エラー ({status})"
         raise HTTPException(status_code=400, detail=detail)
@@ -621,9 +708,7 @@ async def sync_gitea(
 
     async with httpx.AsyncClient(timeout=30.0) as client:
         for file_path in md_files:
-            raw_url = (
-                f"{base}/api/v1/repos/{owner}/{repo}/raw/{file_path}?ref={branch}"
-            )
+            raw_url = f"{base}/api/v1/repos/{owner}/{repo}/raw/{file_path}?ref={branch}"
             resp = await client.get(raw_url, headers=headers)
             if resp.status_code != 200:
                 logger.warning("Failed to download %s: %s", raw_url, resp.status_code)

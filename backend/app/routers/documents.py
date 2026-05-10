@@ -62,6 +62,51 @@ def _clear_cancel_flag(document_id: str) -> None:
 
 
 # ---------------------------------------------------------------------------
+# ファイル名・保存先パスのサニタイズ
+# ---------------------------------------------------------------------------
+
+
+def _safe_filename(raw: str | None) -> str:
+    """アップロードファイル名からパス成分を除去して安全なベース名を返す。
+
+    POSIX ではバックスラッシュが区切り文字でないため、Windows 由来の
+    "..\\..\\x" のような名前にも対応できるよう先にスラッシュへ正規化する。
+
+    Args:
+        raw: クライアントが申告したファイル名（None 可）。
+
+    Returns:
+        パス区切りを含まない安全なファイル名。空や "." / ".." の場合は "unknown"。
+    """
+    name = os.path.basename((raw or "").replace("\\", "/")).strip()
+    if not name or name in (".", ".."):
+        return "unknown"
+    return name
+
+
+def _assert_within_upload_dir(path: str) -> str:
+    """path が UPLOAD_DIR 配下に収まることを検証して realpath を返す。
+
+    Args:
+        path: 検証対象の保存先パス。
+
+    Returns:
+        正規化済みの絶対パス。
+
+    Raises:
+        HTTPException: path が UPLOAD_DIR の外を指す場合（400）。
+    """
+    upload_dir_real = os.path.realpath(config.UPLOAD_DIR)
+    path_real = os.path.realpath(path)
+    if (
+        os.path.commonpath([upload_dir_real, path_real]) != upload_dir_real
+        or path_real == upload_dir_real
+    ):
+        raise HTTPException(status_code=400, detail="不正なファイル名です")
+    return path_real
+
+
+# ---------------------------------------------------------------------------
 # Pydantic スキーマ
 # ---------------------------------------------------------------------------
 
@@ -374,7 +419,7 @@ async def upload_documents(
     files_to_process: list[tuple[str, str, str]] = []  # (doc_id, file_path, filename)
 
     for upload_file in files:
-        filename = upload_file.filename or "unknown"
+        filename = _safe_filename(upload_file.filename)
         ext = filename.rsplit(".", 1)[-1].lower() if "." in filename else ""
 
         # ZIP 自動展開
@@ -387,7 +432,7 @@ async def upload_documents(
                 for zip_info in zf.infolist():
                     if zip_info.is_dir():
                         continue
-                    inner_name = os.path.basename(zip_info.filename)
+                    inner_name = _safe_filename(zip_info.filename)
                     inner_ext = (
                         inner_name.rsplit(".", 1)[-1].lower()
                         if "." in inner_name
@@ -397,7 +442,9 @@ async def upload_documents(
                         continue
 
                     doc_id = str(uuid4())
-                    extracted_path = os.path.join(zip_dir, f"{doc_id}_{inner_name}")
+                    extracted_path = _assert_within_upload_dir(
+                        os.path.join(zip_dir, f"{doc_id}_{inner_name}")
+                    )
                     with zf.open(zip_info) as src:
                         with open(extracted_path, "wb") as dst:
                             dst.write(src.read())
@@ -451,7 +498,9 @@ async def upload_documents(
         # ファイル保存
         doc_id = str(uuid4())
         os.makedirs(config.UPLOAD_DIR, exist_ok=True)
-        file_path = os.path.join(config.UPLOAD_DIR, f"{doc_id}_{filename}")
+        file_path = _assert_within_upload_dir(
+            os.path.join(config.UPLOAD_DIR, f"{doc_id}_{filename}")
+        )
         content = await upload_file.read()
         with open(file_path, "wb") as f:
             f.write(content)
@@ -656,7 +705,11 @@ async def validate_folder_path(
 
     if not os.path.isdir(container_path):
         is_unc = container_path.startswith("/host_drives/unc/")
-        hint = "（UNCパスはサーバー側のマウント設定が必要です。マップ済みのドライブレター（Z:\\等）で試してください）" if is_unc else ""
+        hint = (
+            "（UNCパスはサーバー側のマウント設定が必要です。マップ済みのドライブレター（Z:\\等）で試してください）"
+            if is_unc
+            else ""
+        )
         return FolderSourceValidateResponse(
             valid=False,
             container_path=container_path,
@@ -766,7 +819,9 @@ async def list_folder_sources(
     responses: list[FolderSourceResponse] = []
     for s in sources:
         try:
-            files = scan_folder(s.container_path, max_files=config.FOLDER_SOURCE_MAX_FILES + 1)
+            files = scan_folder(
+                s.container_path, max_files=config.FOLDER_SOURCE_MAX_FILES + 1
+            )
             has_more = len(files) > config.FOLDER_SOURCE_MAX_FILES
             file_count = min(len(files), config.FOLDER_SOURCE_MAX_FILES)
         except Exception:
@@ -790,18 +845,14 @@ async def list_folder_sources(
     return responses
 
 
-@router.delete(
-    "/folder-sources/{source_id}", status_code=204, response_class=Response
-)
+@router.delete("/folder-sources/{source_id}", status_code=204, response_class=Response)
 async def delete_folder_source(
     source_id: str = Path(..., description="フォルダソース ID"),
     user_id: str = Depends(get_user_id),
     db: AsyncSession = Depends(get_db),
 ) -> Response:
     """フォルダソースを削除する。"""
-    result = await db.execute(
-        select(FolderSource).where(FolderSource.id == source_id)
-    )
+    result = await db.execute(select(FolderSource).where(FolderSource.id == source_id))
     source = result.scalar_one_or_none()
     if source is None:
         raise HTTPException(

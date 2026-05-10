@@ -63,7 +63,9 @@ class Config(BaseSettings):
     QUERY_EXPANSION_COUNT: int = 3
 
     # セキュリティ
-    SECRET_KEY: str = "dev-secret-key-change-in-production"
+    # SECRET_KEY は環境変数 SECRET_KEY で必ず設定する。
+    # 空または既知の弱い値のままだと main.lifespan の起動時バリデーションで起動が中止される。
+    SECRET_KEY: str = ""
     ALLOWED_ORIGINS: list[str] = [
         "http://localhost:3000",
         "http://localhost:5173",
@@ -71,8 +73,10 @@ class Config(BaseSettings):
         "https://10.168.124.32:3443",
     ]
 
-    # 外部 API キー
-    API_KEYS: list[str] = ["the-rag-default-key"]
+    # 外部 API キー（/api/external/* の X-API-Key 認証用）。
+    # 未設定（空リスト）の場合は外部 API エンドポイントが事実上無効化される。
+    # 既知の弱い値 "the-rag-default-key" を含む場合は起動時バリデーションで中止される。
+    API_KEYS: list[str] = []
 
     # エラーリトライ
     MAX_RETRY_COUNT: int = 3

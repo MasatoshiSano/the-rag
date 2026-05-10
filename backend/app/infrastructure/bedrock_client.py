@@ -11,9 +11,10 @@ from collections.abc import AsyncGenerator
 from dataclasses import dataclass
 
 import boto3
+from botocore.exceptions import BotoCoreError, ClientError
 from tenacity import (
     retry,
-    retry_if_exception_type,
+    retry_if_exception,
     stop_after_attempt,
     wait_exponential,
 )
@@ -24,6 +25,38 @@ logger = logging.getLogger(__name__)
 
 # Module-level client (lazy init)
 _bedrock_runtime: "boto3.client | None" = None
+
+# リトライ対象とする AWS API エラーコード（スロットリング・一時的なサービス不能）
+_RETRYABLE_AWS_ERROR_CODES = frozenset(
+    {
+        "ThrottlingException",
+        "TooManyRequestsException",
+        "ServiceUnavailableException",
+        "ServiceUnavailable",
+        "ModelTimeoutException",
+        "InternalServerException",
+        "ModelNotReadyException",
+    }
+)
+
+
+def _is_retryable_bedrock_error(exc: BaseException) -> bool:
+    """Bedrock 呼び出しでリトライする価値のあるエラーかを判定する。
+
+    スロットリング・一時的なサービス不能・接続/タイムアウト系のみリトライ対象とし、
+    不正リクエスト（ValidationException 等）やレスポンスのパースエラーはリトライしない。
+
+    Args:
+        exc: 発生した例外。
+
+    Returns:
+        リトライすべきなら True。
+    """
+    if isinstance(exc, ClientError):
+        code = exc.response.get("Error", {}).get("Code", "")
+        return code in _RETRYABLE_AWS_ERROR_CODES
+    # ConnectTimeoutError / ReadTimeoutError / EndpointConnectionError などは BotoCoreError 派生
+    return isinstance(exc, BotoCoreError)
 
 
 def get_bedrock_runtime() -> "boto3.client":
@@ -55,7 +88,7 @@ class RerankResult:
 @retry(
     stop=stop_after_attempt(config.MAX_RETRY_COUNT),
     wait=wait_exponential(multiplier=1, min=1, max=8),
-    retry=retry_if_exception_type(Exception),
+    retry=retry_if_exception(_is_retryable_bedrock_error),
     reraise=True,
 )
 async def generate_text(
@@ -151,7 +184,7 @@ async def generate_text_stream(
 @retry(
     stop=stop_after_attempt(config.MAX_RETRY_COUNT),
     wait=wait_exponential(multiplier=1, min=1, max=8),
-    retry=retry_if_exception_type(Exception),
+    retry=retry_if_exception(_is_retryable_bedrock_error),
     reraise=True,
 )
 async def generate_vision(
@@ -232,13 +265,15 @@ class ModelResponse:
 
     stop_reason: str  # "tool_use" | "end_turn" | "max_tokens"
     content: list[ToolUseBlock | TextBlock]
-    content_raw: list[dict[str, object]]  # Bedrock API 形式そのまま（messages 再構築用）
+    content_raw: list[
+        dict[str, object]
+    ]  # Bedrock API 形式そのまま（messages 再構築用）
 
 
 @retry(
     stop=stop_after_attempt(config.MAX_RETRY_COUNT),
     wait=wait_exponential(multiplier=1, min=1, max=8),
-    retry=retry_if_exception_type(Exception),
+    retry=retry_if_exception(_is_retryable_bedrock_error),
     reraise=True,
 )
 async def generate_with_tools(
@@ -354,15 +389,19 @@ async def generate_text_stream_with_messages(
 @retry(
     stop=stop_after_attempt(config.MAX_RETRY_COUNT),
     wait=wait_exponential(multiplier=1, min=1, max=8),
-    retry=retry_if_exception_type(Exception),
+    retry=retry_if_exception(_is_retryable_bedrock_error),
     reraise=True,
 )
-async def embed_texts(texts: list[str]) -> list[list[float]]:
+async def embed_texts(
+    texts: list[str], input_type: str = "search_document"
+) -> list[list[float]]:
     """
     Cohere Embed でテキストをベクトル化（バッチ処理対応、最大96テキスト/コール）。
 
     Args:
         texts: 埋め込み対象のテキストリスト。
+        input_type: Cohere の input_type。ドキュメント側は "search_document"、
+            検索クエリ側は "search_query" を指定する（既定はドキュメント側）。
 
     Returns:
         各テキストに対応する埋め込みベクトルのリスト。
@@ -376,7 +415,7 @@ async def embed_texts(texts: list[str]) -> list[list[float]]:
         batch = texts[i : i + batch_size]
         body: dict = {
             "texts": batch,
-            "input_type": "search_document",
+            "input_type": input_type,
             "truncate": "END",
         }
 
@@ -426,7 +465,7 @@ async def embed_query(text: str) -> list[float]:
 @retry(
     stop=stop_after_attempt(config.MAX_RETRY_COUNT),
     wait=wait_exponential(multiplier=1, min=1, max=8),
-    retry=retry_if_exception_type(Exception),
+    retry=retry_if_exception(_is_retryable_bedrock_error),
     reraise=True,
 )
 async def rerank(
